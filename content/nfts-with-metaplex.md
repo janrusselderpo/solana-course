@@ -20,7 +20,7 @@ objectives:
 
 Ang Solana Non-Fungible Token (NFTs) ay mga SPL token na ginawa gamit ang Token program. Ang mga token na ito, gayunpaman, ay mayroon ding karagdagang metadata account na nauugnay sa bawat token mint. Nagbibigay-daan ito para sa isang malawak na iba't ibang mga kaso ng paggamit para sa mga token. Maaari mong epektibong i-tokenize ang anumang bagay, mula sa imbentaryo ng laro hanggang sa sining.
 
-Sa araling ito, sasakupin namin ang mga pangunahing kaalaman sa kung paano kinakatawan ang mga NFT sa Solana, kung paano gawin at i-update ang mga ito gamit ang Metaplex SDK, at magbigay ng maikling panimula sa mga tool na makakatulong sa iyo sa paggawa at pamamahagi ng mga NFT sa Solana sa sukat.
+Sa araling ito, Talakayin natin ang mga pangunahing kaalaman sa kung paano kinakatawan ang mga NFT sa Solana, kung paano gawin at i-update ang mga ito gamit ang Metaplex SDK, at magbigay ng maikling panimula sa mga tool na makakatulong sa iyo sa paggawa at pamamahagi ng mga NFT sa Solana sa sukat.
 
 ## NFT sa Solana
 
@@ -33,29 +33,29 @@ Sa madaling salita, ang isang NFT ay isang karaniwang token mula sa Token Progra
 3. Nagmula sa isang token mint na ang awtoridad ay nakatakda sa `null` (upang matiyak na hindi kailanman magbabago ang supply)
 4. May nauugnay na account na nag-iimbak ng metadata
 
-Habang ang unang tatlong puntos ay mga tampok na maaaring makamit gamit ang SPL Token Program, ang nauugnay na metadata ay nangangailangan ng ilang karagdagang paggana.
+Habang ang unang tatlong puntos ay mga tampok na maaaring makamit gamit ang SPL Token Program, ang nauugnay na metadata ay nangangailangan ng ilang karagdagang functionality.
 
-Karaniwan, ang metadata ng isang NFT ay may parehong on-chain at off-chain na bahagi. Ang on-chain metadata ay iniimbak sa isang account na nauugnay sa token mint. Ang isa sa mga field nito ay ang URI na karaniwang tumuturo sa isang off-chain na JSON file (tingnan ang [link na ito](https://lsc6xffbdvalb5dvymf5gwjpeou7rr2btkoltutn5ij5irlpg3wa.arweave.net/XIXrlKEdQLD0dcML01kvI6Ln4x0ex) Ang off-chain na bahagi ay nag-iimbak ng karagdagang data at isang link sa larawan. Ang mga permanenteng sistema ng pag-iimbak ng data tulad ng Arweave ay kadalasang ginagamit upang iimbak ang off-chain na bahagi ng NFT metadata.
+Karaniwan, ang metadata ng isang NFT ay may parehong on-chain at off-chain na bahagi. Ang on-chain metadata ay iniimbak sa isang account na nauugnay sa token mint. Ang isa sa mga field nito ay ang URI na karaniwang tumuturo sa isang off-chain na JSON file (tingnan ang [link na ito](https://lsc6xffbdvalb5dvymf5gwjpeou7rr2btkoltutn5ij5irlpg3wa.arweave.net/XIXrlKEdQLD0dcML01kvI6n4x0GanLnSbeoT1EVvNuw). Ang off-chain na bahagi ay nag-iimbak ng karagdagang data at isang link sa larawan. Ang mga permanenteng sistema ng pag-iimbak ng data tulad ng Arweave ay kadalasang ginagamit upang iimbak ang off-chain na bahagi ng NFT metadata.
 
-Nasa ibaba ang isang halimbawa ng ugnayan sa pagitan ng on-chain at off-chain metadata. Ang on-chain metadata ay naglalaman ng isang URI field na tumuturo sa isang off-chain na `.json` file na nag-iimbak ng link sa larawan ng NFT at karagdagang metadata.
+Nasa ibaba ang isang halimbawa ng relasyon sa pagitan ng on-chain at off-chain metadata. Ang on-chain metadata ay naglalaman ng isang URI field na tumuturo sa isang off-chain na `.json` file na nag-iimbak ng link sa larawan ng NFT at karagdagang metadata.
 
 ![Screenshot of Metadata](../assets/solana-nft-metaplex-metadata.png)
 
 ## **Metaplex**
 
-Ang [Metaplex](https://www.metaplex.com/) ay isang organisasyong nagbibigay ng hanay ng mga tool, tulad ng [Metaplex SDK](https://docs.metaplex.com/sdks/js/), na nagpapasimple ang paglikha at pamamahagi ng mga NFT sa Solana blockchain. Ang mga tool na ito ay tumutugon sa isang malawak na hanay ng mga kaso ng paggamit at nagbibigay-daan sa iyong madaling pamahalaan ang buong proseso ng NFT sa paglikha at pag-print ng isang koleksyon ng NFT.
+Ang [Metaplex](https://www.metaplex.com/) ay isang organisasyong nagbibigay ng hanay ng mga tool, tulad ng [Metaplex SDK](https://docs.metaplex.com/sdks/js/), na nagpapasimple sa paglikha at pamamahagi ng mga NFT sa Solana blockchain. Ang mga tool na ito ay ginawa upang matugunan ang iba't ibang mga pangangailangan at gawing madali ang pamamahala ng buong proseso ng NFT mula sa paglikha at pagmimintina ng isang koleksyon ng NFT.
 
-Higit na partikular, ang Metaplex SDK ay idinisenyo upang tulungan ang mga developer sa paggamit ng mga on-chain na tool na inaalok ng Metaplex. Nag-aalok ito ng user-friendly na API na nakatuon sa mga sikat na kaso ng paggamit at nagbibigay-daan para sa madaling pagsasama sa mga third-party na plugin. Upang matuto nang higit pa tungkol sa mga kakayahan ng Metaplex SDK, maaari kang sumangguni sa [README](https://github.com/metaplex-foundation/js#readme).
+Higit na partikular, ang Metaplex SDK ay idinisenyo upang tulungan ang mga developer sa paggamit ng mga on-chain na tool na inaalok ng Metaplex. Nag-aalok ito ng user-friendly na API na nakatuon sa mga sikat na kaso ng paggamit at nagbibigay-daan para sa madaling pagsasama sa mga third-party na plugin. Upang matuto nang higit pa tungkol sa mga kakayahan ng Metaplex SDK, maaari kang tumukoy sa [README](https://github.com/metaplex-foundation/js#readme).
 
-Isa sa mga mahahalagang programa na inaalok ng Metaplex ay ang Token Metadata program. Ang Token Metadata program ay nag-standardize sa proseso ng pag-attach ng metadata sa SPL Token. Kapag gumagawa ng NFT gamit ang Metaplex, ang Token Metadata program ay gumagawa ng metadata account gamit ang Program Derived Address (PDA) na may token mint bilang isang binhi. Nagbibigay-daan ito sa metadata account para sa anumang NFT na matukoy nang deterministiko gamit ang address ng token mint. Upang matuto nang higit pa tungkol sa Token Metadata program, maaari kang sumangguni sa Metaplex [dokumentasyon](https://docs.metaplex.com/programs/token-metadata/).
+Isa sa mga mahahalagang programa na inaalok ng Metaplex ay ang Token Metadata program. Ang Token Metadata program ay nag-standardize sa proseso ng pag-attach ng metadata sa SPL Token. Kapag gumagawa ng NFT gamit ang Metaplex, ang Token Metadata program ay gumagawa ng metadata account gamit ang Program Derived Address (PDA) na may token mint bilang isang seed. Nagbibigay-daan ito sa metadata account para sa anumang NFT na matukoy nang deterministiko gamit ang address ng token mint. Upang matuto nang higit pa tungkol sa Token Metadata program, maaari kang tumukoy sa Metaplex [dokumentasyon](https://docs.metaplex.com/programs/token-metadata/).
 
-Sa mga sumusunod na seksyon, sasakupin namin ang mga pangunahing kaalaman sa paggamit ng Metaplex SDK upang maghanda ng mga asset, gumawa ng mga NFT, mag-update ng mga NFT, at mag-ugnay ng isang NFT sa isang mas malawak na koleksyon.
+Sa mga sumusunod na seksyon, tatalakayin natin ang mga pangunahing kaalaman sa paggamit ng Metaplex SDK upang maghanda ng mga asset, gumawa ng mga NFT, mag-update ng mga NFT, at mag-ugnay ng isang NFT sa isang mas malawak na koleksyon.
 
 ### Metaplex instance
 
-Ang isang `Metaplex` instance ay nagsisilbing entry point para sa pag-access sa Metaplex SDK API. Ang pagkakataong ito ay tumatanggap ng koneksyon na ginagamit upang makipag-ugnayan sa cluster. Bukod pa rito, maaaring i-customize ng mga developer ang mga pakikipag-ugnayan ng SDK sa pamamagitan ng pagtukoy ng "Identity Driver" at "Storage Driver."
+Ang isang `Metaplex` instance ay nagsisilbing entry point para sa pag-access sa mga Metaplex SDK API. Ang pagkakataong ito ay tumatanggap ng koneksyon na ginagamit upang makipag-ugnayan sa cluster. Bukod pa rito, maaaring i-customize ng mga developer ang mga pakikipag-ugnayan ng SDK sa pamamagitan ng pagtukoy ng "Identity Driver" at "Storage Driver."
 
-Ang Identity Driver ay epektibong isang keypair na maaaring magamit upang pumirma ng mga transaksyon, isang kinakailangan kapag lumilikha ng isang NFT. Ginagamit ang Storage Driver para tukuyin ang storage service na gusto mong gamitin para sa pag-upload ng mga asset. Ang driver ng `bundlrStorage` ay ang default na opsyon at nag-a-upload ito ng mga asset sa Arweave, isang permanenteng at desentralisadong serbisyo ng storage.
+Ang Identity Driver ay isang epektibong keypair na maaaring magamit upang pumirma ng mga transaksyon, isang kinakailangan upang makalikha ng isang NFT. Ginagamit ang Storage Driver para tukuyin ang storage service na gusto mong gamitin para sa pag-upload ng mga asset. Ang driver ng `bundlrStorage` ay ang default na opsyon at nag-a-upload ito ng mga asset sa Arweave, isang permanenteng at desentralisadong serbisyo ng storage.
 
 Nasa ibaba ang isang halimbawa kung paano mo mase-set up ang instance ng `Metaplex` para sa devnet.
 
@@ -83,9 +83,9 @@ const metaplex = Metaplex.make(connection)
 
 ### Mag-upload ng mga asset
 
-Bago ka makagawa ng NFT, kailangan mong maghanda at mag-upload ng anumang asset na pinaplano mong iugnay sa NFT. Bagama't hindi ito kailangang isang imahe, karamihan sa mga NFT ay may larawang nauugnay sa kanila.
+Bago ka makagawa ng NFT, kailangan mong maghanda at mag-upload ng anumang asset na pinaplano mong iugnay sa NFT. Bagama't hindi ito kailangang maging isang imahe, karamihan sa mga NFT ay may larawang nauugnay sa kanila.
 
-Ang paghahanda at pag-upload ng isang imahe ay kinabibilangan ng pag-convert ng imahe sa isang buffer, pag-convert nito sa Metaplex na format gamit ang `toMetaplexFile` function, at sa wakas ay pag-upload nito sa itinalagang Storage Driver.
+Ang paghahanda at pag-upload ng isang imahe ay kabilang sa pag-convert ng imahe sa isang buffer, pag-convert nito sa Metaplex na format gamit ang `toMetaplexFile` function, at sa wakas ay pag-upload nito sa itinalagang Storage Driver.
 
 Sinusuportahan ng Metaplex SDK ang paglikha ng isang bagong Metaplex file mula sa alinman sa mga file na nasa iyong lokal na computer o sa mga na-upload ng isang user sa pamamagitan ng isang browser. Magagawa mo ang una sa pamamagitan ng paggamit ng `fs.readFileSync` upang basahin ang file ng imahe, pagkatapos ay i-convert ito sa isang Metaplex file gamit ang `toMetaplexFile`. Panghuli, gamitin ang iyong instance ng `Metaplex` para tawagan ang `storage().upload(file)` para i-upload ang file. Ang return value ng function ay ang URI kung saan iniimbak ang larawan.
 
@@ -131,7 +131,7 @@ Ang pamamaraang ito ay nagbabalik ng isang bagay na naglalaman ng impormasyon tu
 
 ### I-update ang NFT
 
-Kung iniwan mong totoo ang `isMutable`, maaaring magkaroon ka ng dahilan para i-update ang metadata ng iyong NFT. Nagbibigay-daan sa iyo ang paraang `update` ng SDK na i-update ang parehong on-chain at off-chain na bahagi ng metadata ng NFT. Upang i-update ang off-chain metadata, kakailanganin mong ulitin ang mga hakbang sa pag-upload ng bagong larawan at metadata URI gaya ng nakabalangkas sa mga nakaraang hakbang, pagkatapos ay ibigay ang bagong metadata URI sa paraang ito. Babaguhin nito ang URI kung saan itinuturo ng on-chain metadata, na epektibong ina-update din ang off-chain metadata.
+Kung iniwan mong true ang `isMutable`, maaaring magkaroon ka ng dahilan para i-update ang metadata ng iyong NFT. Nagbibigay-daan sa iyo ang paraang `update` ng SDK na i-update ang parehong on-chain at off-chain na bahagi ng metadata ng NFT. Upang i-update ang off-chain metadata, kakailanganin mong ulitin ang mga hakbang sa pag-upload ng bagong larawan at metadata URI tulad ng inilarawan sa mga nakaraang hakbang, pagkatapos ay ibigay ang bagong metadata URI sa paraang ito. Babaguhin nito ang URI kung saan itinuturo ng on-chain metadata, na epektibong ina-update din ang off-chain metadata.
 
 ```tsx
 const nft = await metaplex.nfts().findByMint({ mintAddress });
@@ -151,9 +151,9 @@ Tandaan na ang anumang mga field na hindi mo isasama sa tawag sa `update` ay man
 
 ### Magdagdag ng NFT sa Koleksyon
 
-Ang [Certified Collection](https://docs.metaplex.com/programs/token-metadata/certified-collections#introduction) ay isang NFT na maaaring pag-aari ng mga indibidwal na NFT. Mag-isip ng malaking koleksyon ng NFT tulad ng Solana Monkey Business. Kung titingnan mo ang [Metadata] ng isang indibidwal na NFT(https://explorer.solana.com/address/C18YQWbfwjpCMeCm2MPGTgfcxGeEDPvNaGpVjwYv33q1/metadata) makakakita ka ng field ng `collection` na may `key` na nakaturo sa `CV. ](https://explorer.solana.com/address/SMBH3wF6baUj6JWtzYvqcKuj2XCKWDqQxzspY12xPND/). Sa madaling salita, ang mga NFT na bahagi ng isang koleksyon ay nauugnay sa isa pang NFT na kumakatawan sa koleksyon mismo.
+Ang [Certified Collection](https://docs.metaplex.com/programs/token-metadata/certified-collections#introduction) ay isang NFT na maaaring pag-aari ng mga indibidwal na NFT. Mag-isip ng malaking koleksyon ng NFT tulad ng Solana Monkey Business. Kung titingnan mo ang [Metadata] ng isang indibidwal na NFT(https://explorer.solana.com/address/C18YQWbfwjpCMeCm2MPGTgfcxGeEDPvNaGpVjwYv33q1/metadata) makakakita ka ng field ng `collection` na may `key` na nakaturo sa `Certified Collection`. ](https://explorer.solana.com/address/SMBH3wF6baUj6JWtzYvqcKuj2XCKWDqQxzspY12xPND/). Sa madaling salita, ang mga NFT na bahagi ng isang koleksyon ay nauugnay sa isa pang NFT na kumakatawan sa koleksyon mismo.
 
-Upang makapagdagdag ng NFT sa isang koleksyon, kailangan munang gawin ang Collection NFT. Ang proseso ay kapareho ng dati, maliban kung magsasama ka ng isang karagdagang field sa aming NFT Metadata: `isCollection`. Ang field na ito ay nagsasabi sa token program na ang NFT na ito ay isang Collection NFT.
+Upang makapagdagdag ng NFT sa isang koleksyon, kailangan munang gawin ang Collection NFT. Ang proseso ay kapareho ng dati, maliban kung magsasama ka ng isang karagdagang field sa ating NFT Metadata: `isCollection`. Ang field na ito ay nagsasabi sa token program na ang NFT na ito ay isang Collection NFT.
 
 ```tsx
 const { collectionNft } = await metaplex.nfts().create(
@@ -167,7 +167,7 @@ const { collectionNft } = await metaplex.nfts().create(
 );
 ```
 
-Pagkatapos ay ilista mo ang Mint Address ng koleksyon bilang reference para sa field ng `collection` sa aming bagong Nft.
+Pagkatapos ay ilista mo ang Mint Address ng koleksyon bilang reference para sa field ng `collection` sa ating bagong Nft.
 
 ```tsx
 const { nft } = await metaplex.nfts().create(
@@ -181,7 +181,7 @@ const { nft } = await metaplex.nfts().create(
 );
 ```
 
-Kapag nag-checkout ka ng metadata sa iyong bagong likhang NFT, dapat ka na ngayong makakita ng field na `collection` tulad nito:
+Kapag nag-checkout ka ng metadata sa iyong bagong likhang NFT, makakakita kana ngayon ng field na `collection` tulad nito:
 
 ```JSON
 "collection":{
@@ -190,7 +190,7 @@ Kapag nag-checkout ka ng metadata sa iyong bagong likhang NFT, dapat ka na ngayo
 }
 ```
 
-Ang huling bagay na kailangan mong gawin ay i-verify ang NFT. Ito ay epektibong i-flip ang `na-verify' na field sa itaas sa true, ngunit ito ay hindi kapani-paniwalang mahalaga. Ito ang nagpapaalam sa mga gumagamit ng programa at app na ang iyong NFT ay sa katunayan bahagi ng koleksyon. Magagawa mo ito gamit ang function na `verifyCollection`:
+Ang huling bagay na kailangan mong gawin ay i-verify ang NFT. Ito ay lubusang nagpapalit ng verified na field sa itaas upang maging true,Ngunit ito ay lubhang mahalaga. Ito ang nagbibigay-daan sa mga programa at mga app na gamitin ang iyong NFT bilang bahagi ng koleksyon. Maaari mong gawin ito gamit ang verifyCollection function:
 
 ```tsx
 await metaplex.nfts().verifyCollection({
@@ -202,9 +202,9 @@ await metaplex.nfts().verifyCollection({
 
 ### Makina ng Candy
 
-Kapag gumagawa at namamahagi ng maramihang supply ng NFT's, ginagawang madali ng Metaplex gamit ang kanilang [Candy Machine](https://docs.metaplex.com/programs/candy-machine/overview) program at [Sugar CLI](https:// docs.metaplex.com/developer-tools/sugar/).
+Kapag gumagawa at namamahagi ng maramihang supply ng NFT's, ang Metaplex ay gumagawa ng pagpapadali nito sa pamamagitan ng kanilang [Candy Machine](https://docs.metaplex.com/programs/candy-machine/overview) program at [Sugar CLI](https:// docs.metaplex.com/developer-tools/sugar/).
 
-Ang Candy Machine ay isang epektibong programa sa pagmimina at pamamahagi upang makatulong sa paglunsad ng mga koleksyon ng NFT. Ang Sugar ay isang command line interface na tumutulong sa iyong gumawa ng candy machine, maghanda ng mga asset, at gumawa ng mga NFT sa sukat. Ang mga hakbang na sakop sa itaas para sa paglikha ng isang NFT ay hindi kapani-paniwalang nakakapagod na isagawa para sa libu-libong NFT nang sabay-sabay. Ang Candy Machine at Sugar ay malulutas ito at tumulong na matiyak ang isang patas na paglulunsad sa pamamagitan ng pag-aalok ng ilang mga pananggalang.
+Ang Candy Machine ay isang epektibong programang pangmimint at pagpapamahagi na tumutulong sa paglulunsad ng mga koleksyon ng NFT. Ang Sugar ay isang command line interface na tumutulong sa iyo na gumawa ng isang candy machine, maghanda ang mga assets, at gumuwa ng NFT sa malawakang antas. Ang mga hakbang na sinaklaw sa itaas para sa paglikha ng isang NFT ay lubhang kahalintulad at nakakapagod na isagawa para sa libu-libong NFT sa iisang pagkakataon. Ang Candy Machine at Sugar ay naglalayong malutas ito at matiyak ang isang patas na paglulunsad sa pamamagitan ng pagbibigay ng iba't ibang mga pangangalaga.
 
 Hindi namin tatalakayin nang malalim ang mga tool na ito, ngunit tiyak na tingnan kung paano gumagana ang mga ito nang magkasama [dito](https://docs.metaplex.com/developer-tools/sugar/overview/introduction).
 
@@ -213,15 +213,15 @@ Upang i-explore ang buong hanay ng mga tool na inaalok ng Metaplex, maaari mong 
 
 # Demo
 
-Sa demo na ito, dadaan tayo sa mga hakbang upang lumikha ng isang NFT gamit ang Metaplex SDK, i-update ang metadata ng NFT pagkatapos ng katotohanan, pagkatapos ay iugnay ang NFT sa isang koleksyon. Sa pagtatapos, magkakaroon ka ng pangunahing pag-unawa sa kung paano gamitin ang Metaplex SDK na nakikipag-ugnayan sa mga NFT sa Solana.
+Sa demo na ito, dadaan tayo sa mga hakbang upang lumikha ng isang NFT gamit ang Metaplex SDK, i-update ang metadata ng NFT pagkatapos ng pangyayari, pagkatapos ay iugnay ang NFT sa isang koleksyon. Sa huli, magkakaroon ka ng pangunahing pag-unawa sa kung paano gamitin ang Metaplex SDK na nakikipag-ugnayan sa mga NFT sa Solana.
 
 ### 1. Panimula
 
 Upang magsimula, i-download ang starter code mula sa `starter` branch ng [repository na ito](https://github.com/Unboxed-Software/solana-metaplex/tree/starter).
 
-Ang proyekto ay naglalaman ng dalawang larawan sa `src` na direktoryo na aming gagamitin para sa mga NFT.
+Ang proyekto ay naglalaman ng dalawang larawan sa `src` na direktoryo na ating gagamitin para sa mga NFT.
 
-Bukod pa rito, sa `index.ts` file, makikita mo ang sumusunod na snippet ng code na may kasamang sample na data para sa NFT na gagawin at ia-update namin.
+Bukod pa rito, sa `index.ts` file, makikita mo ang sumusunod na snippet ng code na may kasamang sample na data para sa NFT na gagawin at ia-update natin.
 
 ```tsx
 interface NftData {
@@ -312,7 +312,7 @@ async function main() {
 
 ### 3. `uploadMetadata` helper function
 
-Susunod, hayaang lumikha ng isang helper function upang pangasiwaan ang proseso ng pag-upload ng larawan at metadata, at pagbabalik ng metadata URI. Ang function na ito ay kukuha sa Metaplex instance at NFT data bilang input, at ibabalik ang metadata URI bilang output.
+Susunod, lumikha tayo ng isang helper function na gagampanan ang proseso ng pag-upload ng isang imahe at metadata, at magbabalik ng metadata URI. Ang function na ito ay kukuha ng Metaplex instance at NFT data bilang input, at magbabalik ng metadata URI bilang output.
 
 ```tsx
 // helper function to upload image and metadata
@@ -378,7 +378,7 @@ Nila-log ng function na `createNft` ang token mint URL at ibinabalik ang isang `
 
 ### 6. Lumikha ng NFT
 
-Ngayong na-set up na namin ang instance ng Metaplex at gumawa ng mga function ng helper para sa pag-upload ng metadata at paggawa ng mga NFT, maaari naming subukan ang mga function na ito sa pamamagitan ng paggawa ng NFT. Sa `main()` function, tawagan ang `uploadMetadata` function para i-upload ang NFT data at makuha ang URI para sa metadata. Pagkatapos, gamitin ang function na `createNft` at metadata URI para gumawa ng NFT.
+Ngayong na-set up na natin ang instance ng Metaplex at gumawa ng mga function ng helper para sa pag-upload ng metadata at paggawa ng mga NFT, maaari nating subukan ang mga function na ito sa pamamagitan ng paggawa ng NFT. Sa `main()` function, tawagan ang `uploadMetadata` function para i-upload ang NFT data at makuha ang URI para sa metadata. Pagkatapos, gamitin ang function na `createNft` at metadata URI para gumawa ng NFT.
 
 ```tsx
 async function main() {
@@ -407,7 +407,7 @@ Huwag mag-atubiling suriin ang mga nabuong URI para sa larawan at metadata, pati
 
 ### 7. `updateNftUri` helper function
 
-Susunod, gumawa tayo ng function na helper upang mahawakan ang pag-update ng isang umiiral nang URI ng NFT. Ang function na ito ay kukuha sa Metaplex instance, metadata URI, at mint address ng NFT. Ginagamit nito ang paraan ng `findByMint` ng SDK para kunin ang kasalukuyang data ng NFT gamit ang mint address, at pagkatapos ay ginagamit ang paraan ng `update` para i-update ang metadata gamit ang bagong URI. Sa wakas, itatala nito ang token mint URL at lagda ng transaksyon para sa sanggunian.
+Susunod, gumawa tayo ng isang helper function upang gampanan ang pag-update ng URI ng isang umiiral na NFT. Ang function na ito ay tatanggap ng Metaplex instance, metadata URI, at mint address ng NFT. Ginagamit nito ang findByMint na method ng SDK upang kunin ang umiiral na data ng NFT gamit ang mint address, at pagkatapos ay ginagamit ang update na method upang i-update ang metadata ng NFT gamit ang bagong URI. Sa huli, maglolog ito ng token mint URL at transaction signature para sa sanggunian.
 
 ```tsx
 // helper function update NFT
@@ -440,7 +440,7 @@ async function updateNftUri(
 
 ### 8. I-update ang NFT
 
-Upang i-update ang isang umiiral nang NFT, kailangan muna naming mag-upload ng bagong metadata para sa NFT at kunin ang bagong URI. Sa function na `main()`, tawagan muli ang function na `uploadMetadata` upang i-upload ang na-update na data ng NFT at makuha ang bagong URI para sa metadata. Pagkatapos, maaari naming gamitin ang function ng helper na `updateNftUri`, na ipinapasa ang instance ng Metaplex, ang bagong URI mula sa metadata, at ang mint address ng NFT. Ang `nft.address` ay mula sa output ng `createNft` function.
+Upang i-update ang isang umiiral nang NFT, kailangan muna nating mag-upload ng bagong metadata para sa NFT at kunin ang bagong URI. Sa function na `main()`, tawagan muli ang function na `uploadMetadata` upang i-upload ang na-update na data ng NFT at makuha ang bagong URI para sa metadata. Pagkatapos, maaari nating gamitin ang function ng helper na `updateNftUri`, na ipinapasa ang instance ng Metaplex, ang bagong URI mula sa metadata, at ang mint address ng NFT. Ang `nft.address` ay mula sa output ng `createNft` function.
 
 ```tsx
 async function main() {
@@ -496,7 +496,7 @@ async function createCollectionNft(
 }
 ```
 
-Susunod, kailangan nating gawin ang off-chain na data para sa koleksyon. Sa `pangunahing` *bago* ang mga kasalukuyang tawag sa `createNft`, idagdag ang sumusunod na `collectionNftData`:
+Susunod, kailangan nating gawin ang off-chain na data para sa koleksyon. Sa `main` *bago* ang mga kasalukuyang tawag sa `createNft`, idagdag ang sumusunod na `collectionNftData`:
 
 ```tsx
 const collectionNftData = {
@@ -528,7 +528,7 @@ async function main() {
 }
 ```
 
-Ibabalik nito ang mint address ng aming koleksyon upang magamit namin ito upang magtalaga ng mga NFT sa koleksyon.
+Ibabalik nito ang mint address ng ating koleksyon upang magamit natin ito upang magtalaga ng mga NFT sa koleksyon.
 
 ### 10. Magtalaga ng NFT sa isang koleksyon
 
@@ -569,11 +569,11 @@ Ngayon, patakbuhin ang `npm start` at voila! Kung susundin mo ang bagong link ng
 
 Binabati kita! Matagumpay mong natutunan kung paano gamitin ang Metaplex SDK upang gumawa, mag-update, at mag-verify ng mga NFT bilang bahagi ng isang koleksyon. Iyan ang lahat ng kailangan mo upang bumuo ng iyong sariling koleksyon para sa halos anumang kaso ng paggamit. Maaari kang bumuo ng isang katunggali sa TicketMaster, baguhin ang Membership Program ng Costco, o i-digitize ang Student ID system ng iyong paaralan. Ang mga posibilidad ay walang hanggan!
 
-Kung gusto mong tingnan ang panghuling code ng solusyon, mahahanap mo ito sa sangay ng solusyon ng parehong [repository](https://github.com/Unboxed-Software/solana-metaplex/tree/solution).
+Kung gusto mong tingnan ang panghuling code ng solusyon, mahahanap mo ito sa branch ng solusyon ng parehong [repository](https://github.com/Unboxed-Software/solana-metaplex/tree/solution).
 
 # Hamon
 
-Upang palalimin ang iyong pag-unawa sa mga tool ng Metaplex, sumisid sa dokumentasyon ng Metaplex at gawing pamilyar ang iyong sarili sa iba't ibang mga programa at tool na inaalok ng Metaplex. Halimbawa, maaari mong pag-aralan ang tungkol sa programa ng Candy Machine upang maunawaan ang pagpapagana nito.
+Upang palalimin ang iyong pag-unawa sa mga tool ng Metaplex, pumunta sa dokumentasyon ng Metaplex at gawing pamilyar ang iyong sarili sa iba't ibang mga programa at tool na inaalok ng Metaplex. Halimbawa, maaari mong pag-aralan ang tungkol sa programa ng Candy Machine upang maunawaan ang pagpapagana nito.
 
 Kapag naunawaan mo na kung paano gumagana ang programa ng Candy Machine, subukan ang iyong kaalaman sa pamamagitan ng paggamit ng Sugar CLI upang lumikha ng Candy Machine para sa sarili mong koleksyon. Ang hands-on na karanasang ito ay hindi lamang magpapatibay sa iyong pag-unawa sa mga tool, ngunit magpapalakas din ng iyong kumpiyansa sa iyong kakayahang magamit ang mga ito nang epektibo sa hinaharap.
 
