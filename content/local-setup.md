@@ -17,11 +17,11 @@ objectives:
 
 # Pangkalahatang-ideya
 
-Sa ngayon sa kursong ito, ginamit namin ang Solana Playground upang bumuo at mag-deploy ng mga programang Solana. At habang ito ay isang mahusay na tool, para sa ilang mga kumplikadong proyekto ay maaaring mas gusto mong magkaroon ng isang lokal na kapaligiran sa pag-unlad na naka-set up. Maaaring ito ay upang magamit ang mga crates na hindi sinusuportahan ng Solana Playground, upang samantalahin ang mga custom na script o tooling na iyong ginawa, o dahil lang sa personal na kagustuhan.
+Sa ngayon sa kursong ito, ginamit namin ang Solana Playground upang bumuo at mag-deploy ng mga programang Solana. At habang ito ay isang mahusay na tool, para sa ilang mga kumplikadong proyekto ay maaaring mas gusto mong magkaroon ng isang naka-set up na lokal na kapaligiran sa pag-unlad. Maaaring ito ay upang magamit ang mga crates na hindi suportado ng Solana Playground, upang samantalahin ang mga custom na script o tooling na iyong ginawa, o dahil lang sa personal na kagustuhan.
 
 Sa sinabi nito, ang araling ito ay bahagyang naiiba sa iba. Sa halip na saklawin ang maraming lugar kung paano magsulat ng isang programa o makipag-ugnayan sa network ng Solana, ang araling ito ay pangunahing tututuon sa hindi gaanong kaakit-akit na gawain ng pag-set up ng iyong lokal na kapaligiran sa pag-unlad.
 
-Upang bumuo, subukan, at mag-deploy ng mga programang Solana mula sa iyong makina, kakailanganin mong i-install ang Rust compiler at ang Solana Command Line Interface (CLI). Magsisimula kami sa pamamagitan ng paggabay sa iyo sa mga proseso ng pag-install na ito, pagkatapos ay saklawin kung paano gamitin ang kaka-install mo pa lang.
+Upang bumuo, subukan, at mag-deploy ng mga programang Solana mula sa iyong makina, kakailanganin mong i-install ang Rust compiler at ang Solana Command Line Interface (CLI). Magsisimula kami sa pamamagitan ng paggabay sa iyo sa mga proseso ng pag-install na ito, pagkatapos ay tatalakayin natin kung paano gamitin ang mga kagamitang iyong in-install.
 
 Ang mga tagubilin sa pag-install sa ibaba ay naglalaman ng mga hakbang para sa pag-install ng Rust at ang Solana CLI sa oras ng pagsulat. Maaaring nagbago ang mga ito sa oras na binabasa mo ito, kaya kung magkakaroon ka ng mga isyu mangyaring kumonsulta sa opisyal na pahina ng pag-install para sa bawat isa:
 
@@ -65,7 +65,7 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
 ### I-download ang Solana CLI
 
-Ngayon handa na kaming mag-download ng Solana CLI para sa Linux. Sige at patakbuhin ang sumusunod na command sa isang Ubuntu terminal. Maaari kang magbasa nang higit pa tungkol sa pag-download ng Solana CLI [dito](https://docs.solana.com/cli/install-solana-cli-tools).
+Ngayon handa na kaming mag-download ng Solana CLI para sa Linux. Maari mong patakbuhin ang sumusunod na command sa isang Ubuntu terminal. Maaari kang magbasa nang higit pa tungkol sa pag-download ng Solana CLI [dito](https://docs.solana.com/cli/install-solana-cli-tools).
 
 ```bash
 sh -c "$(curl -sSfL https://release.solana.com/v1.10.31/install)"
@@ -133,7 +133,7 @@ solana config set --keypair ~/<FILE_PATH>
 
 ### Test validators
 
-Madalas mong makitang kapaki-pakinabang na magpatakbo ng lokal na validator para sa pagsubok at pag-debug kaysa sa pag-deploy sa Devnet.
+Madalas mong mapapansin na makakatulong sa iyo ang pagpapatakbo ng isang lokal na validator para sa pagsubok at pag-debug kaysa sa pag-deploy sa Devnet.
 
 Maaari kang magpatakbo ng lokal na test validator gamit ang command na `solana-test-validator`. Lumilikha ang command na ito ng isang patuloy na proseso na mangangailangan ng sarili nitong command line window.
 
@@ -141,11 +141,11 @@ Maaari kang magpatakbo ng lokal na test validator gamit ang command na `solana-t
 
 Madalas na nakakatulong na magbukas ng bagong console at patakbuhin ang command na `solana logs` kasama ng test validator. Lumilikha ito ng isa pang patuloy na proseso na mag-stream ng mga log na nauugnay sa cluster ng iyong configuration.
 
-Kung ang iyong CLI configuration ay nakaturo sa `localhost`, ang mga log ay palaging iuugnay sa test validator na iyong ginawa, ngunit maaari ka ring mag-stream ng mga log mula sa iba pang mga cluster tulad ng Devnet at Mainnet Beta. Kapag nag-stream ng mga log mula sa iba pang mga cluster, gugustuhin mong magsama ng program ID na may command na limitahan ang mga log na nakikita mo sa iyong partikular na program.
+Kung ang iyong CLI configuration ay nakaturo sa `localhost`, ang mga log ay palaging iuugnay sa test validator na iyong ginawa, ngunit maaari ka ring mag-stream ng mga log mula sa iba pang mga cluster tulad ng Devnet at Mainnet Beta. Kapag nag-stream ng mga log mula sa iba pang mga cluster, gugustuhin mong magsama ng program ID na may command upang limitahan ang mga logs na iyong nakikita sa iyong partikular na program.
 
-### Keypares
+### Keypairs
 
-Maaari kang bumuo ng bagong keypair gamit ang utos na `solana-keygen new --outfile` na sinusundan ng path ng file upang iimbak ang keypair.
+Maaari kang bumuo ng bagong keypair gamit ang command na `solana-keygen new --outfile` na sinusundan ng path ng file upang iimbak ang keypair.
 
 ```bash
 solana-keygen new --outfile ~/<FILE_PATH>
@@ -173,9 +173,9 @@ Habang gumagawa ka at sumusubok ng mga programa sa iyong lokal na kapaligiran, m
 
 - Paggamit ng maling keypair
 - Walang sapat na SOL para i-deploy ang iyong program o magsagawa ng transaksyon
-- Tumuturo sa maling kumpol
+- Tumuturo sa maling cluster
 
-Ang mga utos ng CLI na saklaw namin sa ngayon ay dapat makatulong sa iyo na mabilis na malutas ang mga isyung iyon.
+Ang mga command ng CLI na saklaw namin sa ngayon ay dapat makatulong sa iyo na mabilis na malutas ang mga isyung iyon.
 
 ## Bumuo ng mga programang Solana sa iyong lokal na kapaligiran
 
@@ -189,7 +189,7 @@ Para gumawa ng bagong Rust package para magsulat ng Solana program, maaari mong 
 cargo new --lib <PROJECT_DIRECTORY_NAME>
 ```
 
-Ang utos na ito ay lilikha ng bagong direktoryo na may pangalang tinukoy mo sa dulo ng utos. Ang bagong direktoryo na ito ay maglalaman ng `Cargo.toml` na manifest file na naglalarawan sa package.
+Ang command na ito ay lilikha ng bagong direktoryo na may pangalang tinukoy mo sa dulo ng utos. Ang bagong direktoryo na ito ay maglalaman ng `Cargo.toml` na manifest file na naglalarawan sa package.
 
 Ang manifest file ay naglalaman ng metadata gaya ng pangalan, bersyon, at dependencies (crates). Para magsulat ng Solana program, kakailanganin mong i-update ang `Cargo.toml` file para maisama ang `solana-program` bilang dependency. Maaaring kailanganin mo ring idagdag ang mga linyang `[lib]` at `crate-type` na ipinapakita sa ibaba.
 
@@ -291,7 +291,7 @@ pub fn process_instruction(
 
 ### 3. Magpatakbo ng lokal na test validator
 
-Sa pagsulat ng iyong programa, siguraduhin nating ang aming Solana CLI configuration ay tumuturo sa localhost sa pamamagitan ng paggamit ng `solana config set --url` na utos.
+Sa pagsulat ng iyong programa, siguraduhin nating ang ating Solana CLI configuration ay tumuturo sa localhost sa pamamagitan ng paggamit ng `solana config set --url` na utos.
 
 ```bash
 solana config set --url localhost
@@ -303,7 +303,7 @@ Susunod, tingnan kung na-update ang configuration ng Solana CLI gamit ang comman
 solana config get
 ```
 
-Panghuli, magpatakbo ng lokal na test validator. Sa isang hiwalay na terminal window, patakbuhin ang command na `solana-test-validator`. Ito ay kinakailangan lamang kapag ang aming `RPC URL` ay nakatakda sa localhost.
+Panghuli, magpatakbo ng lokal na test validator. Sa isang hiwalay na terminal window, patakbuhin ang command na `solana-test-validator`. Ito ay kinakailangan lamang kapag ang ating `RPC URL` ay nakatakda sa localhost.
 
 ```bash
 solana-test-validator
@@ -311,7 +311,7 @@ solana-test-validator
 
 ### 4. Bumuo at mag-deploy
 
-Handa na kaming buuin at i-deploy ang aming programa. Buuin ang program sa pamamagitan ng pagpapatakbo ng utos na `cargo build-bpf`.
+Handa na tayong buuin at i-deploy ang ating programa. Buuin ang program sa pamamagitan ng pagpapatakbo ng utos na `cargo build-bpf`.
 
 ```bash
 cargo build-bpf
@@ -327,7 +327,7 @@ Ang `solana program deploy` ay maglalabas ng `Program ID` para sa iyong program.
 
 ### 5. Tingnan ang mga log ng programa
 
-Bago namin i-invoke ang aming program, magbukas ng hiwalay na terminal at patakbuhin ang command na `solana logs`. Ito ay magbibigay-daan sa paggamit upang tingnan ang mga log ng programa sa terminal.
+Bago natin i-invoke ang ating program, magbukas ng hiwalay na terminal at patakbuhin ang command na `solana logs`. Ito ay magbibigay-daan sa paggamit upang tingnan ang mga log ng programa sa terminal.
 
 ```bash
 solana logs <PROGRAM_ID>
@@ -357,7 +357,7 @@ console.log(
 );
 ```
 
-Maaari ka ring magbukas ng hiwalay na command line window at gamitin ang `solana logs | grep "<PROGRAM_ID> invoke" -Isang <NUMBER_OF_LINES_TO_RETURN>`. Kapag gumagamit ng `solana logs` sa Devnet dapat mong tukuyin ang program ID. Kung hindi, ang command na `solana logs` ay magbabalik ng tuluy-tuloy na stream ng mga log mula sa Devnet. Halimbawa, gagawin mo ang sumusunod upang subaybayan ang mga invocation sa Token Program at ipakita ang unang 5 linya ng mga log para sa bawat invocation:
+Maaari ka ring magbukas ng hiwalay na command line window at gamitin ang `solana logs | grep "<PROGRAM_ID> invoke" -A <NUMBER_OF_LINES_TO_RETURN>`. Kapag gumagamit ng `solana logs` sa Devnet dapat mong tukuyin ang program ID. Kung hindi, ang command na `solana logs` ay magbabalik ng tuluy-tuloy na stream ng mga log mula sa Devnet. Halimbawa, gagawin mo ang sumusunod upang subaybayan ang mga invocation sa Token Program at ipakita ang unang 5 linya ng mga log para sa bawat invocation:
 
 ```bash
 solana logs | grep "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA invoke" -A 5
