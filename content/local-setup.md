@@ -65,7 +65,7 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
 ### I-download ang Solana CLI
 
-Ngayon handa na kaming mag-download ng Solana CLI para sa Linux. Maari mong patakbuhin ang sumusunod na command sa isang Ubuntu terminal. Maaari kang magbasa nang higit pa tungkol sa pag-download ng Solana CLI [dito](https://docs.solana.com/cli/install-solana-cli-tools).
+Ngayon handa na tayong mag-download ng Solana CLI para sa Linux. Maari mong patakbuhin ang sumusunod na command sa isang Ubuntu terminal. Maaari kang magbasa nang higit pa tungkol sa pag-download ng Solana CLI [dito](https://docs.solana.com/cli/install-solana-cli-tools).
 
 ```bash
 sh -c "$(curl -sSfL https://release.solana.com/v1.10.31/install)"
