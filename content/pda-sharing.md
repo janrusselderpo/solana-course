@@ -8,19 +8,19 @@ objectives:
 
 # TL;DR
 
-- Ang paggamit ng parehong PDA para sa maraming awtoridad na domain ay nagbubukas sa iyong programa hanggang sa posibilidad ng mga user na ma-access ang data at mga pondo na hindi sa kanila
-- Pigilan ang parehong PDA na gamitin para sa maramihang mga account sa pamamagitan ng paggamit ng mga buto na user at/o domain-specific
-- Gamitin ang mga hadlang sa `seeds` at `bump` ng Anchor upang patunayan na ang isang PDA ay nakuha gamit ang inaasahang mga buto at bump
+- Ang paggamit ng parehong PDA para sa maraming authority domain ay nagbubukas sa iyong programa hanggang sa posibilidad ng mga user na ma-access ang data at mga pondo na hindi sa kanila
+- Pigilan ang parehong PDA na gamitin para sa maramihang mga account sa pamamagitan ng paggamit ng mga seeds na user at/o domain-specific
+- Gamitin ang `seeds` at `bump` constraints ng Anchor upang patunayan na ang isang PDA ay nakuha gamit ang inaasahang mga seed at bump
 
 # Pangkalahatang-ideya
 
-Ang pagbabahagi ng PDA ay tumutukoy sa paggamit ng parehong PDA bilang isang lumagda sa maraming user o domain. Lalo na kapag gumagamit ng mga PDA para sa pagpirma, maaaring mukhang angkop na gumamit ng isang pandaigdigang PDA upang kumatawan sa programa. Gayunpaman, nagbubukas ito ng posibilidad na pumasa ang pagpapatunay ng account ngunit naa-access ng user ang mga pondo, paglilipat, o data na hindi pag-aari nila.
+Ang pagbabahagi ng PDA ay tumutukoy sa paggamit ng parehong PDA bilang isang signer sa maraming user o domain. Lalo na kapag gumagamit ng mga PDA para sa pagsign, maaaring tila angkop na gamitin ang isang global na PDA upang kumatawan sa programa. Gayunpaman, nagbubukas ito ng posibilidad na pumasa ang pagpapatunay ng account ngunit naa-access ng user ang mga pondo, paglilipat, o data na hindi pag-aari nila.
 
 ## Hindi secure na pandaigdigang PDA
 
-Sa halimbawa sa ibaba, ang `authority` ng `vault` account ay isang PDA na hinango gamit ang `mint` address na nakaimbak sa `pool` account. Ang PDA na ito ay ipinapasa sa tagubilin bilang `authority` account para mag-sign para sa mga token ng paglilipat mula sa `vault` patungo sa `withdraw_destination`.
+Sa halimbawa sa ibaba, ang `authority` ng `vault` account ay isang PDA na hinango gamit ang `mint` address na nakaimbak sa `pool` account. Ang PDA na ito ay ipinapasa sa instruction bilang `authority` account para mag-sign para sa mga token ng paglilipat mula sa `vault` patungo sa `withdraw_destination`.
 
-Ang paggamit ng `mint` na address bilang isang seed upang makuha ang PDA para mag-sign para sa `vault` ay hindi secure dahil maraming `pool` account ang maaaring gawin para sa parehong `vault` token account, ngunit ibang `withdraw_destination`. Sa pamamagitan ng paggamit ng `mint` bilang isang seed na nakukuha ang PDA para mag-sign para sa mga paglilipat ng token, anumang `pool` account ay maaaring mag-sign para sa paglilipat ng mga token mula sa isang `vault` token account patungo sa isang arbitrary na `withdraw_destination`.
+Ang paggamit ng `mint` na address bilang isang seed upang makuha ang PDA para mag-sign para sa `vault` ay hindi secure dahil maraming `pool` account ang maaaring magawa para sa parehong `vault` token account, ngunit ibang `withdraw_destination`. Sa pamamagitan ng paggamit ng `mint` bilang isang seed na nakukuha ang PDA para mag-sign para sa mga paglilipat ng token, anumang `pool` account ay maaaring mag-sign para sa paglilipat ng mga token mula sa isang `vault` token account patungo sa isang arbitrary na `withdraw_destination`.
 
 ```rust
 use anchor_lang::prelude::*;
@@ -72,7 +72,7 @@ pub struct TokenPool {
 
 ## Secure na account na partikular na PDA
 
-Ang isang diskarte upang lumikha ng isang account na partikular na PDA ay ang paggamit ng `withdraw_destination` bilang isang binhi upang makuha ang PDA na ginamit bilang awtoridad ng `vault` token account. Tinitiyak nito na ang pag-sign ng PDA para sa CPI sa pagtuturo ng `withdraw_tokens` ay nakukuha gamit ang nilalayong token account na `withdraw_destination`. Sa madaling salita, ang mga token mula sa isang `vault` token account ay maaari lamang i-withdraw sa `withdraw_destination` na orihinal na sinimulan sa `pool` account.
+Ang isang diskarte upang lumikha ng isang account na partikular na PDA ay ang paggamit ng `withdraw_destination` bilang isang seed upang makuha ang PDA na ginamit bilang authority ng `vault` token account. Tinitiyak nito na ang pag-sign ng PDA para sa CPI sa pagtuturo ng `withdraw_tokens` ay nakukuha gamit ang nilalayong token account na `withdraw_destination`. Sa madaling salita, ang mga token mula sa isang `vault` token account ay maaari lamang i-withdraw sa `withdraw_destination` na orihinal na sinimulan sa `pool` account.
 
 ```rust
 use anchor_lang::prelude::*;
@@ -131,7 +131,7 @@ Maaaring gamitin ang mga PDA bilang parehong address ng isang account at payagan
 
 Ang halimbawa sa ibaba ay gumagamit ng PDA na hinango gamit ang `withdraw_destination` bilang parehong address ng `pool` account at may-ari ng `vault` token account. Nangangahulugan ito na ang account lang ng `pool` na nauugnay sa tamang `vault` at `withdraw_destination` ang maaaring gamitin sa pagtuturo ng `withdraw_tokens`.
 
-Magagamit mo ang `seeds` at `bump` ng Anchor na may attribute na `#[account(...)]` para i-validate ang `pool` account PDA. Nakukuha ng Anchor ang isang PDA gamit ang `seeds` at `bump` na tinukoy at inihambing sa account na ipinasa sa pagtuturo bilang `pool` account. Ang `has_one` na hadlang ay ginagamit upang higit pang matiyak na ang mga tamang account lang na nakaimbak sa `pool` account ang naipapasa sa pagtuturo.
+Magagamit mo ang `seeds` at `bump` ng Anchor na may attribute na `#[account(...)]` para i-validate ang `pool` account PDA. Nakukuha ng Anchor ang isang PDA gamit ang `seeds` at `bump` na tinukoy at inihambing sa account na ipinasa sa instruction bilang `pool` account. Ang `has_one` constraint ay ginagamit upang higit pang matiyak na ang mga tamang account lang na nakaimbak sa `pool` account ang naipapasa sa instruction.
 
 ```rust
 use anchor_lang::prelude::*;
@@ -190,25 +190,25 @@ pub struct TokenPool {
 
 # Demo
 
-Magsanay tayo sa pamamagitan ng paglikha ng isang simpleng programa upang ipakita kung paano maaaring payagan ng pagbabahagi ng PDA ang isang umaatake na mag-withdraw ng mga token na hindi sa kanila. Ang demo na ito ay lumalawak sa mga halimbawa sa itaas sa pamamagitan ng pagsasama ng mga tagubilin upang simulan ang mga kinakailangang account ng programa.
+Magsanay tayo sa pamamagitan ng paglikha ng isang simpleng programa upang ipakita kung paano maaaring payagan ng pagbabahagi ng PDA ang isang umaatake na mag-withdraw ng mga token na hindi sa kanila. Ang demo na ito ay lumalawak sa mga halimbawa sa itaas sa pamamagitan ng pagsasama ng mga instruction upang simulan ang mga kinakailangang account ng programa.
 
 ### 1. Panimula
 
-Para makapagsimula, i-download ang starter code sa `starter` branch ng [repository na ito](https://github.com/Unboxed-Software/solana-pda-sharing/tree/starter). Kasama sa starter code ang isang program na may dalawang tagubilin at ang setup ng boilerplate para sa test file.
+Para makapagsimula, i-download ang starter code sa `starter` branch ng [repository na ito](https://github.com/Unboxed-Software/solana-pda-sharing/tree/starter). Kasama sa starter code ang isang program na may dalawang instruction at ang setup ng boilerplate para sa test file.
 
-Ang tagubiling `initialize_pool` ay nagpapasimula ng bagong `TokenPool` na nag-iimbak ng `vault`, `mint`, `withdraw_destination`, at `bump`. Ang `vault` ay isang token account kung saan ang awtoridad ay itinakda bilang isang PDA na hinango gamit ang `mint` na address.
+Ang `initialize_pool` instruction ay nagpapasimula ng bagong `TokenPool` na nag-iimbak ng `vault`, `mint`, `withdraw_destination`, at `bump`. Ang `vault` ay isang token account kung saan ang authority ay itinakda bilang isang PDA na hinango gamit ang `mint` na address.
 
-Ang tagubiling `withdraw_insecure` ay maglilipat ng mga token sa `vault` token account sa isang `withdraw_destination` token account.
+Ang `withdraw_insecure` instruction ay maglilipat ng mga token sa `vault` token account sa isang `withdraw_destination` token account.
 
-Gayunpaman, tulad ng nakasulat ang mga buto na ginamit para sa pagpirma ay hindi partikular sa destinasyon ng pag-withdraw ng vault, kaya nagbubukas ng programa sa mga pagsasamantala sa seguridad. Maglaan ng isang minuto upang maging pamilyar sa code bago magpatuloy.
+Gayunpaman, tulad ng nakasulat ang mga seed na ginamit para sa pagpirma ay hindi partikular sa destinasyon ng pag-withdraw ng vault, dahil dito, binubuksan ang program sa mga security exploits. Maglaan ng isang minuto upang maging pamilyar sa code bago magpatuloy.
 
-### 2. Subukan ang instruction na `withdraw_insecure`
+### 2. Subukan ang `withdraw_insecure` instruction
 
-Kasama sa test file ang code para i-invoke ang `initialize_pool` na pagtuturo at pagkatapos ay mag-mint ng 100 token sa `vault` token account. Kasama rin dito ang pagsubok para i-invoke ang `withdraw_insecure` gamit ang nilalayong `withdraw_destination`. Ipinapakita nito na ang mga tagubilin ay maaaring gamitin ayon sa nilalayon.
+Kasama sa test file ang code para i-invoke ang `initialize_pool` na pagtuturo at pagkatapos ay mag-mint ng 100 token sa `vault` token account. Kasama rin dito ang pagsubok para i-invoke ang `withdraw_insecure` gamit ang nilalayong `withdraw_destination`. Ipinapakita nito na ang mga instruction ay maaaring gamitin ayon sa inaasahan.
 
-Pagkatapos nito, may dalawa pang pagsubok upang ipakita kung paano madaling pagsamantalahan ang mga tagubilin.
+Pagkatapos nito, may dalawa pang pagsubok upang ipakita kung paano madaling pagsamantalahan ang mga instruction.
 
-Invokes ng unang pagsubok ang tagubiling `initialize_pool` na gumawa ng "pekeng" `pool` account gamit ang parehong token account ng `vault`, ngunit ibang `withdraw_destination`.
+ang unang test ay nag i-invoke ng `initialize_pool` instruction na gumawa ng "fake" `pool` account gamit ang parehong token account ng `vault`, ngunit ibang `withdraw_destination`.
 
 Ang pangalawang pagsubok ay aalis mula sa pool na ito, na epektibong nagnakaw ng mga pondo mula sa vault.
 
@@ -259,13 +259,13 @@ it("Insecure withdraw allows stealing from vault", async () => {
 })
 ```
 
-Patakbuhin ang `anchor test` upang makita na matagumpay na nakumpleto ang mga transaksyon at ang pagtuturo ng `withdraw_instrucure` ay nagbibigay-daan sa token account ng `vault` na ma-drain sa isang pekeng destinasyon sa pag-withdraw na nakaimbak sa pekeng `pool` account.
+Patakbuhin ang `anchor test` upang makita na matagumpay na nakumpleto ang mga transaksyon at ang `withdraw_instrucure` instruction ay nagbibigay-daan sa token account ng `vault` na ma-drain sa isang pekeng destinasyon sa pag-withdraw na nakaimbak sa pekeng `pool` account.
 
-### 3. Magdagdag ng `initialize_pool_secure` na pagtuturo
+### 3. Magdagdag ng `initialize_pool_secure` instruction
 
-Ngayon, magdagdag tayo ng bagong pagtuturo sa programa para sa ligtas na pagsisimula ng pool.
+Ngayon, magdagdag tayo ng bagong instruction sa programa para sa ligtas na pagsisimula ng pool.
 
-Ang bagong `initialize_pool_secure` na pagtuturo ay magsisimula ng `pool` account bilang isang PDA na hinango gamit ang `withdraw_destination`. Magsisimula rin ito ng `vault` token account na may awtoridad na itinakda bilang `pool` na PDA.
+Ang bagong `initialize_pool_secure` instruction ay magsisimula ng `pool` account bilang isang PDA na hinango gamit ang `withdraw_destination`. Magsisimula rin ito ng `vault` token account na may authority na itinakda bilang `pool` na PDA.
 
 ```rust
 pub fn initialize_pool_secure(ctx: Context<InitializePoolSecure>) -> Result<()> {
@@ -305,9 +305,9 @@ pub struct InitializePoolSecure<'info> {
 }
 ```
 
-### 4. Magdagdag ng `withdraw_secure` na pagtuturo
+### 4. Magdagdag ng `withdraw_secure` instruction
 
-Susunod, magdagdag ng `withdraw_secure` na pagtuturo. Ang tagubiling ito ay mag-withdraw ng mga token mula sa `vault` token account patungo sa `withdraw_destination`. Ang `pool` account ay napatunayan gamit ang `seeds` at `bump` constraints upang matiyak na ang tamang PDA account ay ibinigay. Sinusuri ng mga hadlang na `may_isa` kung ang tamang `vault` at `withdraw_destination` na token account ay ibinigay.
+Susunod, magdagdag ng `withdraw_secure` instruction. Ang instruction na ito ay mag-withdraw ng mga token mula sa `vault` token account patungo sa `withdraw_destination`. Ang `pool` account ay napatunayan gamit ang `seeds` at `bump` constraints upang matiyak na ang tamang PDA account ay ibinigay. Sinusuri ng `has_one` constraint kung ang tamang `vault` at `withdraw_destination` na token account ay ibinigay.
 
 ```rust
 pub fn withdraw_secure(ctx: Context<WithdrawTokensSecure>) -> Result<()> {
@@ -352,9 +352,9 @@ impl<'info> WithdrawTokensSecure<'info> {
 
 ### 5. Subukan ang `withdraw_secure` na pagtuturo
 
-Panghuli, bumalik sa test file upang subukan ang `withdraw_secure` na pagtuturo at ipakita na sa pamamagitan ng pagpapaliit sa saklaw ng aming awtoridad sa pagpirma ng PDA, inalis namin ang kahinaan.
+Panghuli, bumalik sa test file upang subukan ang `withdraw_secure` na pagtuturo at ipakita na sa pamamagitan ng pagpapaliit sa saklaw ng ating authority sa pagsign ng PDA, inalis natin ang kahinaan.
 
-Bago tayo magsulat ng isang pagsubok na nagpapakita na ang kahinaan ay na-patched, sumulat tayo ng isang pagsubok na nagpapakita lamang na ang pagsisimula at pag-withdraw ng mga tagubilin ay gumagana tulad ng inaasahan:
+Bago tayo magsulat ng isang pagsubok na nagpapakita na ang kahinaan ay na-patched, sumulat tayo ng isang pagsubok na nagpapakita lamang na ang initialization at withdraw instruction ay gumagana tulad ng inaasahan:
 
 ```typescript
 it("Secure pool initialization and withdraw works", async () => {
@@ -405,7 +405,7 @@ it("Secure pool initialization and withdraw works", async () => {
 })
 ```
 
-Ngayon, susubukan naming hindi na gumagana ang pagsasamantala. Dahil ang awtoridad sa `vault` ay ang `pool` na PDA na hinango gamit ang nilalayong token account na `withdraw_destination`, wala nang dapat na paraan para mag-withdraw sa isang account maliban sa nilalayong `withdraw_destination`.
+Ngayon, susubukan nating tiyakin na ang exploit ay hindi na gumagana. Dahil ang authority sa `vault` ay ang `pool` na PDA na hinango gamit ang nilalayong token account na `withdraw_destination`, wala nang dapat na paraan para mag-withdraw sa isang account maliban sa nilalayong `withdraw_destination`.
 
 Magdagdag ng pagsubok na nagpapakitang hindi mo matatawagan ang `withdraw_secure` sa maling destinasyon ng withdrawal. Maaari nitong gamitin ang pool at vault na ginawa sa nakaraang pagsubok.
 
@@ -430,7 +430,7 @@ Magdagdag ng pagsubok na nagpapakitang hindi mo matatawagan ang `withdraw_secure
   })
 ```
 
-Panghuli, dahil ang `pool` account ay isang PDA na hinango gamit ang `withdraw_destination` token account, hindi kami makakagawa ng pekeng `pool` account gamit ang parehong PDA. Magdagdag ng isa pang pagsubok na nagpapakita na ang bagong tagubiling `initialize_pool_secure` ay hindi hahayaan ang isang attacker na maglagay sa maling vault.
+Panghuli, dahil ang `pool` account ay isang PDA na hinango gamit ang `withdraw_destination` token account, hindi tayo makakagawa ng pekeng `pool` account gamit ang parehong PDA. Magdagdag ng isa pang pagsubok na nagpapakita na ang bagong `initialize_pool_secure` instruction ay hindi hahayaan ang isang attacker na maglagay sa maling vault.
 
 ```typescript
 it("Secure pool initialization doesn't allow wrong vault", async () => {
@@ -454,7 +454,7 @@ it("Secure pool initialization doesn't allow wrong vault", async () => {
 })
 ```
 
-Patakbuhin ang `anchor test` at upang makita na ang mga bagong tagubilin ay hindi nagpapahintulot sa isang umaatake na umatras mula sa isang vault na hindi sa kanila.
+Patakbuhin ang `anchor test` at upang makita na ang mga bagong instruction ay hindi nagpapahintulot sa isang umaatake na umatras mula sa isang vault na hindi sa kanila.
 
 ```
   pda-sharing
@@ -469,13 +469,13 @@ unknown signer: GJcHJLot3whbY1aC9PtCsBYk5jWoZnZRJPy5uUwzktAY
     ✔ Secure pool initialization doesn't allow wrong vault
 ```
 
-At ayun na nga! Hindi tulad ng ilan sa iba pang mga kahinaan sa seguridad na napag-usapan namin, ang isang ito ay mas konseptwal at hindi maaaring ayusin sa pamamagitan lamang ng paggamit ng isang partikular na uri ng Anchor. Kakailanganin mong pag-isipan ang arkitektura ng iyong programa at tiyaking hindi ka nagbabahagi ng mga PDA sa iba't ibang domain.
+At ayun na nga! Hindi tulad ng ilan sa iba pang mga kahinaan sa seguridad na napag-usapan natin, ang isang ito ay mas konseptwal at hindi maaaring ayusin sa pamamagitan lamang ng paggamit ng isang partikular na Anchor type. Kakailanganin mong pag-isipan ang arkitektura ng iyong programa at tiyaking hindi ka nagbabahagi ng mga PDA sa iba't ibang domain.
 
 Kung gusto mong tingnan ang panghuling code ng solusyon, mahahanap mo ito sa `solution` branch ng [parehong repositoryo](https://github.com/Unboxed-Software/solana-pda-sharing/tree/solution).
 
 # Hamon
 
-Tulad ng iba pang mga aralin sa modyul na ito, ang iyong pagkakataon na magsanay sa pag-iwas sa pagsasamantala sa seguridad na ito ay nakasalalay sa pag-audit ng iyong sarili o iba pang mga programa.
+Tulad ng iba pang mga aralin sa modyul na ito, ang iyong pagkakataon na magsanay sa pag-iwas sa security exploits na ito ay nakasalalay sa pag-audit ng iyong sarili o iba pang mga programa.
 
 Maglaan ng ilang oras upang suriin ang hindi bababa sa isang programa at hanapin ang mga potensyal na kahinaan sa istruktura ng PDA nito. Ang mga PDA na ginagamit para sa pagpirma ay dapat na makitid at nakatutok sa isang domain hangga't maaari.
 
