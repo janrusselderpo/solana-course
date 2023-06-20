@@ -9,8 +9,8 @@ objectives:
 
 # TL;DR
 
-- Gamitin ang **Mga Pagsusuri ng May-ari** upang i-verify na ang mga account ay pagmamay-ari ng inaasahang programa. Kung walang naaangkop na mga pagsusuri ng may-ari, ang mga account na pagmamay-ari ng mga hindi inaasahang programa ay maaaring gamitin sa isang pagtuturo.
-- Upang ipatupad ang pagsusuri ng may-ari sa Rust, tingnan lang kung tumutugma ang may-ari ng account sa inaasahang program ID
+- Gamitin ang **Owner Checks** upang i-verify ang mga account ay pagmamay-ari ng inaasahang program. Kung walang naaangkop na owner checks, ang mga account na pagmamay-ari ng mga hindi inaasahang program ay maaaring gamitin sa isang instruction.
+- Upang ipatupad ang owner check sa Rust, tingnan lang kung tumutugma ang may-ari ng account sa inaasahang program ID
 
 ```rust
 if ctx.accounts.account.owner != ctx.program_id {
@@ -18,14 +18,14 @@ if ctx.accounts.account.owner != ctx.program_id {
 }
 ```
 
-- Ang mga uri ng account ng anchor program ay nagpapatupad ng katangiang `May-ari` na nagbibigay-daan sa wrapper ng `Account<'info, T>` na awtomatikong i-verify ang pagmamay-ari ng programa
-- Binibigyan ka ng Anchor ng opsyon na tahasang tukuyin ang may-ari ng isang account kung ito ay dapat na kahit ano maliban sa kasalukuyang nagsasagawa ng programa
+- Ang mga uri ng account ng anchor program ay nagpapatupad ng katangiang `Owner` na nagbibigay-daan sa wrapper ng `Account<'info, T>` na awtomatikong i-verify ang pagmamay-ari ng program
+- Ang Anchor ay nagbibigay sa iyo ng pagkakataon na malinaw na tukuyin ang may-ari ng isang account kung dapat ba ito maging kahit ano maliban sa maliban sa kasalukuyang isinasagawang program.
 
 # Pangkalahatang-ideya
 
-Ang mga tseke ng may-ari ay ginagamit upang i-verify na ang isang account na ipinasa sa isang pagtuturo ay pagmamay-ari ng isang inaasahang programa. Pinipigilan nito ang mga account na pagmamay-ari ng isang hindi inaasahang programa na magamit sa isang pagtuturo.
+Ang mga checks ng may-ari ay ginagamit upang i-verify na ang isang account na ipinasa sa isang pagtuturo ay pagmamay-ari ng isang inaasahang program. Pinipigilan nito ang mga account na pagmamay-ari ng isang hindi inaasahang program na magamit sa isang instruction.
 
-Bilang isang refresher, ang `AccountInfo` struct ay naglalaman ng mga sumusunod na field. Ang pagsusuri ng may-ari ay tumutukoy sa pagsuri na ang field ng `may-ari` sa `AccountInfo` ay tumutugma sa inaasahang program ID.
+Bilang isang refresher, ang `AccountInfo` struct ay naglalaman ng mga sumusunod na field. Ang owner checks ay tumutukoy sa pagsuri na ang field ng `owner` sa `AccountInfo` ay tumutugma sa inaasahang program ID.
 
 ```jsx
 /// Account information
@@ -54,11 +54,11 @@ pub struct AccountInfo<'a> {
 
 Ang halimbawa sa ibaba ay nagpapakita ng `admin_instruction` na nilalayong ma-access lamang ng isang `admin` account na naka-store sa isang `admin_config` account.
 
-Bagama't sinusuri ng tagubilin ang `admin` account na nilagdaan ang transaksyon at tumutugma sa field ng `admin` na nakaimbak sa `admin_config` account, walang pagsusuri ng may-ari upang i-verify na ang `admin_config` na account na ipinasa sa pagtuturo ay pagmamay-ari ng nagpapatupad na programa.
+Bagama't sinusuri ng instruction ang `admin` account na nilagdaan ang transaksyon at tumutugma sa field ng `admin` na nakaimbak sa `admin_config` account, walang owner check upang i-verify na ang `admin_config` na account na ipinasa sa instruction ay pagmamay-ari ng nagpapatupad na program.
 
-Dahil ang `admin_config` ay hindi naka-check tulad ng ipinahiwatig ng uri ng `AccountInfo`, ang isang pekeng `admin_config` na account na pag-aari ng ibang program ay maaaring gamitin sa `admin_instruction`. Nangangahulugan ito na ang isang attacker ay maaaring lumikha ng isang program na may `admin_config` na ang data structure ay tumutugma sa `admin_config` ng iyong program, itakda ang kanilang pampublikong key bilang `admin` at ipasa ang kanilang `admin_config` account sa iyong program. Ito ay magbibigay-daan sa kanilang epektibong dayain ang iyong programa sa pag-iisip na sila ang awtorisadong admin para sa iyong programa.
+Dahil ang `admin_config` ay hindi naka-check tulad ng ipinapakita `AccountInfo` type, ang isang pekeng `admin_config` na account na pag-aari ng ibang program ay maaaring gamitin sa `admin_instruction`. Nangangahulugan ito na ang isang attacker ay maaaring gumuwa ng isang program na may `admin_config` na ang data structure ay tumutugma sa `admin_config` ng iyong program, itakda ang kanilang public key bilang `admin` at ipasa ang kanilang `admin_config` account sa iyong program. Ito ay magbibigay sa kanila ng kakayahang upang epektibong ma-spoof ang iyong program sa pag-iisip na sila ang awtorisadong admin para sa iyong program.
 
-Ang pinasimpleng halimbawang ito ay nagpi-print lamang ng `admin` sa mga log ng programa. Gayunpaman, maaari mong isipin kung paano pinapayagan ng isang nawawalang pagsusuri ng may-ari ang mga pekeng account na pagsamantalahan ang isang tagubilin.
+Ang pinasimpleng halimbawang ito ay nagpi-print lamang ng `admin` sa mga log ng program. Gayunpaman, maaari mong isipin kung paano pinapayagan ng isang nawawalang owner check ang mga pekeng account na pagsamantalahan ang isang instruction.
 
 ```rust
 use anchor_lang::prelude::*;
@@ -95,9 +95,9 @@ pub struct AdminConfig {
 }
 ```
 
-### Magdagdag ng pagsusuri ng may-ari
+### Magdagdag ng owner check
 
-Sa vanilla Rust, maaari mong lutasin ang problemang ito sa pamamagitan ng paghahambing ng field ng `owner` sa account sa ID ng programa. Kung hindi sila tumugma, magbabalik ka ng error na `IncorrectProgramId`.
+Sa vanilla Rust, maaari mong lutasin ang problemang ito sa pamamagitan ng pagkokumpara ng field ng `owner` sa account sa ID ng program. Kung hindi sila tumugma, magbabalik ka ng error na `IncorrectProgramId`.
 
 ```rust
 if ctx.accounts.admin_config.owner != ctx.program_id {
@@ -105,7 +105,7 @@ if ctx.accounts.admin_config.owner != ctx.program_id {
 }
 ```
 
-Ang pagdaragdag ng tseke ng may-ari ay pumipigil sa mga account na pagmamay-ari ng isang hindi inaasahang programa na maipasa bilang `admin_config` na account. Kung ginamit ang pekeng `admin_config` account sa `admin_instruction`, mabibigo ang transaksyon.
+Ang pagdaragdag ng owner check ay pumipigil sa mga account na pagmamay-ari ng isang hindi inaasahang program na maipasa bilang `admin_config` na account. Kung ginamit ang pekeng `admin_config` account sa `admin_instruction`, mabibigo ang transaksyon.
 
 ```rust
 use anchor_lang::prelude::*;
@@ -147,15 +147,15 @@ pub struct AdminConfig {
 
 ### Gamitin ang `Account<'info, T>` ng Anchor
 
-Magagawa ito ng Anchor na mas simple gamit ang uri ng `Account`.
+Magagawang simple ng Anchor gamit ang `Account` type.
 
-Ang `Account<'info, T>` ay isang wrapper sa paligid ng `AccountInfo` na nagbe-verify ng pagmamay-ari ng program at nagde-deserialize ng pinagbabatayan na data sa tinukoy na uri ng account na `T`. Ito naman ay nagbibigay-daan sa iyong gamitin ang `Account<'info, T>` upang madaling mapatunayan ang pagmamay-ari.
+Ang `Account<'info, T>` ay isang wrapper sa paligid ng `AccountInfo` na nagbe-verify ng pagmamay-ari ng program at nagde-deserialize ng pinagbabatayan na data sa tinukoy na account type `T`. Ito naman ay magbibigay-daan sa iyo na gamitin ang `Account<'info, T>` upang madaling mapatunayan ang pagmamay-ari.
 
-Para sa konteksto, ang attribute na `#[account]` ay nagpapatupad ng iba't ibang katangian para sa isang istraktura ng data na kumakatawan sa isang account. Ang isa sa mga ito ay ang katangian ng `May-ari` na tumutukoy sa isang address na inaasahang pagmamay-ari ng isang account. Ang may-ari ay nakatakda bilang program ID na tinukoy sa `declare_id!` na macro.
+Para sa konteksto, ang attribute na `#[account]` ay nagpapatupad ng iba't ibang traits para sa isang istraktura ng data na kumakatawan sa isang account. Ang isa sa mga ito ay ang katangian ng `Owner` na tumutukoy sa isang address na inaasahang pagmamay-ari ng isang account. Ang owner ay nakatakda bilang program ID na tinukoy sa `declare_id!` na macro.
 
-Sa halimbawa sa ibaba, ang `Account<'info, AdminConfig>` ay ginagamit upang patunayan ang `admin_config`. Awtomatiko nitong gagawin ang pagsusuri ng may-ari at i-deserialize ang data ng account. Bukod pa rito, ginagamit ang hadlang na `may_isa` upang tingnan kung tumutugma ang `admin` na account sa field ng `admin` na nakaimbak sa account na `admin_config`.
+Sa halimbawa sa ibaba, ang `Account<'info, AdminConfig>` ay ginagamit upang patunayan ang `admin_config`. Awtomatiko nitong gagawin ang owner check at i-deserialize ang data ng account. Bukod pa rito, ginagamit ang hadlang na `has_one` upang tingnan kung tumutugma ang `admin` na account sa field ng `admin` na nakaimbak sa account na `admin_config`.
 
-Sa ganitong paraan, hindi mo kailangang kalat ang iyong lohika ng pagtuturo sa mga pagsusuri ng may-ari.
+Sa ganitong paraan, hindi mo kailangang i-clutter ang iyong lohika ng insctruction sa mga owner check.
 
 ```rust
 use anchor_lang::prelude::*;
@@ -187,11 +187,11 @@ pub struct AdminConfig {
 }
 ```
 
-### Gamitin ang hadlang na `#[account(owner = <expr>)]` ng Anchor
+### Gamitin ang constraint na `#[account(owner = <expr>)]` ng Anchor
 
-Bilang karagdagan sa uri ng `Account`, maaari kang gumamit ng hadlang na `may-ari`. Binibigyang-daan ka ng hadlang na `may-ari` na tukuyin ang program na dapat nagmamay-ari ng isang account kung iba ito sa kasalukuyang pinapatupad. Magagamit ito kung, halimbawa, sumusulat ka ng isang tagubilin na umaasa na ang isang account ay isang PDA na nagmula sa ibang programa. Maaari mong gamitin ang mga hadlang sa `seeds` at `bump` at tukuyin ang `may-ari` upang makuha at ma-verify nang maayos ang address ng account na ipinasa.
+Bilang karagdagan sa `Account` type, maaari kang gumamit ng constraint na `owner`. Binibigyang-daan ka ng constraint na `owner` na tukuyin ang program na dapat nagmamay-ari ng isang account kung iba ito sa kasalukuyang isinasagawa program. Magagamit ito kung, halimbawa, sumusulat ka ng isang instruction na umaasa na ang isang account ay isang PDA na nagmula sa ibang program. Maaari mong gamitin ang `seeds` at `bump` constraint at tukuyin ang `owner` upang makuha at ma-verify nang maayos ang address ng account na ipinasa.
 
-Para magamit ang hadlang sa `may-ari`, kailangan mong magkaroon ng access sa pampublikong key ng program na inaasahan mong pagmamay-ari ng isang account. Maaari mong ipasa ang programa bilang karagdagang account o i-hard-code ang pampublikong key sa isang lugar sa iyong programa.
+Para magamit ang `owner` constraint, kailangan mong magkaroon ng access sa public key ng program na inaasahan mong pagmamay-ari ng isang account. Maaari mong ipasa ang program bilang karagdagang account o i-hard-code ang public key sa isang lugar sa iyong program.
 
 ```rust
 use anchor_lang::prelude::*;
@@ -232,22 +232,22 @@ pub struct AdminConfig {
 
 # Demo
 
-Sa demo na ito, gagamit kami ng dalawang programa upang ipakita kung paano maaaring payagan ng isang nawawalang pagsusuri ng may-ari ang isang pekeng account na maubos ang mga token mula sa isang pinasimpleng token na "vault" na account (tandaan na ito ay halos kapareho sa demo mula sa aralin sa Pagpapahintulot ng Tagapagpirma).
+Sa demo na ito, gagamit tayo ng dalawang program upang ipakita kung paano maaaring payagan ng isang nawawalang owner check ang isang pekeng account na i-drain ang mga token mula sa isang pinasimpleng token na "vault" na account (tandaan na ito ay halos kapareho sa demo mula sa aralin sa Signer Authorization).
 
-Upang makatulong na mailarawan ito, ang isang programa ay mawawalan ng pagsusuri ng may-ari ng account sa vault account kung saan ito nag-withdraw ng mga token.
+Upang makatulong na mailarawan ito, ang isang program ay mawawalan ng owner check ng account sa vault account kung saan ito nag-withdraw ng mga token.
 
 Ang pangalawang program ay magiging direktang clone ng unang program na ginawa ng isang malisyosong user para gumawa ng account na kapareho ng vault account ng unang program.
 
-Kung walang pagsusuri ng may-ari, makakapasa ang malisyosong user na ito sa vault account na pagmamay-ari ng kanilang "pekeng" na programa at mapapatupad pa rin ang orihinal na programa.
+Kung walang owner check, makakapasa ang malisyosong user na ito sa vault account na pagmamay-ari ng kanilang "pekeng" na program at mapapatupad pa rin ang orihinal na program.
 
 ### 1. Panimula
 
 Para makapagsimula, i-download ang starter code mula sa `starter` branch ng [repository na ito](https://github.com/Unboxed-Software/solana-owner-checks/tree/starter). Kasama sa starter code ang dalawang program na `clone` at `owner_check` at ang boilerplate setup para sa test file.
 
-Kasama sa programang `owner_check` ang dalawang tagubilin:
+Kasama sa programng `owner_check` ang dalawang instruction:
 
-- Ang `initialize_vault` ay nagpapasimula ng isang pinasimpleng vault account na nag-iimbak ng mga address ng isang token account at isang account ng awtoridad
-- Ang `insecure_withdraw` ay nag-withdraw ng mga token mula sa token account, ngunit nawawala ang may-ari ng check para sa vault account
+- Ang `initialize_vault` ay nagpapasimula ng isang pinasimpleng vault account na nag-iimbak ng mga address ng isang token account at isang authority account
+- Ang `insecure_withdraw` ay nag-withdraw ng mga token mula sa token account, ngunit nawawala ang owner check para sa vault account
 
 ```rust
 use anchor_lang::prelude::*;
@@ -345,9 +345,9 @@ pub struct Vault {
 }
 ```
 
-Ang programang `clone` ay may kasamang isang pagtuturo:
+Ang programng `clone` ay may kasamang isang instruction:
 
-- Nagsisimula ang `initialize_vault` ng isang “vault” account na ginagaya ang vault account ng programang `owner_check`. Iniimbak nito ang address ng token account ng totoong vault, ngunit pinapayagan ang malisyosong user na maglagay ng sarili nilang account ng awtoridad.
+- Nagsisimula ang `initialize_vault` ng isang “vault” account na ginagaya ang vault account ng programng `owner_check`. Iniimbak nito ang address ng token account ng totoong vault, ngunit pinapayagan ang malisyosong user na maglagay ng sarili nilang authority account.
 
 ```rust
 use anchor_lang::prelude::*;
@@ -387,13 +387,13 @@ pub struct Vault {
 }
 ```
 
-### 2. Subukan ang `insecure_withdraw` na pagtuturo
+### 2. Subukan ang `insecure_withdraw` na instruction
 
-Ang test file ay may kasamang pagsubok para gamitin ang `initialize_vault` na pagtuturo sa `owner_check` program gamit ang provider wallet bilang `authority` at pagkatapos ay mag-mint ng 100 token sa token account.
+Ang test file ay may kasamang test para gamitin ang `initialize_vault` na pagtuturo sa `owner_check` program gamit ang provider wallet bilang `authority` at pagkatapos ay mag-mint ng 100 token sa token account.
 
-Kasama rin sa test file ang isang pagsubok para gamitin ang `initialize_vault` na pagtuturo sa `clone` na program para magsimula ng pekeng `vault` account na nag-iimbak ng parehong `tokenPDA` account, ngunit ibang `authority`. Tandaan na walang mga bagong token ang nai-mint dito.
+Kasama rin sa test file ang isang pagsubok para gamitin ang `initialize_vault` na instruction sa `clone` na program para magsimula ng pekeng `vault` account na nag-iimbak ng parehong `tokenPDA` account, ngunit ibang `authority`. Tandaan na walang mga bagong token ang nai-mint dito.
 
-Magdagdag tayo ng pagsubok para magamit ang tagubiling `insecure_withdraw`. Ang pagsusulit na ito ay dapat pumasa sa naka-clone na vault at sa pekeng awtoridad. Dahil walang pagsusuri ng may-ari upang i-verify na ang `vaultClone` na account ay pagmamay-ari ng programang `owner_check`, ang pagsusuri sa validation ng data ng tagubilin ay papasa at ipapakita ang `walletFake` bilang isang wastong awtoridad. Ang mga token mula sa `tokenPDA` account ay ibabalik sa `withdrawDestinationFake` account.
+Magdagdag tayo ng test para magamit ang `insecure_withdraw` instruction. Ang test na ito ay dapat pumasa sa naka-clone na vault at sa pekeng authority. Dahil walang owner check upang i-verify na ang `vaultClone` na account ay pagmamay-ari ng programng `owner_check`, ang pagsusuri sa data validation ng instruction ay papasa at ipapakita ang `walletFake` bilang isang valid authority. Ang mga token mula sa `tokenPDA` account ay ibabalik sa `withdrawDestinationFake` account.
 
 ```tsx
 describe("owner-check", () => {
@@ -427,7 +427,7 @@ owner-check
   ✔ Insecure withdraw (409ms)
 ```
 
-Tandaan na matagumpay na nagde-deserialize ang `vaultClone` kahit na awtomatikong sinisimulan ng Anchor ang mga bagong account na may natatanging 8 byte na discriminator at sinusuri ang discriminator kapag nagde-deserialize ng account. Ito ay dahil ang discriminator ay isang hash ng pangalan ng uri ng account.
+Tandaan na matagumpay na nagde-deserialize ang `vaultClone` kahit na awtomatikong sinisimulan ng Anchor ang mga bagong account na may natatanging 8 byte na discriminator at sinusuri ang discriminator kapag nagde-deserialize ng account. Ito ay dahil ang discriminator ay isang hash ng pangalan ng account type.
 
 ```rust
 #[account]
@@ -437,15 +437,15 @@ pub struct Vault {
 }
 ```
 
-Dahil ang parehong mga programa ay nagpapasimula ng magkaparehong mga account at ang parehong mga istruktura ay pinangalanang `Vault`, ang mga account ay may parehong discriminator kahit na sila ay pag-aari ng magkaibang mga programa.
+Dahil ang parehong mga program ay nagpapasimula ng magkaparehong mga account at ang parehong mga istruktura ay pinangalanang `Vault`, ang mga account ay may parehong discriminator kahit na sila ay pag-aari ng magkaibang mga program.
 
-### 3. Magdagdag ng `secure_withdraw` na pagtuturo
+### 3. Magdagdag ng `secure_withdraw` na instruction
 
 Isara natin ang butas ng seguridad na ito.
 
 Sa `lib.rs` file ng `owner_check` program magdagdag ng `secure_withdraw` na pagtuturo at isang `SecureWithdraw` account struct.
 
-Sa `SecureWithdraw` struct, gamitin natin ang `Account<'info, Vault>` para matiyak na may ginagawang pagsusuri ng may-ari sa `vault` account. Gagamitin din namin ang hadlang na `may_isa` upang tingnan kung ang `token_account` at `awtoridad` ay naipasa sa pagtuturo ay tumutugma sa mga halagang nakaimbak sa `vault` account.
+Sa `SecureWithdraw` struct, gamitin natin ang `Account<'info, Vault>` para matiyak na may ginagawang owner check sa `vault` account. Gagamitin din natin ang `has_one` constraint upang tingnan kung ang `token_account` at `authority` ay naipasa sa instruction ay tumutugma sa mga value na nakaimbak sa `vault` account.
 
 ```rust
 #[program]
@@ -498,9 +498,9 @@ pub struct SecureWithdraw<'info> {
 }
 ```
 
-### 4. Subukan ang pagtuturo ng `secure_withdraw`
+### 4. I-Test ang `secure_withdraw` instruction
 
-Upang subukan ang tagubiling `secure_withdraw`, gagamitin namin ang tagubilin nang dalawang beses. Una, gagamitin namin ang pagtuturo gamit ang `vaultClone` account, na inaasahan naming mabibigo. Pagkatapos, gagamitin namin ang tagubilin gamit ang tamang `vault` na account upang matiyak na gumagana ang pagtuturo ayon sa nilalayon.
+Upang subukan ang `secure_withdraw` instruction, gagamitin natin ang instruction nang dalawang beses. Una, gagamitin natin ang instruction gamit ang `vaultClone` account, na inaasahan nating mag fail. Pagkatapos, gagamitin natin ang instruction gamit ang tamang `vault` na account upang matiyak na gumagana ang instruction ayon sa inaasahan.
 
 ```tsx
 describe("owner-check", () => {
@@ -564,21 +564,21 @@ Patakbuhin ang `anchor test` upang makita na ang transaksyon gamit ang `vaultClo
 'Program HQYNznB3XTqxzuEqqKMAD9XkYE5BGrnv8xmkoDNcqHYB failed: custom program error: 0xbbf'
 ```
 
-Dito makikita natin kung paano mapasimple ng paggamit ng uri ng `Account<'info, T>` ng Anchor ang proseso ng pagpapatunay ng account upang i-automate ang pagsusuri sa pagmamay-ari. Bukod pa rito, tandaan na maaaring tukuyin ng Anchor Errors ang account na nagdudulot ng error (hal. ang ikatlong linya ng mga log sa itaas ay nagsasabing `AnchorError na dulot ng account: vault`). Makakatulong ito kapag nagde-debug.
+Dito makikita natin kung paano mapapasimple ng paggamit ng `Account<'info, T>` type ng Anchor ang proseso ng pagpapatunay ng account upang i-automate ang ownership check. Bukod pa rito, tandaan na maaaring tukuyin ng Anchor Errors ang account na nagdudulot ng error (halimbawa. ang ikatlong linya ng mga log sa itaas ay nagsasabing `AnchorError caused by account: vault`). Makakatulong ito kapag nagde-debug.
 
 ```bash
 ✔ Secure withdraw, expect error (78ms)
 ✔ Secure withdraw (10063ms)
 ```
 
-Iyon lang ang kailangan mo para matiyak na suriin mo ang may-ari sa isang account! Tulad ng ilang iba pang pagsasamantala, medyo simple itong iwasan ngunit napakahalaga. Tiyaking palaging pag-isipan kung aling mga account ang dapat pagmamay-ari ng kung aling mga programa at tiyaking magdaragdag ka ng naaangkop na pagpapatunay.
+Iyon lang ang kailangan mo para matiyak na suriin mo ang may-ari sa isang account! Tulad ng ilang iba pang pagsasamantala, medyo simple itong iwasan ngunit napakahalaga. Tiyaking palaging pag-isipan kung aling mga account ang dapat pagmamay-ari ng kung aling mga program at tiyaking magdaragdag ka ng naaangkop na pagpapatunay.
 
 Kung gusto mong tingnan ang panghuling code ng solusyon, mahahanap mo ito sa `solution` branch ng [repository](https://github.com/Unboxed-Software/solana-owner-checks/tree/solution) .
 
 # Hamon
 
-Tulad ng iba pang mga aralin sa modyul na ito, ang iyong pagkakataon na magsanay sa pag-iwas sa pagsasamantala sa seguridad na ito ay nakasalalay sa pag-audit ng iyong sarili o iba pang mga programa.
+Tulad ng iba pang mga aralin sa modyul na ito, ang iyong pagkakataon na magsanay sa pag-iwas sa exploit sa seguridad na ito ay nakasalalay sa pag-audit ng iyong sarili o iba pang mga program.
 
-Maglaan ng ilang oras upang suriin ang hindi bababa sa isang programa at tiyaking isinasagawa ang wastong pagsusuri ng may-ari sa mga account na ipinasa sa bawat tagubilin.
+Maglaan ng ilang oras upang suriin ang hindi bababa sa isang program at tiyaking isinasagawa ang wastong owner check sa mga account na ipinasa sa bawat instruction.
 
-Tandaan, kung makakita ka ng bug o pagsasamantala sa programa ng ibang tao, mangyaring alertuhan sila! Kung makakita ka ng isa sa iyong sariling programa, siguraduhing i-patch ito kaagad.
+Tandaan, kung makakita ka ng bug o exploit sa program ng ibang tao, mangyaring alertuhan sila! Kung makakita ka ng isa sa iyong sariling program, siguraduhing i-patch ito kaagad.
