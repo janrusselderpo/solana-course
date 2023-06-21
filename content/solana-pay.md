@@ -10,7 +10,7 @@ objectives:
 
 - **Solana Pay** ay isang detalye para sa pag-encode ng mga kahilingan sa transaksyon ng Solana sa loob ng mga URL, na nagpapagana ng mga standardized na kahilingan sa transaksyon sa iba't ibang Solana app at wallet
 - **Partial signing** ng mga transaksyon ay nagbibigay-daan para sa paglikha ng mga transaksyon na nangangailangan ng maramihang mga lagda bago sila isumite sa network
-- Ang **Transaction gating** ay nagsasangkot ng pagpapatupad ng mga panuntunan na tumutukoy kung ang ilang partikular na transaksyon ay pinapayagang iproseso o hindi, batay sa ilang kundisyon o pagkakaroon ng partikular na data sa transaksyon
+- Ang **Transaction gating** ay nagsasangkot ng implementation ng mga panuntunan na tumutukoy kung ang ilang partikular na transaksyon ay pinapayagang iproseso o hindi, batay sa ilang kundisyon o pagkakaroon ng partikular na data sa transaksyon
 
 # Pangkalahatang-ideya
 
@@ -18,7 +18,7 @@ Ang komunidad ng Solana ay patuloy na pinapabuti at pinapalawak ang paggana ng n
 
 Ang Solana Pay ay isang magandang halimbawa nito. Sa halip na magdagdag ng bagong functionality sa network, ginagamit ng Solana Pay ang mga kasalukuyang feature ng pag-sign ng network sa isang natatanging paraan upang paganahin ang mga merchant at application na humiling ng mga transaksyon at bumuo ng mga mekanismo ng gating para sa mga partikular na uri ng transaksyon.
 
-Sa buong araling ito, matututunan mo kung paano gamitin ang Solana Pay para gumawa ng mga kahilingan sa paglilipat at transaksyon, i-encode ang mga kahilingang ito bilang QR code, bahagyang pumirma sa mga transaksyon, at mga transaksyon sa gate batay sa mga kundisyong pipiliin mo. Sa halip na pabayaan ito, umaasa kaming makikita mo ito bilang isang halimbawa ng paggamit ng mga umiiral na feature sa mga bago at kawili-wiling paraan, gamit ito bilang isang launching pad para sa iyong sariling natatanging mga pakikipag-ugnayan sa network sa panig ng kliyente.
+Sa buong araling ito, matututunan mo kung paano gamitin ang Solana Pay para gumawa ng mga kahilingan sa paglilipat at transaksyon, i-encode ang mga kahilingang ito bilang QR code, bahagyang pumirma sa mga transaksyon, at mga transaksyon sa gate batay sa mga kundisyong pipiliin mo. Sa halip na pabayaan ito, umaasa tayong makikita mo ito bilang isang halimbawa ng paggamit ng mga umiiral na feature sa mga bago at kawili-wiling paraan, gamit ito bilang isang launching pad para sa iyong sariling natatanging mga pakikipag-ugnayan sa network sa panig ng kliyente.
 
 ## Solana Pay
 
@@ -28,10 +28,10 @@ Ang mga URL ng kahilingan ay may prefix na `solana:` upang maidirekta ng mga pla
 
 Mayroong dalawang uri ng mga kahilingan na tinukoy ng detalye ng Solana Pay:
 
-1. Kahilingan sa Paglipat: ginagamit para sa simpleng paglilipat ng SOL o SPL Token
-2. Kahilingan sa Transaksyon: ginagamit upang humiling ng anumang uri ng transaksyon sa Solana
+1. Transfer Request: ginagamit para sa simpleng paglilipat ng SOL o SPL Token
+2. Transaction Request: ginagamit upang humiling ng anumang uri ng transaksyon sa Solana
 
-### Mga kahilingan sa paglipat
+### Transfer Request
 
 Ang detalye ng kahilingan sa paglipat ay naglalarawan ng isang hindi interactive na kahilingan para sa paglilipat ng token ng SOL o SPL. Ang mga URL ng kahilingan sa paglipat ay may sumusunod na format na `solana:<recipient>?<optional-query-params>`.
 
@@ -41,7 +41,7 @@ Ang halaga ng `recipient` ay kinakailangan at dapat ay isang base58-encoded publ
 - `spl-token` - isang base58-encoded public key ng isang SPL Token mint account kung ang paglilipat ay isang SPL token at hindi SOL
 - `reference` - opsyonal na reference value bilang base58-encoded 32 byte arrays. Ito ay maaaring gamitin ng isang kliyente para sa pagtukoy sa transaksyon na on-chain dahil ang kliyente ay hindi magkakaroon ng lagda ng isang transaksyon.
 - `label` - isang URL-encoded UTF-8 string na naglalarawan sa pinagmulan ng kahilingan sa paglipat
-- `mensahe` - isang URL-encoded UTF-8 string na naglalarawan sa katangian ng kahilingan sa paglipat
+- `mensahe` - isang URL-encoded UTF-8 string na naglalarawan sa attribute ng kahilingan sa paglipat
 - `memo` - isang URL-encoded UTF-8 string na dapat isama sa SPL memo instruction sa transaksyon sa pagbabayad
 
 Bilang halimbawa, narito ang isang URL na naglalarawan ng kahilingan sa paglipat para sa 1 SOL:
@@ -56,7 +56,7 @@ At narito ang isang URL na naglalarawan ng kahilingan sa paglipat para sa 0.1 US
 solana:mvines9iiHiQTysrwkJjGf2gb9Ex9jXJX8ns3qwf2kN?amount=0.01&spl-token=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v
 ```
 
-### Mga kahilingan sa transaksyon
+### Transaction Request:
 
 Ang kahilingan sa transaksyon ng Solana Pay ay katulad ng isang kahilingan sa paglipat dahil isa lang itong URL na maaaring gamitin ng isang sumusuportang wallet. Gayunpaman, interactive ang kahilingang ito at mas open-ended ang format:
 
@@ -69,8 +69,8 @@ Ang halaga ng `link` ay dapat na isang URL kung saan maaaring gumawa ng HTTP na 
 Kapag nakatanggap ang wallet ng URL ng Kahilingan sa transaksyon, apat na bagay ang mangyayari:
 
 1. Nagpapadala ang wallet ng kahilingan sa GET sa application sa ibinigay na URL ng `link` upang makuha ang isang label at imahe ng icon na ipapakita sa user.
-2. Pagkatapos, magpapadala ang wallet ng kahilingan sa POST kasama ang pampublikong susi ng end user.
-3. Gamit ang pampublikong key ng end user (at anumang karagdagang impormasyon na ibinigay sa `link`), ang application ay bubuo ng transaksyon at tumugon sa isang base64-encoded serialized na transaksyon.
+2. Pagkatapos, magpapadala ang wallet ng kahilingan sa POST kasama ang public key ng end user.
+3. Gamit ang public key ng end user (at anumang karagdagang impormasyon na ibinigay sa `link`), ang application ay bubuo ng transaksyon at tumugon sa isang base64-encoded serialized na transaksyon.
 4. Ang wallet ay nagde-decode at nagde-deserialize ng transaksyon, pagkatapos ay hahayaan ang user na mag-sign at ipadala ang transaksyon.
 
 Dahil mas kasangkot ang mga kahilingan sa transaksyon kaysa sa mga kahilingan sa paglipat, ang natitira sa araling ito ay tututuon sa paggawa ng mga kahilingan sa transaksyon.
@@ -79,7 +79,7 @@ Dahil mas kasangkot ang mga kahilingan sa transaksyon kaysa sa mga kahilingan sa
 
 ### Tukuyin ang endpoint ng API
 
-Ang pangunahing bagay na kailangan mong gawin, ang developer, para magawa ang daloy ng kahilingan sa transaksyon ay mag-set up ng REST API endpoint sa URL na plano mong isama sa kahilingan sa transaksyon. Sa araling ito, gagamitin namin ang [Next.js API Routes](https://nextjs.org/docs/api-routes/introduction) para sa aming mga endpoint, ngunit maaari kang gumamit ng kahit anong stack at tool na gusto mo' re pinaka komportable sa.
+Ang pangunahing bagay na kailangan mong gawin, ang developer, para magawa ang daloy ng kahilingan sa transaksyon ay mag-set up ng REST API endpoint sa URL na plano mong isama sa kahilingan sa transaksyon. Sa araling ito, gagamitin natin ang [Next.js API Routes](https://nextjs.org/docs/api-routes/introduction) para sa ating mga endpoint, ngunit maaari kang gumamit ng kahit anong stack at tool na gusto mo' re pinaka komportable sa.
 
 Sa Next.js, gagawin mo ito sa pamamagitan ng pagdaragdag ng file sa folder na `pages/api` at pag-export ng function na humahawak sa kahilingan at tugon.
 
@@ -129,13 +129,13 @@ Kapag ang wallet ay humiling ng GET sa API endpoint, ang function na `get` ay ti
 
 ### Pangasiwaan ang isang POST na kahilingan at buuin ang transaksyon
 
-Pagkatapos mag-isyu ng kahilingan sa GET, maglalabas ang wallet ng kahilingan sa POST sa parehong URL. Dapat asahan ng iyong endpoint na ang `body` ng POST na kahilingan ay naglalaman ng JSON object na may field na `account` na ibinigay ng humihiling na wallet. Ang halaga ng `account` ay magiging isang string na kumakatawan sa pampublikong key ng end user.
+Pagkatapos mag-isyu ng kahilingan sa GET, maglalabas ang wallet ng kahilingan sa POST sa parehong URL. Dapat asahan ng iyong endpoint na ang `body` ng POST na kahilingan ay naglalaman ng JSON object na may field na `account` na ibinigay ng humihiling na wallet. Ang halaga ng `account` ay magiging isang string na kumakatawan sa public key ng end user.
 
 Gamit ang impormasyong ito at anumang karagdagang mga parameter na ibinigay, maaari mong buuin ang transaksyon at ibalik ito sa wallet para sa pagpirma sa pamamagitan ng:
 
 1. Kumokonekta sa network ng Solana at makuha ang pinakabagong `blockhash`.
 2. Paglikha ng bagong transaksyon gamit ang `blockhash`.
-3. Pagdaragdag ng mga tagubilin sa transaksyon
+3. Pagdaragdag ng mga instruction sa transaksyon
 4. Pagse-serye ng transaksyon at pagbabalik nito sa isang object na `PostResponse` kasama ng isang mensahe para sa user.
 
 ```typescript
@@ -217,9 +217,9 @@ Kung gagamitin mo ang library na `@solana/pay`, maaari mong gamitin ang function
 
 ## Gated na mga transaksyon
 
-Nabanggit na namin dati kung paano ang Solana Pay ay isang halimbawa ng kakayahang gumawa ng mga cool na bagong bagay sa network sa pamamagitan ng pagiging malikhain gamit ang kasalukuyang functionality. Ang isa pang maliit na halimbawa ng paggawa nito sa loob ng payong ng Solana Pay ay gawing available lang ang ilang partikular na transaksyon kapag natugunan ang ilang kundisyon.
+Nabanggit na natin dati kung paano ang Solana Pay ay isang halimbawa ng kakayahang gumawa ng mga cool na bagong bagay sa network sa pamamagitan ng pagiging malikhain gamit ang kasalukuyang functionality. Ang isa pang maliit na halimbawa ng paggawa nito sa loob ng payong ng Solana Pay ay gawing available lang ang ilang partikular na transaksyon kapag natugunan ang ilang kundisyon.
 
-Dahil kinokontrol mo ang endpoint na pagbuo ng transaksyon, matutukoy mo kung anong pamantayan ang dapat matugunan bago mabuo ang isang transaksyon. Halimbawa, maaari mong gamitin ang field ng `account` na ibinigay sa kahilingan ng POST upang tingnan kung ang end user ay may hawak na NFT mula sa isang partikular na koleksyon o kung ang pampublikong key na iyon ay nasa isang paunang natukoy na listahan ng mga account na maaaring gumawa ng partikular na transaksyong ito.
+Dahil kinokontrol mo ang endpoint na pagbuo ng transaksyon, matutukoy mo kung anong pamantayan ang dapat matugunan bago mabuo ang isang transaksyon. Halimbawa, maaari mong gamitin ang field ng `account` na ibinigay sa kahilingan ng POST upang tingnan kung ang end user ay may hawak na NFT mula sa isang partikular na koleksyon o kung ang public key na iyon ay nasa isang paunang natukoy na listahan ng mga account na maaaring gumawa ng partikular na transaksyong ito.
 
 ```typescript
 // retrieve array of nfts owned by the given wallet
@@ -240,14 +240,14 @@ for (let i = 0; i < nfts.length; i++) {
 
 Kung gusto mo ng ilang partikular na transaksyon sa likod ng ilang uri ng gating mechanism, ang functionality na iyon ay kailangang ipatupad din on-chain. Ang pagbabalik ng error mula sa iyong endpoint ng Solana Pay ay nagpapahirap para sa mga end user na gawin ang transaksyon, ngunit maaari pa rin nilang gawin ito nang manu-mano.
 
-Ang ibig sabihin nito ay ang (mga) tagubiling tinatawag ay dapat mangailangan ng ilang uri ng lagda ng "admin" na ang iyong aplikasyon lamang ang makakapagbigay. Sa paggawa nito, gayunpaman, nagawa mo ito upang ang aming mga nakaraang halimbawa ay hindi gumana. Ang transaksyon ay binuo at ipinadala sa humihiling na wallet para sa pirma ng end user, ngunit ang isinumiteng transaksyon ay mabibigo nang walang pirma ng admin.
+Ang ibig sabihin nito ay ang (mga) instruction tinatawag ay dapat mangailangan ng ilang uri ng lagda ng "admin" na ang iyong aplikasyon lamang ang makakapagbigay. Sa paggawa nito, gayunpaman, nagawa mo ito upang ang ating mga nakaraang halimbawa ay hindi gumana. Ang transaksyon ay binuo at ipinadala sa humihiling na wallet para sa pirma ng end user, ngunit ang isinumiteng transaksyon ay mabibigo nang walang pirma ng admin.
 
 Sa kabutihang palad, pinapagana ng Solana ang pagiging composability ng lagda na may bahagyang pagpirma.
 
 Ang bahagyang pagpirma sa isang multi-signature na transaksyon ay nagbibigay-daan sa mga pumirma na idagdag ang kanilang lagda bago ang transaksyon ay i-broadcast sa network. Maaari itong maging kapaki-pakinabang sa maraming sitwasyon, kabilang ang:
 
 - Pag-apruba sa mga transaksyon na nangangailangan ng lagda ng maraming partido, tulad ng isang merchant at isang mamimili na kailangang kumpirmahin ang mga detalye ng isang pagbabayad.
-- Pag-invoke ng mga custom na program na nangangailangan ng mga lagda ng parehong user at administrator. Makakatulong ito upang limitahan ang pag-access sa mga tagubilin ng programa at matiyak na ang mga awtorisadong partido lamang ang makakapagsagawa ng mga ito.
+- Pag-invoke ng mga custom na program na nangangailangan ng mga lagda ng parehong user at administrator. Makakatulong ito upang limitahan ang pag-access sa mga instruction ng programa at matiyak na ang mga awtorisadong partido lamang ang makakapagsagawa ng mga ito.
 
 ```typescript
 const { blockhash, lastValidBlockHeight } = await connection.getLatestBlockhash()
@@ -284,17 +284,17 @@ const qr = createQR(url, 400, 'transparent')
 
 # Demo
 
-Ngayong mayroon ka nang konseptong kaalaman sa Solana Pay, isabuhay natin ito. Gagamitin namin ang Solana Pay upang bumuo ng isang serye ng mga QR code para sa isang scavenger hunt. Dapat bisitahin ng mga kalahok ang bawat lokasyon ng scavenger hunt sa pagkakasunud-sunod. Sa bawat lokasyon, gagamitin nila ang ibinigay na QR code para isumite ang naaangkop na transaksyon sa smart contract ng scavenger hunt na sumusubaybay sa pag-unlad ng user.
+Ngayong mayroon ka nang konseptong kaalaman sa Solana Pay, isabuhay natin ito. Gagamitin natin ang Solana Pay upang bumuo ng isang serye ng mga QR code para sa isang scavenger hunt. Dapat bisitahin ng mga kalahok ang bawat lokasyon ng scavenger hunt sa pagkakasunud-sunod. Sa bawat lokasyon, gagamitin nila ang ibinigay na QR code para isumite ang naaangkop na transaksyon sa smart contract ng scavenger hunt na sumusubaybay sa pag-unlad ng user.
 
 ### 1. Panimula
 
-Para makapagsimula, i-download ang starter code sa `starter` branch ng [repository] na ito(https://github.com/Unboxed-Software/solana-scavenger-hunt-app/tree/starter). Ang starter code ay isang Next.js app na nagpapakita ng Solana Pay QR code. Pansinin na hinahayaan ka ng menu bar na lumipat sa pagitan ng iba't ibang QR code. Ang default na opsyon ay isang simpleng paglilipat ng SOL para sa mga layunin ng paglalarawan. Sa kabuuan Magdaragdag kami ng functionality sa mga opsyon sa lokasyon sa menu bar.
+Para makapagsimula, i-download ang starter code sa `starter` branch ng [repository] na ito(https://github.com/Unboxed-Software/solana-scavenger-hunt-app/tree/starter). Ang starter code ay isang Next.js app na nagpapakita ng Solana Pay QR code. Pansinin na hinahayaan ka ng menu bar na lumipat sa pagitan ng iba't ibang QR code. Ang default na opsyon ay isang simpleng paglilipat ng SOL para sa mga layunin ng paglalarawan. Sa kabuuan Magdaragdag tayo ng functionality sa mga opsyon sa lokasyon sa menu bar.
 
 ![Screenshot ng scavenger hunt app](../assets/scavenger-hunt-screenshot.png)
 
-Para magawa ito, gagawa kami ng bagong endpoint para sa isang kahilingan sa transaksyon na bubuo ng transaksyon para sa paggamit ng Anchor program sa Devnet. Ang program na ito ay partikular na ginawa para sa "scavenger hunt" app na ito at may dalawang tagubilin: `initialize` at `check_in`. Ang tagubiling `pasimulan` ay ginagamit upang i-set up ang estado ng user, habang ang tagubiling `check_in` ay ginagamit upang mag-record ng check-in sa isang lokasyon sa pangangaso ng basura. Hindi kami gagawa ng anumang pagbabago sa program sa demo na ito, ngunit huwag mag-atubiling tingnan ang [source code](https://github.com/Unboxed-Software/anchor-scavenger-hunt) kung gusto mo upang maging pamilyar sa programa.
+Para magawa ito, gagawa tayo ng bagong endpoint para sa isang kahilingan sa transaksyon na bubuo ng transaksyon para sa paggamit ng Anchor program sa Devnet. Ang program na ito ay partikular na ginawa para sa "scavenger hunt" app na ito at may dalawang instruction: `initialize` at `check_in`. Ang `pasimulan` instruction ay ginagamit upang i-set up ang estado ng user, habang ang `check_in` instruction ay ginagamit upang mag-record ng check-in sa isang lokasyon sa pangangaso ng basura. Hindi tayo gagawa ng anumang pagbabago sa program sa demo na ito, ngunit huwag mag-atubiling tingnan ang [source code](https://github.com/Unboxed-Software/anchor-scavenger-hunt) kung gusto mo upang maging pamilyar sa programa.
 
-Bago magpatuloy, tiyaking pamilyar ka sa starter code para sa Scavenger Hunt app. Ang pagtingin sa `pages/index.tsx`, `utils/createQrCode/simpleTransfer`, at `/utils/checkTransaction` ay magbibigay-daan sa iyo na makita kung paano naka-set up ang kahilingan sa transaksyon para sa pagpapadala ng SOL. Susundan namin ang isang katulad na pattern para sa kahilingan sa transaksyon para sa pag-check in sa isang lokasyon.
+Bago magpatuloy, tiyaking pamilyar ka sa starter code para sa Scavenger Hunt app. Ang pagtingin sa `pages/index.tsx`, `utils/createQrCode/simpleTransfer`, at `/utils/checkTransaction` ay magbibigay-daan sa iyo na makita kung paano naka-set up ang kahilingan sa transaksyon para sa pagpapadala ng SOL. Susundan natin ang isang katulad na pattern para sa kahilingan sa transaksyon para sa pag-check in sa isang lokasyon.
 
 ### 2. Pag-setup
 
@@ -325,7 +325,7 @@ Forwarding                    https://7761-24-28-107-82.ngrok.io -> http://local
 
 Ngayon, buksan ang HTTPS ngrok URL na ipinapakita sa iyong console sa browser (hal. https://7761-24-28-107-82.ngrok.io). Papayagan ka nitong mag-scan ng mga QR code mula sa iyong mobile device habang lokal na sumusubok.
 
-Sa oras ng pagsulat, ang demo na ito ay pinakamahusay na gumagana sa Solflare. Magpapakita ang ilang wallet ng maling mensahe ng babala kapag nag-scan ng Solana Pay QR code. Anuman ang wallet na ginagamit mo, siguraduhing lumipat ka sa devnet sa wallet. Pagkatapos ay i-scan ang QR code sa home page na may label na "SOL Transfer". Ang QR code na ito ay isang reference na pagpapatupad para sa isang kahilingan sa transaksyon na nagsasagawa ng simpleng paglilipat ng SOL. Tinatawag din nito ang function na `requestAirdrop` upang pondohan ang iyong mobile wallet gamit ang Devnet SOL dahil karamihan sa mga tao ay walang Devnet SOL na magagamit para sa pagsubok.
+Sa oras ng pagsulat, ang demo na ito ay pinakamahusay na gumagana sa Solflare. Magpapakita ang ilang wallet ng maling mensahe ng babala kapag nag-scan ng Solana Pay QR code. Anuman ang wallet na ginagamit mo, siguraduhing lumipat ka sa devnet sa wallet. Pagkatapos ay i-scan ang QR code sa home page na may label na "SOL Transfer". Ang QR code na ito ay isang reference na implementation para sa isang kahilingan sa transaksyon na nagsasagawa ng simpleng paglilipat ng SOL. Tinatawag din nito ang function na `requestAirdrop` upang pondohan ang iyong mobile wallet gamit ang Devnet SOL dahil karamihan sa mga tao ay walang Devnet SOL na magagamit para sa pagsubok.
 
 Kung matagumpay mong naisagawa ang transaksyon gamit ang QR code, handa ka nang magpatuloy!
 
@@ -333,7 +333,7 @@ Kung matagumpay mong naisagawa ang transaksyon gamit ang QR code, handa ka nang 
 
 Ngayong handa ka na, oras na para gumawa ng endpoint na sumusuporta sa mga kahilingan sa transaksyon para sa pag-check in sa lokasyon gamit ang programang Scavenger Hunt.
 
-Magsimula sa pamamagitan ng pagbubukas ng file sa `pages/api/checkIn.ts`. Pansinin na mayroon itong function na helper para sa pagsisimula ng `eventOrganizer` mula sa isang pribadong key environment variable. Ang unang bagay na gagawin namin sa file na ito ay ang mga sumusunod:
+Magsimula sa pamamagitan ng pagbubukas ng file sa `pages/api/checkIn.ts`. Pansinin na mayroon itong function na helper para sa pagsisimula ng `eventOrganizer` mula sa isang pribadong key environment variable. Ang unang bagay na gagawin natin sa file na ito ay ang mga sumusunod:
 
 1. Mag-export ng function na `handler` upang pangasiwaan ang isang arbitrary na kahilingan sa HTTP
 2. Magdagdag ng mga function na `get` at `post` para sa paghawak sa mga pamamaraang HTTP na iyon
@@ -375,16 +375,16 @@ function get(res: NextApiResponse) {
 
 ### 5. I-update ang function na `post`
 
-Pagkatapos ng kahilingan sa GET, maglalabas ang wallet ng kahilingan sa POST sa endpoint. Ang `body` ng kahilingan ay maglalaman ng JSON object na may field na `account` na kumakatawan sa pampublikong key ng end user.
+Pagkatapos ng kahilingan sa GET, maglalabas ang wallet ng kahilingan sa POST sa endpoint. Ang `body` ng kahilingan ay maglalaman ng JSON object na may field na `account` na kumakatawan sa public key ng end user.
 
 Bilang karagdagan, ang mga parameter ng query ay maglalaman ng anumang na-encode mo sa QR code. Kung titingnan mo ang `utils/createQrCode/checkIn.ts`, mapapansin mo na ang partikular na app na ito ay may kasamang mga parameter para sa `reference` at `id` gaya ng sumusunod:
 
-1. `reference` - isang random na nabuong pampublikong key na ginagamit upang tukuyin ang transaksyon
+1. `reference` - isang random na nabuong public key na ginagamit upang tukuyin ang transaksyon
 2. `id` - ang location id bilang integer
 
 Sige at i-update ang function na `post` upang kunin ang `account`, `reference`, at `id` mula sa kahilingan. Dapat kang tumugon nang may error kung ang alinman sa mga ito ay nawawala.
 
-Susunod, magdagdag ng statement na `try catch` kung saan tumutugon ang `catch` block nang may error at ang `try` block ay tumatawag sa isang bagong function na `buildTransaction`. Kung matagumpay ang `buildTransaction`, tumugon gamit ang 200 at JSON object kasama ang transaksyon at isang mensahe na natagpuan ng user ang ibinigay na lokasyon. Huwag mag-alala tungkol sa lohika para sa function na `buildTransaction` - gagawin namin iyon sa susunod.
+Susunod, magdagdag ng statement na `try catch` kung saan tumutugon ang `catch` block nang may error at ang `try` block ay tumatawag sa isang bagong function na `buildTransaction`. Kung matagumpay ang `buildTransaction`, tumugon gamit ang 200 at JSON object kasama ang transaksyon at isang mensahe na natagpuan ng user ang ibinigay na lokasyon. Huwag mag-alala tungkol sa lohika para sa function na `buildTransaction` - gagawin natin iyon sa susunod.
 
 Tandaan na kakailanganin mo ring mag-import ng `PublicKey` at `Transaction` mula sa `@solana/web3.js` dito.
 
@@ -442,15 +442,15 @@ Susunod, ipatupad natin ang function na `buildTransaction`. Dapat itong buuin, b
 3. I-verify na ang user ay nasa tamang lokasyon
 4. Kunin ang kasalukuyang blockhash at huling wastong taas ng block mula sa koneksyon
 5. Gumawa ng bagong object ng transaksyon
-6. Magdagdag ng tagubilin sa pagsisimula sa transaksyon kung hindi umiiral ang estado ng user
-7. Magdagdag ng tagubilin sa pag-check-in sa transaksyon
-8. Idagdag ang `reference` na pampublikong key sa pagtuturo sa pag-check-in
+6. Magdagdag ng instruction sa pagsisimula sa transaksyon kung hindi umiiral ang estado ng user
+7. Magdagdag ng instruction sa pag-check-in sa transaksyon
+8. Idagdag ang `reference` na public key sa pagtuturo sa pag-check-in
 9. Bahagyang lagdaan ang transaksyon sa keypair ng event organizer
 10. I-serialize ang transaksyon gamit ang base64 encoding at ibalik ang transaksyon
 
-Bagama't diretso ang bawat isa sa mga hakbang na ito, marami itong hakbang. Upang pasimplehin ang function, gagawa kami ng mga walang laman na function ng helper na pupunan namin sa ibang pagkakataon para sa mga hakbang 1, 3, 6, at 7-8. Tatawagin namin itong `fetchUserState`, `verifyCorrectLocation`, `createInitUserInstruction`, at `createCheckInInstruction`, ayon sa pagkakabanggit.
+Bagama't diretso ang bawat isa sa mga hakbang na ito, marami itong hakbang. Upang pasimplehin ang function, gagawa tayo ng mga walang laman na function ng helper na pupunan natin sa ibang pagkakataon para sa mga hakbang 1, 3, 6, at 7-8. Tatawagin natin itong `fetchUserState`, `verifyCorrectLocation`, `createInitUserInstruction`, at `createCheckInInstruction`, ayon sa pagkakabanggit.
 
-Idaragdag din namin ang mga sumusunod na pag-import:
+Idaragdag din natin ang mga sumusunod na pag-import:
 
 ```typescript
 import { NextApiRequest, NextApiResponse } from "next"
@@ -459,7 +459,7 @@ import { locationAtIndex, Location, locations } from "../../utils/locations"
 import { connection, gameId, program } from "../../utils/programSetup"
 ```
 
-Gamit ang mga walang laman na function ng helper at ang mga bagong import, maaari naming punan ang function na `buildTransaction`:
+Gamit ang mga walang laman na function ng helper at ang mga bagong import, maaari nating punan ang function na `buildTransaction`:
 
 ```typescript
 async function buildTransaction(
@@ -541,7 +541,7 @@ async function createCheckInInstruction(
 
 ### 7. Ipatupad ang function na `fetchUserState`
 
-Kapag natapos na ang function na `buildTransaction`, maaari naming simulan ang pagpapatupad ng mga walang laman na function ng helper na ginawa namin, simula sa `fetchUserState`. Ginagamit ng function na ito ang `gameId` at `account` ng user upang makuha ang PDA ng estado ng user, pagkatapos ay kinukuha ang account na iyon, at ibabalik ang null kung wala ito.
+Kapag natapos na ang function na `buildTransaction`, maaari nating simulan ang implementation ng mga walang laman na function ng helper na ginawa natin, simula sa `fetchUserState`. Ginagamit ng function na ito ang `gameId` at `account` ng user upang makuha ang PDA ng estado ng user, pagkatapos ay kinukuha ang account na iyon, at ibabalik ang null kung wala ito.
 
 ```typescript
 async function fetchUserState(account: PublicKey): Promise<UserState | null> {
@@ -589,7 +589,7 @@ function verifyCorrectLocation(
 
 ### 9. Ipatupad ang mga function ng paggawa ng pagtuturo
 
-Panghuli, ipatupad natin ang `createInitUserInstruction` at `createCheckInInstruction`. Maaaring gamitin ng mga ito ang Anchor upang buuin at ibalik ang mga kaukulang tagubilin. Ang tanging catch ay ang `createCheckInInstruction` ay kailangang magdagdag ng `reference` sa listahan ng mga tagubilin ng mga key.
+Panghuli, ipatupad natin ang `createInitUserInstruction` at `createCheckInInstruction`. Maaaring gamitin ng mga ito ang Anchor upang buuin at ibalik ang mga kaukulang instruction. Ang tanging catch ay ang `createCheckInInstruction` ay kailangang magdagdag ng `reference` sa listahan ng mga instruction ng mga key.
 
 ```typescript
 async function createInitUserInstruction(
