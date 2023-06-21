@@ -9,10 +9,10 @@ objectives:
 # TL;DR
 
 - **Procedural macros** ay isang espesyal na uri ng Rust macro na nagpapahintulot sa programmer na bumuo ng code sa oras ng pag-compile batay sa custom na input.
-- Sa balangkas ng Anchor, ginagamit ang mga procedural macro upang bumuo ng code na nagpapababa sa dami ng boilerplate na kinakailangan kapag nagsusulat ng mga programang Solana.
+- Sa Anchor framework, ginagamit ang mga procedural macro upang bumuo ng code na nagpapababa sa dami ng boilerplate na kinakailangan kapag nagsusulat ng mga programang Solana.
 - Ang **Abstract Syntax Tree (AST)** ay isang representasyon ng syntax at istraktura ng input code na ipinapasa sa isang procedural macro. Kapag gumagawa ng macro, gumagamit ka ng mga elemento ng AST tulad ng mga token at item upang makabuo ng naaangkop na code.
 - Ang **Token** ay ang pinakamaliit na unit ng source code na maaaring i-parse ng compiler sa Rust.
-- Ang **Item** ay isang deklarasyon na tumutukoy sa isang bagay na maaaring gamitin sa isang Rust program, gaya ng isang struct, isang enum, isang katangian, isang function, o isang paraan.
+- Ang **Item** ay isang deklarasyon na tumutukoy sa isang bagay na maaaring gamitin sa isang Rust program, gaya ng isang struct, isang enum, isang attribute, isang function, o isang paraan.
 - Ang **TokenStream** ay isang sequence ng mga token na kumakatawan sa isang piraso ng source code, at maaaring ipasa sa isang procedural macro upang payagan itong ma-access at manipulahin ang mga indibidwal na token sa code.
 
 # Pangkalahatang-ideya
@@ -21,12 +21,12 @@ Sa Rust, ang macro ay isang piraso ng code na maaari mong isulat nang isang bese
 
 Mayroong dalawang iba't ibang uri ng macros: declarative macros at procedural macros.
 
-- Ang mga deklaratibong macro ay tinukoy gamit ang `macro_rules!` na macro, na nagbibigay-daan sa iyong tumugma sa mga pattern ng code at bumuo ng code batay sa pagtutugma ng pattern.
+- Ang mga declarative macro ay tinukoy gamit ang `macro_rules!` na macro, na nagbibigay-daan sa iyong tumugma sa mga pattern ng code at bumuo ng code batay sa pagtutugma ng pattern.
 - Ang mga procedural macro sa Rust ay tinukoy gamit ang Rust code at gumagana sa abstract syntax tree (AST) ng input na TokenStream, na nagpapahintulot sa kanila na manipulahin at bumuo ng code sa mas pinong antas ng detalye.
 
 Sa araling ito, magtutuon tayo sa mga procedural macro, na karaniwang ginagamit sa framework ng Anchor.
 
-## Mga konsepto ng kalawang
+## Mga konsepto ng rust
 
 Bago tayo maghukay sa mga macro, partikular, pag-usapan natin ang ilan sa mahahalagang terminolohiya, konsepto, at tool na gagamitin natin sa buong aralin.
 
@@ -49,12 +49,12 @@ Ang mga item ay pinangalanan, self-contained na mga piraso ng code sa Rust. Nagb
 
 Mayroong ilang iba't ibang uri ng mga item, tulad ng:
 
-- Mga Pag-andar
-- Mga istruktura
-- Mga Enum
-- Mga katangian
-- Mga module
-- Mga macro
+-  Mga Function
+-  Mga Struct
+-  Mga Enum
+-  Mga Trait
+-  Mga Module
+-  Mga Macro
 
 Maaari kang magbasa nang higit pa tungkol sa Rust item [dito](https://doc.rust-lang.org/reference/items.html).
 
@@ -156,11 +156,11 @@ Nagbibigay-daan ito sa iyo na lumikha ng mga procedural macro na gumaganap ng ma
 
 Ang mga procedural macro sa Rust ay isang mahusay na paraan upang palawigin ang wika at gumawa ng custom na syntax. Ang mga macro na ito ay nakasulat sa Rust at pinagsama-sama kasama ang natitirang code. May tatlong uri ng procedural macros:
 
-- Mga macro na parang function - `custom!(...)`
-- Kumuha ng mga macro - `#[derive(CustomDerive)]`
-- Mga macro ng katangian - `#[CustomAttribute]`
+-   Function-like macros - `custom!(...)`
+-   Derive macros - `#[derive(CustomDerive)]`
+-   Attribute macros - `#[CustomAttribute]`
 
-Tatalakayin ng seksyong ito ang tatlong uri ng procedural macros at magbibigay ng halimbawang pagpapatupad ng isa. Ang proseso ng pagsulat ng procedural macro ay pare-pareho sa lahat ng tatlong uri, kaya ang halimbawang ibinigay ay maaaring iakma sa iba pang mga uri.
+Tatalakayin ng seksyong ito ang tatlong uri ng procedural macros at magbibigay ng halimbawang implementation ng isa. Ang proseso ng pagsulat ng procedural macro ay pare-pareho sa lahat ng tatlong uri, kaya ang halimbawang ibinigay ay maaaring iakma sa iba pang mga uri.
 
 ### Mga macro na parang function
 
@@ -173,7 +173,7 @@ pub fn my_macro(input: TokenStream) -> TokenStream {
 }
 ```
 
-Ang mga macro na ito ay ginagamit gamit ang pangalan ng function na sinusundan ng `!` operator. Magagamit ang mga ito sa iba't ibang lugar sa isang Rust program, tulad ng sa mga expression, statement, at mga kahulugan ng function.
+Ang mga macro na ito ay ginagamit gamit ang pangalan ng function na sinusundan ng `!` operator. Magagamit ang mga ito sa iba't ibang lugar sa isang Rust program, tulad ng sa mga expression, statement, at mga function definition.
 
 ```rust
 my_macro!(input);
@@ -181,9 +181,9 @@ my_macro!(input);
 
 Ang mga tulad-function na procedural macro ay pinakaangkop para sa mga simpleng gawain sa pagbuo ng code na nangangailangan lamang ng isang input at output stream. Ang mga ito ay madaling maunawaan at gamitin, at nagbibigay sila ng isang tuwirang paraan upang makabuo ng code sa oras ng pag-compile.
 
-### Mga macro ng katangian
+### Mga Attribute macro
 
-Tinutukoy ng mga macro ng katangian ang mga bagong attribute na naka-attach sa mga item sa isang Rust program gaya ng mga function at struct.
+Tinutukoy ng mga attribute macro  ang mga bagong attribute na naka-attach sa mga item sa isang Rust program gaya ng mga function at struct.
 
 ```rust
 #[my_macro]
@@ -192,7 +192,7 @@ fn my_function() {
 }
 ```
 
-Ang mga macro ng katangian ay tinukoy gamit ang isang function na sinusundan ng attribute na `#[proc_macro_attribute]`. Ang function ay nangangailangan ng dalawang token stream bilang input at nagbabalik ng isang `TokenStream` bilang output na pumapalit sa orihinal na item ng arbitrary na bilang ng mga bagong item.
+Ang mga attribute macro ay tinukoy gamit ang isang function na sinusundan ng attribute na `#[proc_macro_attribute]`. Ang function ay nangangailangan ng dalawang token stream bilang input at nagbabalik ng isang `TokenStream` bilang output na pumapalit sa orihinal na item ng arbitrary na bilang ng mga bagong item.
 
 ```rust
 #[proc_macro_attribute]
@@ -201,7 +201,7 @@ pub fn my_macro(attr: TokenStream, input: TokenStream) -> TokenStream {
 }
 ```
 
-Ang unang input ng token stream ay kumakatawan sa mga argumento ng katangian. Ang pangalawang stream ng token ay ang natitirang item kung saan naka-attach ang attribute, kasama ang anumang iba pang attribute na maaaring naroroon.
+Ang unang input ng token stream ay kumakatawan sa mga argumento ng attribute. Ang pangalawang stream ng token ay ang natitirang item kung saan naka-attach ang attribute, kasama ang anumang iba pang attribute na maaaring naroroon.
 
 ```rust
 #[my_macro(arg1, arg2)]
@@ -212,9 +212,9 @@ fn my_function() {
 
 Halimbawa, maaaring iproseso ng macro ng attribute ang mga argumentong ipinasa sa attribute upang paganahin o huwag paganahin ang ilang partikular na feature, at pagkatapos ay gamitin ang pangalawang stream ng token upang baguhin ang orihinal na item sa ilang paraan. Sa pamamagitan ng pagkakaroon ng access sa parehong token stream, ang attribute macros ay makakapagbigay ng higit na flexibility at functionality kumpara sa paggamit lamang ng isang token stream.
 
-### Kumuha ng mga macro
+### Mga Derive macros
 
-Ang mga derive macro ay ginagamit gamit ang `#[derive]` attribute sa isang struct, enum, o union ay karaniwang ginagamit upang awtomatikong ipatupad ang mga katangian para sa mga uri ng input.
+Ang mga derive macro ay ginagamit gamit ang `#[derive]` attribute sa isang struct, enum, o union ay karaniwang ginagamit upang awtomatikong ipatupad ang mga attribute para sa mga uri ng input.
 
 ```rust
 #[derive(MyMacro)]
@@ -223,7 +223,7 @@ struct Input {
 }
 ```
 
-Tinutukoy ang mga derive macro na may isang function na pinangungunahan ng `#[proc_macro_derive]` attribute. Ang mga ito ay limitado sa pagbuo ng code para sa mga struct, enum, at unyon. Kumuha sila ng isang stream ng token bilang input at nagbabalik ng isang stream ng token bilang output.
+Tinutukoy ang mga derive macro na may isang function na pinangungunahan ng `#[proc_macro_derive]` attribute. Ang mga ito ay limitado sa pagbuo ng code para sa mga struct, enum, at unions. Kumuha sila ng isang stream ng token bilang input at nagbabalik ng isang stream ng token bilang output.
 
 Hindi tulad ng iba pang mga procedural macro, hindi pinapalitan ng ibinalik na token stream ang orihinal na code. Sa halip, ang ibinalik na stream ng token ay idaragdag sa module o block kung saan kabilang ang orihinal na item. Nagbibigay-daan ito sa mga developer na palawigin ang functionality ng orihinal na item nang hindi binabago ang orihinal na code.
 
@@ -234,7 +234,7 @@ pub fn my_macro(input: TokenStream) -> TokenStream {
 }
 ```
 
-Bilang karagdagan sa pagpapatupad ng mga katangian, maaaring tukuyin ng mga derive macro ang mga katangian ng katulong. Maaaring gamitin ang mga katangian ng Helper sa saklaw ng item kung saan inilalapat ang derive macro at i-customize ang proseso ng pagbuo ng code.
+Bilang karagdagan sa pagi-implement ng mga trait, maaaring tukuyin ng mga derive macro ang mga helper attributes. Maaaring gamitin ang mga helper attributes sa saklaw ng item kung saan inilalapat ang derive macro at i-customize ang proseso ng pagbuo ng code.
 
 ```rust
 #[proc_macro_derive(MyMacro, attributes(helper))]
@@ -243,7 +243,7 @@ pub fn my_macro(body: TokenStream) -> TokenStream {
 }
 ```
 
-Ang mga katangian ng Helper ay hindi gumagalaw, na nangangahulugang wala silang anumang epekto sa kanilang sarili, at ang kanilang tanging layunin ay gamitin bilang input sa derive macro na tinukoy ang mga ito.
+Ang mga helper attributes ay hindi gumagalaw, na nangangahulugang wala silang anumang epekto sa kanilang sarili, at ang kanilang tanging layunin ay gamitin bilang input sa derive macro na tinukoy ang mga ito.
 
 ```rust
 #[derive(MyMacro)]
@@ -257,7 +257,7 @@ Halimbawa, maaaring tukuyin ng derive macro ang isang helper attribute para mags
 
 ### Halimbawa ng procedural macro
 
-Ipinapakita ng halimbawang ito kung paano gumamit ng derive procedural macro para awtomatikong makabuo ng pagpapatupad ng isang `describe()` na paraan para sa isang struct.
+Ipinapakita ng halimbawang ito kung paano gumamit ng derive procedural macro para awtomatikong makabuo ng implementation ng isang `describe()` na paraan para sa isang struct.
 
 ```rust
 use example_macro::Describe;
@@ -299,7 +299,7 @@ Ang unang `match` ay may dalawang arm: isa para sa `syn::Data::Struct` na varian
 
 Ang pangalawang `match` ay mayroon ding dalawang arm: isa para sa `syn::Fields::Named` na variant, at isa para sa "catch-all" `_` arm na humahawak sa lahat ng iba pang variant ng `syn::Fields` .
 
-Ang `#(#idents), *` syntax ay tumutukoy na ang `idents` iterator ay "papalawakin" upang lumikha ng comma-separated list ng mga elemento sa iterator.
+Ang `#(#idents), *` syntax ay tumutukoy na ang `idents` iterator ay "expanded" upang lumikha ng comma-separated list ng mga elemento sa iterator.
 
 ```rust
 use proc_macro::{self, TokenStream};
@@ -327,11 +327,11 @@ pub fn describe_struct(input: TokenStream) -> TokenStream {
 }
 ```
 
-Ang huling hakbang ay ang magpatupad ng `describe()` method para sa isang struct. Tinutukoy ang variable na `pinalawak` gamit ang macro na `quote!` at ang keyword na `impl` upang lumikha ng pagpapatupad para sa pangalan ng struct na naka-store sa variable na `#ident`.
+Ang huling hakbang ay ang magpatupad ng `describe()` method para sa isang struct. Tinutukoy ang variable na `expanded` gamit ang macro na `quote!` at ang keyword na `impl` upang lumikha ng implementation para sa pangalan ng struct na naka-store sa variable na `#ident`.
 
-Ang pagpapatupad na ito ay tumutukoy sa `describe()` na paraan na gumagamit ng `println!` na macro upang i-print ang pangalan ng struct at ang mga pangalan ng field nito.
+Ang implementation na ito ay tumutukoy sa `describe()` na paraan na gumagamit ng `println!` na macro upang i-print ang pangalan ng struct at ang mga pangalan ng field nito.
 
-Panghuli, ang variable na `pinalawak` ay na-convert sa isang `TokenStream` gamit ang pamamaraang `into()`.
+Panghuli, ang variable na `expanded` ay na-convert sa isang `TokenStream` gamit ang pamamaraang `into()`.
 
 ```rust
 use proc_macro::{self, TokenStream};
@@ -368,7 +368,7 @@ pub fn describe(input: TokenStream) -> TokenStream {
 }
 ```
 
-Ngayon, kapag ang attribute na `#[derive(Describe)]` ay idinagdag sa isang struct, ang Rust compiler ay awtomatikong bubuo ng pagpapatupad ng `describe()` na paraan na maaaring tawagan para i-print ang pangalan ng struct at ang mga pangalan ng mga patlang nito.
+Ngayon, kapag ang attribute na `#[derive(Describe)]` ay idinagdag sa isang struct, ang Rust compiler ay awtomatikong bubuo ng implementation ng `describe()` na paraan na maaaring tawagan para i-print ang pangalan ng struct at ang mga pangalan ng mga patlang nito.
 
 ```rust
 #[derive(Describe)]
@@ -430,9 +430,9 @@ pub fn declare_id(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
 
 Ang `#[derive(Accounts)]` ay isang halimbawa ng isa lang sa maraming derive macro na ginagamit sa Anchor.
 
-Ang `#[derive(Accounts)]` macro ay bumubuo ng code na nagpapatupad ng `Accounts` na katangian para sa ibinigay na struct. Ang katangiang ito ay gumagawa ng ilang bagay, kabilang ang pagpapatunay at pag-deserialize sa mga account na ipinasa sa isang pagtuturo. Pinapayagan nito ang struct na magamit bilang isang listahan ng mga account na kinakailangan ng isang pagtuturo sa isang Anchor program.
+Ang `#[derive(Accounts)]` macro ay bumubuo ng code na nagpapatupad ng `Accounts` attribute para sa ibinigay na struct. Ang attribute na ito ay gumagawa ng ilang bagay, kabilang ang pagpapatunay at pag-deserialize sa mga account na ipinasa sa isang instruction. Pinapayagan nito ang struct na magamit bilang isang listahan ng mga account na kinakailangan ng isang instruction sa isang Anchor program.
 
-Ang anumang mga hadlang na tinukoy sa mga field ng `#[account(..)]` attribute ay inilalapat sa panahon ng deserialization. Ang katangiang `#[instruction(..)]` ay maaari ding idagdag upang tukuyin ang mga argumento ng pagtuturo at gawing naa-access ang mga ito sa macro.
+Ang anumang mga constraints na tinukoy sa mga field ng `#[account(..)]` attribute ay inilalapat sa panahon ng deserialization. Ang `#[instruction(..)]` attribute ay maaari ding idagdag upang tukuyin ang mga argumento ng instruction at gawing naa-access ang mga ito sa macro.
 
 ```rust
 #[derive(Accounts)]
@@ -459,7 +459,7 @@ pub fn derive_anchor_deserialize(item: TokenStream) -> TokenStream {
 
 ### Attribute macro `#[program]`
 
-Ang `#[program]` attribute macro ay isang halimbawa ng attribute macro na ginamit sa Anchor upang tukuyin ang module na naglalaman ng mga tagapangasiwa ng pagtuturo para sa isang Solana program.
+Ang `#[program]` attribute macro ay isang halimbawa ng attribute macro na ginamit sa Anchor upang tukuyin ang module na naglalaman ng mga tagapangasiwa ng instruction para sa isang Solana program.
 
 ```rust
 #[program]
@@ -472,7 +472,7 @@ pub mod my_program {
 }
 ```
 
-Sa kasong ito, ang attribute na `#[program]` ay inilapat sa isang module, at ginagamit ito upang tukuyin na naglalaman ang module ng mga tagapangasiwa ng pagtuturo para sa isang Solana program.
+Sa kasong ito, ang attribute na `#[program]` ay inilapat sa isang module, at ginagamit ito upang tukuyin na naglalaman ang module ng mga tagapangasiwa ng instruction para sa isang Solana program.
 
 ```rust
 #[proc_macro_attribute]
@@ -490,15 +490,15 @@ Sa pangkalahatan, ang paggamit ng mga proc macro sa Anchor ay lubos na nakakabaw
 
 # Demo
 
-Sanayin natin ito sa pamamagitan ng paggawa ng bagong derive macro! Ang aming bagong macro ay hahayaan kaming awtomatikong bumuo ng lohika ng pagtuturo para sa pag-update ng bawat field sa isang account sa isang Anchor program.
+Sanayin natin ito sa pamamagitan ng paggawa ng bagong derive macro! Ang atin bagong macro ay hahayaan tayong awtomatikong bumuo ng lohika ng instruction para sa pag-update ng bawat field sa isang account sa isang Anchor program.
 
 ### 1. Panimula
 
 Para makapagsimula, i-download ang starter code mula sa `starter` branch ng [repository na ito](https://github.com/Unboxed-Software/anchor-custom-macro/tree/starter).
 
-Kasama sa starter code ang isang simpleng Anchor program na nagbibigay-daan sa iyong magsimula at mag-update ng `Config` account. Ito ay katulad ng ginawa namin sa [Environment Variables lesson](./env-variables.md).
+Kasama sa starter code ang isang simpleng Anchor program na nagbibigay-daan sa iyong magsimula at mag-update ng `Config` account. Ito ay katulad ng ginawa natin sa [Environment Variables lesson](./env-variables.md).
 
-Ang account na pinag-uusapan ay nakaayos tulad ng sumusunod:
+Ang account na pinag-uusapan ay nakastructure tulad ng sumusunod:
 
 ```rust
 use anchor_lang::prelude::*;
@@ -516,15 +516,15 @@ impl Config {
 }
 ```
 
-Ang file na `programs/admin/src/lib.rs` ay naglalaman ng entrypoint ng program na may mga kahulugan ng mga tagubilin ng program. Sa kasalukuyan, ang programa ay may mga tagubilin upang simulan ang account na ito at pagkatapos ay isang tagubilin sa bawat field ng account para sa pag-update ng field.
+Ang file na `programs/admin/src/lib.rs` ay naglalaman ng entrypoint ng program na may mga kahulugan ng mga instruction ng program. Sa kasalukuyan, ang programa ay may mga instruction upang simulan ang account na ito at pagkatapos ay isang instruction sa bawat field ng account para sa pag-update ng field.
 
-Ang direktoryo ng `programs/admin/src/admin_config` ay naglalaman ng lohika at estado ng pagtuturo ng programa. Tingnan ang bawat isa sa mga file na ito. Mapapansin mo na ang lohika ng pagtuturo para sa bawat field ay epektibong nadoble para sa bawat pagtuturo.
+Ang direktoryo ng `programs/admin/src/admin_config` ay naglalaman ng lohika at estado ng instruction ng programa. Tingnan ang bawat isa sa mga file na ito. Mapapansin mo na ang lohika ng instruction para sa bawat field ay epektibong nadoble para sa bawat instruction.
 
-Ang layunin ng demo na ito ay magpatupad ng procedural macro na magpapahintulot sa amin na palitan ang lahat ng mga function ng logic ng pagtuturo at awtomatikong bumuo ng mga function para sa bawat pagtuturo.
+Ang layunin ng demo na ito ay magpatupad ng procedural macro na magpapahintulot sa tayo na palitan ang lahat ng mga function ng logic ng instruction at awtomatikong bumuo ng mga function para sa bawat instruction.
 
 ### 2. I-set up ang custom na macro declaration
 
-Magsimula tayo sa pamamagitan ng paggawa ng hiwalay na crate para sa aming custom na macro. Sa root directory ng proyekto, patakbuhin ang `cargo new custom-macro`. Gagawa ito ng bagong `custom-macro` na direktoryo na may sarili nitong `Cargo.toml`. I-update ang bagong `Cargo.toml` file upang maging sumusunod:
+Magsimula tayo sa pamamagitan ng paggawa ng hiwalay na crate para sa tayog custom na macro. Sa root directory ng proyekto, patakbuhin ang `cargo new custom-macro`. Gagawa ito ng bagong `custom-macro` na direktoryo na may sarili nitong `Cargo.toml`. I-update ang bagong `Cargo.toml` file upang maging sumusunod:
 
 ```text
 [package]
@@ -542,7 +542,7 @@ proc-macro2 = "0.4"
 anchor-lang = "0.25.0"
 ```
 
-Tinutukoy ng `proc-macro = true` na linya ang crate na ito bilang naglalaman ng procedural macro. Ang mga dependency ay ang lahat ng crates na gagamitin namin para gawin ang aming derive macro.
+Tinutukoy ng `proc-macro = true` na linya ang crate na ito bilang naglalaman ng procedural macro. Ang mga dependency ay ang lahat ng crates na gagamitin natin para gawin ang ating derive macro.
 
 Susunod, baguhin ang `src/main.rs` sa `src/lib.rs`.
 
@@ -556,7 +556,7 @@ members = [
 ]
 ```
 
-Ngayon ang aming crate ay naka-set up at handa nang umalis. Ngunit bago tayo magpatuloy, gumawa tayo ng isa pang crate sa antas ng ugat na magagamit natin upang subukan ang ating macro habang ginagawa natin ito. Gumamit ng `cargo new custom-macro-test` sa root ng proyekto. Pagkatapos ay i-update ang bagong likhang `Cargo.toml` upang magdagdag ng `anchor-lang` at ang `custom-macro` crates bilang dependencies:
+Ngayon ang atin crate ay naka-set up at handa nang umalis. Ngunit bago tayo magpatuloy, gumawa tayo ng isa pang crate sa antas ng ugat na magagamit natin upang subukan ang ating macro habang ginagawa natin ito. Gumamit ng `cargo new custom-macro-test` sa root ng proyekto. Pagkatapos ay i-update ang bagong likhang `Cargo.toml` upang magdagdag ng `anchor-lang` at ang `custom-macro` crates bilang dependencies:
 
 ```text
 [package]
@@ -580,7 +580,7 @@ members = [
 ]
 ```
 
-Panghuli, palitan ang code sa `custom-macro-test/src/main.rs` ng sumusunod na code. Gagamitin namin ito mamaya para sa pagsubok:
+Panghuli, palitan ang code sa `custom-macro-test/src/main.rs` ng sumusunod na code. Gagamitin natin ito mamaya para sa pagsubok:
 
 ```rust
 use anchor_lang::prelude::*;
@@ -597,7 +597,7 @@ pub struct Config {
 
 ### 3. Tukuyin ang custom na macro
 
-Ngayon, sa `custom-macro/src/lib.rs` file, idagdag natin ang ating bagong deklarasyon ng macro. Sa file na ito, gagamitin namin ang `parse_macro_input!` na macro para i-parse ang input na `TokenStream` at i-extract ang `identity` at `data` na field mula sa isang `DeriveInput` struct. Pagkatapos, gagamitin namin ang macro na `eprintln!` para i-print ang mga value ng `identity` at `data`. Sa ngayon, gagamitin namin ang `TokenStream::new()` para magbalik ng walang laman na `TokenStream`.
+Ngayon, sa `custom-macro/src/lib.rs` file, idagdag natin ang ating bagong deklarasyon ng macro. Sa file na ito, gagamitin natin ang `parse_macro_input!` na macro para i-parse ang input na `TokenStream` at i-extract ang `identity` at `data` na field mula sa isang `DeriveInput` struct. Pagkatapos, gagamitin natin ang macro na `eprintln!` para i-print ang mga value ng `identity` at `data`. Sa ngayon, gagamitin natin ang `TokenStream::new()` para magbalik ng walang laman na `TokenStream`.
 
 ```rust
 use proc_macro::TokenStream;
@@ -623,7 +623,7 @@ Pinapalawak ng command na ito ang mga macro sa crate. Dahil ang `main.rs` file a
 
 ### 4. Kunin ang mga field ng struct
 
-Susunod, gamitin natin ang mga statement na `match` para makuha ang mga pinangalanang field mula sa `data` ng struct. Pagkatapos ay gagamitin namin ang macro na `eprintln!` upang i-print ang mga halaga ng mga field.
+Susunod, gamitin natin ang mga statement na `match` para makuha ang mga pinangalanang field mula sa `data` ng struct. Pagkatapos ay gagamitin natin ang macro na `eprintln!` upang i-print ang mga halaga ng mga field.
 
 ```rust
 use proc_macro::TokenStream;
@@ -650,9 +650,9 @@ pub fn instruction_builder(input: TokenStream) -> TokenStream {
 
 Muli, gamitin ang `cargo expand` sa terminal upang makita ang output ng code na ito. Kapag nakumpirma mo na ang mga field ay kinukuha at nai-print nang tama, maaari mong alisin ang `eprintln!` na pahayag.
 
-### 5. Bumuo ng mga tagubilin sa pag-update
+### 5. Bumuo ng mga instruction sa pag-update
 
-Susunod, ulitin natin ang mga patlang ng struct at bumuo ng pagtuturo sa pag-update para sa bawat field. Ang pagtuturo ay bubuo gamit ang `quote!` na macro at isasama ang pangalan at uri ng field, pati na rin ang isang bagong pangalan ng function para sa pagtuturo sa pag-update.
+Susunod, ulitin natin ang mga patlang ng struct at bumuo ng instruction sa pag-update para sa bawat field. Ang instruction ay bubuo gamit ang `quote!` na macro at isasama ang pangalan at uri ng field, pati na rin ang isang bagong pangalan ng function para sa instruction sa pag-update.
 
 ```rust
 use proc_macro::TokenStream;
@@ -691,7 +691,7 @@ pub fn instruction_builder(input: TokenStream) -> TokenStream {
 
 ### 6. Magbalik ng bagong `TokenStream`
 
-Panghuli, gamitin natin ang macro na `quote!` para bumuo ng pagpapatupad para sa struct na may pangalang tinukoy ng variable na `identity`. Kasama sa pagpapatupad ang mga tagubilin sa pag-update na nabuo para sa bawat field sa struct. Ang nabuong code ay iko-convert sa isang `TokenStream` gamit ang `into()` na paraan at ibabalik bilang resulta ng macro.
+Panghuli, gamitin natin ang macro na `quote!` para bumuo ng implementation para sa struct na may pangalang tinukoy ng variable na `identity`. Kasama sa implementation ang mga instruction sa pag-update na nabuo para sa bawat field sa struct. Ang nabuong code ay iko-convert sa isang `TokenStream` gamit ang `into()` na paraan at ibabalik bilang resulta ng macro.
 
 ```rust
 use proc_macro::TokenStream;
@@ -779,7 +779,7 @@ impl Config {
 
 ### 7. I-update ang program upang magamit ang iyong bagong macro
 
-Upang gamitin ang bagong macro upang bumuo ng mga tagubilin sa pag-update para sa `Config` struct, idagdag muna ang `custom-macro` crate bilang dependency sa program sa `Cargo.toml` nito:
+Upang gamitin ang bagong macro upang bumuo ng mga instruction sa pag-update para sa `Config` struct, idagdag muna ang `custom-macro` crate bilang dependency sa program sa `Cargo.toml` nito:
 
 ```text
 [dependencies]
@@ -808,7 +808,7 @@ impl Config {
 }
 ```
 
-Susunod, mag-navigate sa `admin_update.rs` file at tanggalin ang mga kasalukuyang tagubilin sa pag-update. Ito ay dapat na mag-iwan lamang ng `UpdateAdminAccount` context struct sa file.
+Susunod, mag-navigate sa `admin_update.rs` file at tanggalin ang mga kasalukuyang instruction sa pag-update. Ito ay dapat na mag-iwan lamang ng `UpdateAdminAccount` context struct sa file.
 
 ```rust
 use crate::state::Config;
@@ -825,7 +825,7 @@ pub struct UpdateAdminAccount<'info> {
 }
 ```
 
-Susunod, i-update ang `lib.rs` sa Anchor program upang magamit ang mga tagubilin sa pag-update na nabuo ng macro ng `InstructionBuilder`.
+Susunod, i-update ang `lib.rs` sa Anchor program upang magamit ang mga instruction sa pag-update na nabuo ng macro ng `InstructionBuilder`.
 
 ```rust
 use anchor_lang::prelude::*;
@@ -860,7 +860,7 @@ pub mod admin {
 }
 ```
 
-Panghuli, mag-navigate sa direktoryo ng `admin` at patakbuhin ang `anchor test` upang i-verify na gumagana nang tama ang mga tagubilin sa pag-update na nabuo ng macro ng `InstructionBuilder`.
+Panghuli, mag-navigate sa direktoryo ng `admin` at patakbuhin ang `anchor test` upang i-verify na gumagana nang tama ang mga instruction sa pag-update na nabuo ng macro ng `InstructionBuilder`.
 
 ```
   admin
@@ -874,7 +874,7 @@ Panghuli, mag-navigate sa direktoryo ng `admin` at patakbuhin ang `anchor test` 
   5 passing (2s)
 ```
 
-Magaling! Sa puntong ito, maaari kang lumikha ng mga procedural macro upang makatulong sa iyong proseso ng pag-unlad. Hinihikayat ka naming sulitin ang Rust na wika at gumamit ng mga macro kung saan may katuturan ang mga ito. Ngunit kahit na hindi mo gagawin, ang pag-alam kung paano gumagana ang mga ito ay nakakatulong upang maunawaan kung ano ang nangyayari sa Anchor sa ilalim ng hood.
+Magaling! Sa puntong ito, maaari kang lumikha ng mga procedural macro upang makatulong sa iyong proseso ng pag-unlad. Hinihikayat ka nating sulitin ang Rust na wika at gumamit ng mga macro kung saan may katuturan ang mga ito. Ngunit kahit na hindi mo gagawin, ang pag-alam kung paano gumagana ang mga ito ay nakakatulong upang maunawaan kung ano ang nangyayari sa Anchor sa ilalim ng hood.
 
 Kung kailangan mong gumugol ng mas maraming oras sa code ng solusyon, huwag mag-atubiling sumangguni sa `solution` branch ng [repository](https://github.com/Unboxed-Software/anchor-custom-macro/tree/solution).
 
