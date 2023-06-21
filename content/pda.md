@@ -148,9 +148,9 @@ Maaaring may mga pagkakataon kung saan ang paggamit ng diskarteng ito ay makatuw
 
 ### Mapa sa data gamit ang PDA derivation
 
-Kung madiskarte ka tungkol sa mga seed na ginagamit mo upang kunin ang mga PDA, maaari mong i-embed ang mga kinakailangang mapping sa mismong mga seed. Ito ang natural na ebolusyon ng halimbawa ng note-taking app na tinalakay natin. Kung sinimulan mong gamitin ang public key ng tagalikha ng tala bilang isang seed upang lumikha ng isang account sa mapa bawat user, kung gayon bakit hindi gamitin ang parehong public key ng lumikha at ilang iba pang kilalang piraso ng impormasyon upang makakuha ng isang PDA para sa tala mismo?
+Kung ikaw ay strategic sa paggamit ng mga seed upang mabuo ang mga PDAs, maaari mong isama ang kinakailangang mga mapping sa mga seed mismo. Ito ang natural na pag-unlad ng halimbawa ng note-taking app na ating napag-usapan. Kung simulan mong gamitin ang public key ng gumawa ng tala bilang seed upang lumikha ng isang map account para sa bawat user, bakit hindi gamitin ang public key ng gumawa at iba pang kilalang impormasyon upang mabuo ang PDA para sa mismong tala?
 
-Ngayon, nang hindi tahasang pinag-uusapan ito, nagmamapa kami ng mga seed sa mga account sa buong kursong ito. Isipin ang program ng Pagsusuri ng Pelikula na binuo natin sa mga nakaraang aralin. Gumagamit ang program na ito ng public key ng gumawa ng review at ang pamagat ng pelikulang kanilang nire-review para mahanap ang address na *dapat* gamitin para iimbak ang review. Ang diskarte na ito ay nagbibigay-daan sa program na lumikha ng isang natatanging address para sa bawat bagong pagsusuri habang ginagawang madali upang mahanap ang isang pagsusuri kapag kinakailangan. Kapag gusto mong humanap ng review ng user tungkol sa "Spiderman," alam mong naka-store ito sa PDA account na ang address ay maaaring makuha gamit ang public key ng user at ang text na "Spiderman" bilang mga seed.
+Ngayon, kahit na hindi ito eksplisitong binanggit, nagmamapa tayo ng mga seed sa mga account sa buong kursong ito. Isipin ang program ng Movie Review program na binuo natin sa mga nakaraang aralin. Ang program na ito ay gumagamit ng public key ng gumawa ng review at ang pamagat ng pelikulang kanilang nire-review para mahanap ang address na *dapat* gamitin para iimbak ang review. Ang diskarte na ito ay nagbibigay-daan sa program na lumikha ng isang natatanging address para sa bawat bagong review habang ginagawang madali upang mahanap ang isang review kapag kinakailangan. Kapag gusto mong humanap ng review ng user tungkol sa "Spiderman," alam mong naka-store ito sa PDA account na ang address ay maaaring makuha gamit ang public key ng user at ang text na "Spiderman" bilang mga seed.
 
 ```rust
 let (pda, bump_seed) = Pubkey::find_program_address(&[
@@ -197,19 +197,19 @@ Ang mga pagmamapa sa pagitan ng mga seed at PDA account na iyong ginagamit ay lu
 
 # Demo
 
-Magsanay tayo kasama ang program ng Pagsusuri ng Pelikula na ginawa natin sa mga nakaraang aralin. Huwag mag-alala kung papasok ka lang sa araling ito nang hindi mo nagawa ang nakaraang aralin - dapat ay posible na sumunod sa alinmang paraan.
+Magsanay tayo kasama ang Moview Review program na ginawa natin sa mga nakaraang aralin. Huwag mag-alala kung papasok ka lang sa araling ito nang hindi mo nagawa ang nakaraang aralin - dapat ay posible na sumunod sa alinmang paraan.
 
 Bilang isang refresher, hinahayaan ng program ng Movie Review ang mga user na gumawa ng mga review ng pelikula. Ang mga review na ito ay iniimbak sa isang account gamit ang isang PDA na hinango sa public key ng initializer at ang pamagat ng pelikulang kanilang sinusuri.
 
-Dati, natapos natin ang pagpapatupad ng kakayahang mag-update ng pagsusuri ng pelikula sa isang secure na paraan. Sa demo na ito, magdaragdag kami ng kakayahan para sa mga user na magkomento sa isang pagsusuri ng pelikula. Gagamitin natin ang pagbuo ng feature na ito bilang isang pagkakataon upang pag-aralan kung paano ayusin ang storage ng komento gamit ang mga PDA account.
+Dati, natapos natin ang pagpapatupad ng kakayahang mag-update ng Moview Review sa isang secure na paraan. Sa demo na ito, magdaragdag tayo ng kakayahan para sa mga user na magkomento sa isang Moview Review. Gagamitin natin ang pagbuo ng feature na ito bilang isang pagkakataon upang pag-aralan kung paano ayusin ang storage ng komento gamit ang mga PDA account.
 
 ### 1. Kunin ang starter code
 
 Upang magsimula, mahahanap mo ang starter code [dito](https://github.com/Unboxed-Software/solana-movie-program/tree/starter) sa `starter` branch.
 
-Kung sinusundan mo ang mga demo ng Pagsusuri ng Pelikula, mapapansin mo na ito ang program na binuo natin sa ngayon. Dati, ginamit natin [Solana Playground](https://beta.solpg.io/) para isulat, buuin, at i-deploy ang ating code. Sa araling ito, bubuo at ide-deploy natin ang program nang lokal.
+Kung sinusundan mo ang mga demo ng Moview Review, mapapansin mo na ito ang program na binuo natin sa ngayon. Dati, ginamit natin [Solana Playground](https://beta.solpg.io/) para isulat, buuin, at i-deploy ang ating code. Sa araling ito, bubuo at ide-deploy natin ang program nang lokal.
 
-Buksan ang folder, pagkatapos ay patakbuhin ang `cargo-build-bpf` upang buuin ang program. Ang utos na `cargo-build-bpf` ay maglalabas ng pagtuturo upang i-deploy ang program.
+Buksan ang folder, pagkatapos ay patakbuhin ang `cargo-build-bpf` upang buuin ang program. Ang utos na `cargo-build-bpf` ay maglalabas ng instruction upang i-deploy ang program.
 
 ```sh
 cargo-build-bpf
@@ -221,7 +221,7 @@ I-deploy ang program sa pamamagitan ng pagkopya sa output ng `cargo-build-bpf` a
 solana program deploy <PATH>
 ```
 
-Maaari mong subukan ang program sa pamamagitan ng paggamit ng pagsusuri ng pelikula [frontend](https://github.com/Unboxed-Software/solana-movie-frontend/tree/solution-update-reviews) at pag-update ng program ID gamit ang iyong ' kaka-deploy lang. Tiyaking ginagamit mo ang sangay ng `solution-update-reviews`.
+Maaari mong subukan ang program sa pamamagitan ng paggamit ng Moview Review [frontend](https://github.com/Unboxed-Software/solana-movie-frontend/tree/solution-update-reviews) at pag-update ng program ID gamit ang iyong kaka-deploy lang. Tiyaking ginagamit mo ang sangay ng `solution-update-reviews`.
 
 ### 2. Planuhin ang istraktura ng account
 
@@ -231,17 +231,17 @@ Ang pagdaragdag ng mga komento ay nangangahulugan na kailangan nating gumawa ng 
 - Ang data ay madaling makuha
 - Ang bawat komento ay may maiuugnay dito sa review na nauugnay dito
 
-Para magawa ito, gagawa kami ng dalawang bagong uri ng account:
+Para magawa ito, gagawa tayo ng dalawang bagong uri ng account:
 
 - Komento counter account
 - Magkomento ng account
 
-Magkakaroon ng isang comment counter account sa bawat pagsusuri at isang comment account sa bawat komento. Ang account counter ng komento ay mali-link sa isang ibinigay na pagsusuri sa pamamagitan ng paggamit ng address ng review bilang isang seed para sa paghahanap ng comment counter PDA. Gagamitin din nito ang static na string na "comment" bilang isang seed.
+Magkakaroon ng isang comment counter account sa bawat review at isang comment account sa bawat komento. Ang account counter ng komento ay mali-link sa isang ibinigay na review sa pamamagitan ng paggamit ng address ng review bilang isang seed para sa paghahanap ng comment counter PDA. Gagamitin din nito ang static na string na "comment" bilang isang seed.
 
-Ang account ng komento ay mali-link sa isang pagsusuri sa parehong paraan. Gayunpaman, hindi nito isasama ang string ng "komento" bilang isang seed at sa halip ay gagamitin ang *aktwal na bilang ng komento* bilang isang seed. Sa ganoong paraan ang kliyente ay madaling makuha ang mga komento para sa isang ibinigay na pagsusuri sa pamamagitan ng paggawa ng sumusunod:
+Ang account ng komento ay mali-link sa isang review sa parehong paraan. Gayunpaman, hindi nito isasama ang string ng "komento" bilang isang seed at sa halip ay gagamitin ang *aktwal na bilang ng komento* bilang isang seed. Sa ganoong paraan ang kliyente ay madaling makuha ang mga komento para sa isang ibinigay na review sa pamamagitan ng paggawa ng sumusunod:
 
 1. Basahin ang data sa comment counter account para matukoy ang bilang ng mga komento sa isang review.
-2. Kung saan ang `n` ay ang kabuuang bilang ng mga komento sa pagsusuri, i-loop ang `n` na beses. Ang bawat pag-ulit ng loop ay makakakuha ng isang PDA gamit ang address ng pagsusuri at ang kasalukuyang numero bilang mga seed. Ang resulta ay `n` na bilang ng mga PDA, na ang bawat isa ay ang address ng isang account na nag-iimbak ng komento.
+2. Kung saan ang `n` ay ang kabuuang bilang ng mga komento sa review, i-loop ang `n` na beses. Ang bawat pag-ulit ng loop ay makakakuha ng isang PDA gamit ang address ng review at ang kasalukuyang numero bilang mga seed. Ang resulta ay `n` na bilang ng mga PDA, na ang bawat isa ay ang address ng isang account na nag-iimbak ng komento.
 3. Kunin ang mga account para sa bawat isa sa mga `n` na PDA at basahin ang data na nakaimbak sa bawat isa.
 
 Tinitiyak nito na ang bawat isa sa ating mga account ay maaaring tiyak na makuha gamit ang data na alam na nang maaga.
@@ -250,9 +250,9 @@ Upang maipatupad ang mga pagbabagong ito, kakailanganin nating gawin ang sumusun
 
 - Tukuyin ang mga struct upang kumatawan sa comment counter at comment accounts
 - I-update ang umiiral na `MovieAccountState` upang maglaman ng discriminator (higit pa dito sa ibang pagkakataon)
-- Magdagdag ng variant ng pagtuturo upang kumatawan sa tagubiling `add_comment`
-- I-update ang kasalukuyang function ng pagpoproseso ng pagtuturo ng `add_movie_review` upang isama ang paggawa ng account counter account
-- Lumikha ng bagong `add_comment` na function sa pagproseso ng pagtuturo
+- Magdagdag ng variant ng instruction upang kumatawan sa instruction `add_comment`
+- I-update ang kasalukuyang function ng pagpoproseso ng instruction ng `add_movie_review` upang isama ang paggawa ng account counter account
+- Lumikha ng bagong `add_comment` na function sa pagproseso ng instruction
 
 ### 3. Tukuyin ang mga istruktura ng `MovieCommentCounter` at `MovieComment`
 
@@ -260,10 +260,10 @@ Alalahanin na ang `state.rs` file ay tumutukoy sa mga istrukturang ginagamit ng 
 
 Kakailanganin nating tukuyin ang dalawang bagong struct upang paganahin ang pagkomento.
 
-1. `MovieCommentCounter` - upang mag-imbak ng counter para sa bilang ng mga komentong nauugnay sa isang pagsusuri
+1. `MovieCommentCounter` - upang mag-imbak ng counter para sa bilang ng mga komentong nauugnay sa isang review
 2. `MovieComment` - upang mag-imbak ng data na nauugnay sa bawat komento
 
-Upang magsimula, tukuyin natin ang mga istrukturang gagamitin natin para sa ating program. Tandaan na nagdaragdag kami ng field na `discriminator` sa bawat struct, kasama ang umiiral na `MovieAccountState`. Dahil marami na tayong uri ng account, kailangan natin ng paraan para makuha lang ang uri ng account na kailangan natin mula sa kliyente. Ang discriminator na ito ay isang string na maaaring gamitin upang mag-filter sa mga account kapag kinuha natin ang ating mga account ng program.
+Upang magsimula, tukuyin natin ang mga istrukturang gagamitin natin para sa ating program. Tandaan na nagdaragdag tayo ng field na `discriminator` sa bawat struct, kasama ang umiiral na `MovieAccountState`. Dahil marami na tayong uri ng account, kailangan natin ng paraan para makuha lang ang uri ng account na kailangan natin mula sa kliyente. Ang discriminator na ito ay isang string na maaaring gamitin upang mag-filter sa mga account kapag kinuha natin ang ating mga account ng program.
 
 ```rust
 #[derive(BorshSerialize, BorshDeserialize)]
@@ -314,7 +314,7 @@ impl IsInitialized for MovieComment {
 }
 ```
 
-Dahil nagdagdag kami ng bagong field ng `discriminator` sa ating umiiral na struct, kailangang baguhin ang pagkalkula ng laki ng account. Gamitin natin ito bilang isang pagkakataon upang linisin nang kaunti ang ilan sa ating code. Magdaragdag kami ng pagpapatupad para sa bawat isa sa tatlong struct sa itaas na nagdaragdag ng pare-parehong `DISCRIMINATOR` at alinman sa pare-parehong `SIZE` o function na `get_account_size` upang mabilis nating makuha ang laki na kailangan kapag nag-initialize ng account.
+Dahil nagdagdag tayo ng bagong field ng `discriminator` sa ating umiiral na struct, kailangang baguhin ang pagkalkula ng laki ng account. Gamitin natin ito bilang isang pagkakataon upang linisin nang kaunti ang ilan sa ating code. Magdaragdag tayo ng pagpapatupad para sa bawat isa sa tatlong struct sa itaas na nagdaragdag ng pare-parehong `DISCRIMINATOR` at alinman sa pare-parehong `SIZE` o function na `get_account_size` upang mabilis nating makuha ang laki na kailangan kapag nag-initialize ng account.
 
 ```rust
 impl MovieAccountState {
@@ -345,9 +345,9 @@ impl MovieComment {
 
 Ngayon kahit saan kailangan natin ang discriminator o laki ng account, magagamit natin ang pagpapatupad na ito at hindi ipagsapalaran ang hindi sinasadyang mga typo.
 
-### 4. Lumikha ng tagubiling `AddComment`
+### 4. Lumikha ng `AddComment` instruction
 
-Alalahanin na ang `instruction.rs` file ay tumutukoy sa mga tagubilin na tatanggapin ng ating program at kung paano i-deserialize ang data para sa bawat isa. Kailangan nating magdagdag ng bagong variant ng pagtuturo para sa pagdaragdag ng mga komento. Magsimula tayo sa pamamagitan ng pagdaragdag ng bagong variant na `AddComment` sa `MovieInstruction` enum.
+Alalahanin na ang `instruction.rs` file ay tumutukoy sa mga instruction na tatanggapin ng ating program at kung paano i-deserialize ang data para sa bawat isa. Kailangan nating magdagdag ng bagong variant ng instruction para sa pagdaragdag ng mga komento. Magsimula tayo sa pamamagitan ng pagdaragdag ng bagong variant na `AddComment` sa `MovieInstruction` enum.
 
 ```rust
 pub enum MovieInstruction {
@@ -367,7 +367,7 @@ pub enum MovieInstruction {
 }
 ```
 
-Susunod, gumawa tayo ng `CommentPayload` na struct upang kumatawan sa data ng pagtuturo na nauugnay sa bagong tagubiling ito. Karamihan sa data na isasama natin sa account ay mga public key na nauugnay sa mga account na ipinasa sa program, kaya ang tanging kailangan lang natin dito ay isang field para kumatawan sa text ng komento.
+Susunod, gumawa tayo ng `CommentPayload` na struct upang kumatawan sa data ng instruction na nauugnay sa bagong instruction. Karamihan sa data na isasama natin sa account ay mga public key na nauugnay sa mga account na ipinasa sa program, kaya ang tanging kailangan lang natin dito ay isang field para kumatawan sa text ng komento.
 
 ```rust
 #[derive(BorshDeserialize)]
@@ -376,7 +376,7 @@ struct CommentPayload {
 }
 ```
 
-Ngayon, i-update natin kung paano natin i-unpack ang data ng pagtuturo. Pansinin na inilipat natin ang deserialization ng data ng pagtuturo sa bawat katugmang case gamit ang nauugnay na payload struct para sa bawat pagtuturo.
+Ngayon, i-update natin kung paano natin i-unpack ang data ng instruction. Pansinin na inilipat natin ang deserialization ng data ng instruction sa bawat katugmang case gamit ang nauugnay na payload struct para sa bawat instruction.
 
 ```rust
 impl MovieInstruction {
@@ -410,7 +410,7 @@ impl MovieInstruction {
 }
 ```
 
-Panghuli, i-update natin ang function na `process_instruction` sa `processor.rs` para magamit ang bagong variant ng pagtuturo na ginawa natin.
+Panghuli, i-update natin ang function na `process_instruction` sa `processor.rs` para magamit ang bagong variant ng instruction na ginawa natin.
 
 Sa `processor.rs`, dalhin sa saklaw ang mga bagong struct mula sa `state.rs`.
 
@@ -418,7 +418,7 @@ Sa `processor.rs`, dalhin sa saklaw ang mga bagong struct mula sa `state.rs`.
 use crate::state::{MovieAccountState, MovieCommentCounter, MovieComment};
 ```
 
-Pagkatapos, sa `process_instruction` itugma natin ang ating deserialized na `AddComment` na data ng pagtuturo sa function na `add_comment` na ipapatupad natin sa ilang sandali.
+Pagkatapos, sa `process_instruction` itugma natin ang ating deserialized na `AddComment` na data ng instruction sa function na `add_comment` na ipapatupad natin sa ilang sandali.
 
 ```rust
 pub fn process_instruction(
@@ -446,7 +446,7 @@ pub fn process_instruction(
 
 Bago natin ipatupad ang function na `add_comment`, kailangan nating i-update ang function na `add_movie_review` para magawa ang comment counter account ng review.
 
-Tandaan na susubaybayan ng account na ito ang kabuuang bilang ng mga komentong umiiral para sa isang nauugnay na pagsusuri. Ang address nito ay isang PDA na hango gamit ang address ng pagsusuri ng pelikula at ang salitang "comment" bilang mga seed. Tandaan na kung paano natin iniimbak ang counter ay isang pagpipilian lamang sa disenyo. Maaari rin tayong magdagdag ng field na "counter" sa orihinal na account sa pagsusuri ng pelikula.
+Tandaan na susubaybayan ng account na ito ang kabuuang bilang ng mga komentong umiiral para sa isang nauugnay na review. Ang address nito ay isang PDA na hango gamit ang address ng Moview Review at ang salitang "comment" bilang mga seed. Tandaan na kung paano natin iniimbak ang counter ay isang pagpipilian lamang sa disenyo. Maaari rin tayong magdagdag ng field na "counter" sa orihinal na account sa Moview Review.
 
 Sa loob ng function na `add_movie_review`, magdagdag tayo ng `pda_counter` upang kumatawan sa bagong counter account na sisimulan natin kasama ng movie review account. Nangangahulugan ito na inaasahan na natin ngayon ang apat na account na ipapasa sa function na `add_movie_review` sa pamamagitan ng argumento ng `accounts`.
 
@@ -470,7 +470,7 @@ if MovieAccountState::get_account_size(title.clone(), description.clone()) > acc
 }
 ```
 
-Tandaan na kailangan din itong i-update sa function na `update_movie_review` para gumana nang maayos ang tagubiling iyon.
+Tandaan na kailangan din itong i-update sa function na `update_movie_review` para gumana nang maayos ang instruction na iyon.
 
 Kapag nasimulan na natin ang review account, kakailanganin din nating i-update ang `account_data` gamit ang mga bagong field na ating tinukoy sa `MovieAccountState` na struct.
 
@@ -547,9 +547,9 @@ Ngayon kapag may ginawang bagong review, dalawang account ang sinisimulan:
 
 Panghuli, ipatupad natin ang ating function na `add_comment` upang lumikha ng mga bagong account ng komento.
 
-Kapag may ginawang bagong komento para sa pagsusuri, dagdagan natin ang bilang sa PDA account ng counter ng komento at kukunin ang PDA para sa account ng komento gamit ang address ng pagsusuri at kasalukuyang bilang.
+Kapag may ginawang bagong komento para sa review, dagdagan natin ang bilang sa PDA account ng counter ng komento at kukunin ang PDA para sa account ng komento gamit ang address ng review at kasalukuyang bilang.
 
-Tulad ng iba pang mga function sa pagpoproseso ng pagtuturo, magsisimula kami sa pamamagitan ng pag-ulit sa mga account na ipinasa sa program. At bago tayo gumawa ng anupaman, kailangan nating i-deserialize ang counter account para magkaroon tayo ng access sa kasalukuyang bilang ng komento:
+Tulad ng iba pang mga function sa pagpoproseso ng instruction, magsisimula tayo sa pamamagitan ng pag-ulit sa mga account na ipinasa sa program. At bago tayo gumawa ng anupaman, kailangan nating i-deserialize ang counter account para magkaroon tayo ng access sa kasalukuyang bilang ng komento:
 
 ```rust
 pub fn add_comment(
@@ -577,7 +577,7 @@ pub fn add_comment(
 Ngayon na mayroon na tayong access sa counter data, maaari tayong magpatuloy sa mga natitirang hakbang:
 
 1. Kalkulahin ang halaga ng hindi kasama sa upa para sa bagong account ng komento
-2. Kunin ang PDA para sa account ng komento gamit ang address ng pagsusuri at ang kasalukuyang komento ay binibilang bilang mga seed
+2. Kunin ang PDA para sa account ng komento gamit ang address ng review at ang kasalukuyang komento ay binibilang bilang mga seed
 3. I-invoke ang System Program para gumawa ng bagong comment account
 4. Itakda ang naaangkop na mga halaga sa bagong likhang account
 5. I-serialize ang data ng account at ibalik mula sa function
@@ -651,13 +651,13 @@ pub fn add_comment(
 
 ### 7. Bumuo at i-deploy
 
-Handa na ktayong buuin at i-deploy ang ating program!
+Handa na tayong buuin at i-deploy ang ating program!
 
 Buuin ang na-update na program sa pamamagitan ng pagpapatakbo ng `cargo-build-bpf`. Pagkatapos ay i-deploy ang program sa pamamagitan ng pagpapatakbo ng command na `solana program deploy` na naka-print sa console.
 
-Maaari mong subukan ang iyong program sa pamamagitan ng pagsusumite ng isang transaksyon na may tamang data ng pagtuturo. Maaari kang gumawa ng sarili mong script o huwag mag-atubiling gamitin ang [frontend na ito](https://github.com/Unboxed-Software/solana-movie-frontend/tree/solution-add-comments). Tiyaking gamitin ang sangay ng `solution-add-comments` at palitan ang `MOVIE_REVIEW_PROGRAM_ID` sa `utils/constants.ts` ng ID ng iyong program o hindi gagana ang frontend sa iyong program.
+Maaari mong subukan ang iyong program sa pamamagitan ng pagsusumite ng isang transaksyon na may tamang data ng instruction. Maaari kang gumawa ng sarili mong script o huwag mag-atubiling gamitin ang [frontend na ito](https://github.com/Unboxed-Software/solana-movie-frontend/tree/solution-add-comments). Tiyaking gamitin ang sangay ng `solution-add-comments` at palitan ang `MOVIE_REVIEW_PROGRAM_ID` sa `utils/constants.ts` ng ID ng iyong program o hindi gagana ang frontend sa iyong program.
 
-Tandaan na gumawa kami ng mga paglabag na pagbabago sa mga review account (ibig sabihin, pagdaragdag ng discriminator). Kung gagamitin mo ang parehong program ID na ginamit mo dati noong i-deploy ang program na ito, wala sa mga review na ginawa mo dati ang lalabas sa frontend na ito dahil sa isang data mismatch.
+Tandaan na gumawa tayo ng mga paglabag na pagbabago sa mga review account (ibig sabihin, pagdaragdag ng discriminator). Kung gagamitin mo ang parehong program ID na ginamit mo dati noong i-deploy ang program na ito, wala sa mga review na ginawa mo dati ang lalabas sa frontend na ito dahil sa isang data mismatch.
 
 Kung kailangan mo ng mas maraming oras sa proyektong ito para maging komportable sa mga konseptong ito, tingnan ang [solution code](https://github.com/Unboxed-Software/solana-movie-program/tree/solution-add-comments) bago magpatuloy. Tandaan na ang code ng solusyon ay nasa sangay ng `solution-add-comments` ng naka-link na repository.
 
@@ -665,7 +665,7 @@ Kung kailangan mo ng mas maraming oras sa proyektong ito para maging komportable
 
 Ngayon ay iyong pagkakataon na bumuo ng isang bagay nang nakapag-iisa! Sige at magtrabaho kasama ang Student Intro program na ginamit natin sa mga nakaraang aralin. Ang Student Intro program ay isang Solana program na nagbibigay-daan sa mga mag-aaral na ipakilala ang kanilang sarili. Ang program na ito ay tumatagal ng pangalan ng isang user at isang maikling mensahe bilang `instruction_data` at gumagawa ng isang account upang iimbak ang data sa chain. Para sa hamon na ito dapat mong:
 
-1. Magdagdag ng tagubilin na nagpapahintulot sa ibang mga user na tumugon sa isang intro
+1. Magdagdag ng instruction na nagpapahintulot sa ibang mga user na tumugon sa isang intro
 2. Buuin at i-deploy ang program nang lokal
 
 Kung hindi mo pa sinusubaybayan ang mga nakaraang aralin o hindi mo pa nai-save ang iyong trabaho mula noon, huwag mag-atubiling gamitin ang starter code sa `starter` branch ng [repository na ito](https://github.com/Unboxed-Software/solana-student-intro-program/tree/starter).
