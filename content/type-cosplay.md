@@ -43,9 +43,9 @@ Ang "Uri ng cosplay" ay tumutukoy sa isang hindi inaasahang uri ng account na gi
 
 ### Hindi na-check ang account
 
-Sa halimbawa sa ibaba, ang mga uri ng account na `AdminConfig` at `UserConfig` ay nag-iimbak ng isang pampublikong key. Ang tagubiling `admin_instruction` ay nagde-deserialize sa `admin_config` account bilang isang uri ng `AdminConfig` at pagkatapos ay nagsasagawa ng pagsusuri ng may-ari at pagsusuri ng data validation.
+Sa halimbawa sa ibaba, ang mga uri ng account na `AdminConfig` at `UserConfig` ay nag-iimbak ng isang pampublikong key. Ang `admin_instruction` instruction ay nagde-deserialize sa `admin_config` account bilang isang uri ng `AdminConfig` at pagkatapos ay nagsasagawa ng owner check at data validation check.
 
-Gayunpaman, ang mga uri ng account na `AdminConfig` at `UserConfig` ay may parehong istraktura ng data. Nangangahulugan ito na maaaring maipasa ang uri ng account na `UserConfig` bilang `admin_config` na account. Hangga't ang pampublikong key na nakaimbak sa data ng account ay tumutugma sa pag-sign ng `admin` sa transaksyon, patuloy na mapoproseso ang tagubiling `admin_instruction`, kahit na hindi naman admin ang pumirma.
+Gayunpaman, ang mga uri ng account na `AdminConfig` at `UserConfig` ay may parehong istraktura ng data. Nangangahulugan ito na maaaring maipasa ang uri ng account na `UserConfig` bilang `admin_config` na account. Hangga't ang pampublikong key na nakaimbak sa data ng account ay tumutugma sa pag-sign ng `admin` sa transaksyon, patuloy na mapoproseso ang `admin_instruction` instruction, kahit na hindi naman admin ang pumirma.
 
 Tandaan na ang mga pangalan ng mga field na nakaimbak sa mga uri ng account (`admin` at `user`) ay walang pagkakaiba kapag nagde-deserialize ng data ng account. Ang data ay serialized at deserialized batay sa pagkakasunud-sunod ng mga field kaysa sa kanilang mga pangalan.
 
@@ -94,7 +94,7 @@ pub struct UserConfig {
 
 Upang malutas ito, maaari kang magdagdag ng field ng discriminant para sa bawat uri ng account at itakda ang discriminant kapag nagpasimula ng account.
 
-Ina-update ng halimbawa sa ibaba ang mga uri ng account na `AdminConfig` at `UserConfig` na may field na `discriminant`. Kasama sa tagubiling `admin_instruction` ang karagdagang pagsusuri sa validation ng data para sa field na `discriminant`.
+Ina-update ng halimbawa sa ibaba ang mga uri ng account na `AdminConfig` at `UserConfig` na may field na `discriminant`. Kasama sa `admin_instruction` instruction ang karagdagang pagsusuri sa validation ng data para sa field na `discriminant`.
 
 ```rust
 if account_data.discriminant != AccountDiscriminant::Admin {
@@ -158,13 +158,13 @@ pub enum AccountDiscriminant {
 
 ### Gamitin ang `Account` wrapper ng Anchor
 
-Ang pagpapatupad ng mga pagsusuring ito para sa bawat account na kailangan para sa bawat pagtuturo ay maaaring nakakapagod. Sa kabutihang palad, ang Anchor ay nagbibigay ng `#[account]` attribute macro para sa awtomatikong pagpapatupad ng mga katangiang dapat taglayin ng bawat account.
+Ang pagimplement ng mga pagsusuring ito para sa bawat account na kailangan para sa bawat pagtuturo ay maaaring nakakapagod. Sa kabutihang palad, ang Anchor ay nagbibigay ng `#[account]` attribute macro para sa awtomatikong pagimplement ng mga katangiang dapat taglayin ng bawat account.
 
 Ang mga istrukturang minarkahan ng `#[account]` ay maaaring gamitin sa `Account` upang patunayan na ang naipasa sa account ay talagang ang uri na inaasahan mo. Kapag sinisimulan ang isang account na ang representasyon ng istruktura ay may katangiang `#[account]`, ang unang 8 byte ay awtomatikong nakalaan para sa isang discriminator na natatangi sa uri ng account. Kapag deserialize ang data ng account, awtomatikong susuriin ng Anchor kung ang discriminator sa account ay tumutugma sa inaasahang uri ng account at throw and error kung hindi ito tumugma.
 
 Sa halimbawa sa ibaba, ang `Account<'info, AdminConfig>` ay tumutukoy na ang `admin_config` na account ay dapat na nasa uri ng `AdminConfig`. Awtomatikong tinitingnan ng Anchor na ang unang 8 byte ng data ng account ay tumutugma sa discriminator ng uri ng `AdminConfig`.
 
-Ang pagsusuri sa pagpapatunay ng data para sa field na `admin` ay inilipat din mula sa lohika ng pagtuturo patungo sa struct ng pagpapatunay ng account gamit ang hadlang na `may_isa`. Tinutukoy ng `#[account(has_one = admin)]` na dapat tumugma ang field ng `admin` ng `admin_config` account sa `admin` account na ipinasa sa pagtuturo. Tandaan na para gumana ang `has_one` na hadlang, ang pagpapangalan ng account sa struct ay dapat tumugma sa pagpapangalan ng field sa account na iyong pinapatunayan.
+Ang data validation check para sa field na `admin` ay inilipat din mula sa lohika ng pagtuturo patungo sa struct ng pagpapatunay ng account gamit ang constraint na `has_one`. Tinutukoy ng `#[account(has_one = admin)]` na dapat tumugma ang field ng `admin` ng `admin_config` account sa `admin` account na ipinasa sa pagtuturo. Tandaan na para gumana ang `has_one` na constraint, ang pagpapangalan ng account sa struct ay dapat tumugma sa pagpapangalan ng field sa account na iyong pinapatunayan.
 
 ```rust
 use anchor_lang::prelude::*;
@@ -207,19 +207,19 @@ Mahalagang tandaan na ito ay isang kahinaan na hindi mo kailangang mag-alala kap
 Para sa demo na ito, gagawa kami ng dalawang programa upang ipakita ang isang uri ng kahinaan sa cosplay.
 
 - Ang unang programa ay magsisimula ng mga account ng programa nang walang discriminator
-- Ang pangalawang programa ay magsisimula ng mga account ng program gamit ang hadlang na `init` ng Anchor na awtomatikong nagtatakda ng discriminator ng account
+- Ang pangalawang programa ay magsisimula ng mga account ng program gamit ang constraint na `init` ng Anchor na awtomatikong nagtatakda ng discriminator ng account
 
 ### 1. Panimula
 
-Para makapagsimula, i-download ang starter code mula sa `starter` branch ng [repository na ito](https://github.com/Unboxed-Software/solana-type-cosplay/tree/starter). Kasama sa starter code ang isang program na may tatlong tagubilin at ilang pagsubok.
+Para makapagsimula, i-download ang starter code mula sa `starter` branch ng [repository na ito](https://github.com/Unboxed-Software/solana-type-cosplay/tree/starter). Kasama sa starter code ang isang program na may tatlong instruction at ilang pagsubok.
 
-Ang tatlong tagubilin ay:
+Ang tatlong instruction ay:
 
 1. `initialize_admin` - nagpapasimula ng admin account at nagtatakda ng awtoridad ng admin ng program
 2. `initialize_user` - nagpapakilala ng karaniwang user account
 3. `update_admin` - nagbibigay-daan sa kasalukuyang admin na i-update ang awtoridad ng admin ng programa
 
-Tingnan ang tatlong tagubiling ito sa `lib.rs` file. Ang huling tagubilin ay dapat lang na matatawag ng account na tumutugma sa field ng `admin` sa admin account na sinimulan gamit ang tagubiling `initialize_admin`.
+Tingnan ang tatlong instruction ito sa `lib.rs` file. Ang huling instruction ay dapat lang na matatawag ng account na tumutugma sa field ng `admin` sa admin account na sinimulan gamit ang `initialize_admin` instruction.
 
 ### 2. Subukan ang hindi secure na `update_admin` na pagtuturo
 
@@ -237,7 +237,7 @@ pub struct User {
 }
 ```
 
-Dahil dito, posibleng ipasa ang isang `User` na account sa halip na ang `admin` na account sa tagubiling `update_admin`, sa gayon ay nilalampasan ang pangangailangan na ang isa ay maging isang admin upang tawagan ang tagubiling ito.
+Dahil dito, posibleng ipasa ang isang `User` na account sa halip na ang `admin` na account sa `update_admin` instruction, sa gayon ay nilalampasan ang pangangailangan na ang isa ay maging isang admin upang tawagan ang instruction ito.
 
 Tingnan ang `solana-type-cosplay.ts` file sa direktoryo ng `tests`. Naglalaman ito ng ilang pangunahing pag-setup at dalawang pagsubok. Ang isang pagsubok ay nagpapasimula ng isang user account, at ang isa ay humihiling ng `update_admin` at pumasa sa user account sa halip ng isang admin account.
 
@@ -255,7 +255,7 @@ Ngayon ay gagawa kami ng bagong program na tinatawag na `type-checked` sa pamama
 
 Ngayon sa iyong `programs` folder magkakaroon ka ng dalawang program. Patakbuhin ang `listahan ng mga anchor key` at dapat mong makita ang program ID para sa bagong program. Idagdag ito sa `lib.rs` file ng `type-checked` program at sa `type_checked` program sa `Anchor.toml` file.
 
-Susunod, i-update ang setup ng test file para isama ang bagong program at dalawang bagong keypair para sa mga account na sisimulan namin para sa bagong program.
+Susunod, i-update ang setup ng test file para isama ang bagong program at dalawang bagong keypair para sa mga account na sisimulan natin para sa bagong program.
 
 ```tsx
 import * as anchor from "@project-serum/anchor"
@@ -281,9 +281,9 @@ describe("type-cosplay", () => {
 
 ### 4. Ipatupad ang programang `type-checked`
 
-Sa programang `type_checked`, magdagdag ng dalawang tagubilin gamit ang `init` constraint upang simulan ang isang `AdminConfig` account at isang `User` account. Kapag ginagamit ang hadlang na `init` upang simulan ang mga bagong account ng program, awtomatikong itatakda ng Anchor ang unang 8 byte ng data ng account bilang isang natatanging discriminator para sa uri ng account.
+Sa programang `type_checked`, magdagdag ng dalawang instruction gamit ang `init` constraint upang simulan ang isang `AdminConfig` account at isang `User` account. Kapag ginagamit ang `init` constraint upang simulan ang mga bagong account ng program, awtomatikong itatakda ng Anchor ang unang 8 byte ng data ng account bilang isang natatanging discriminator para sa uri ng account.
 
-Magdaragdag din kami ng tagubiling `update_admin` na nagpapatunay sa `admin_config` account bilang isang uri ng account na `AdminConfig` gamit ang `Account` wrapper ng Anchor. Para sa anumang account na ipinasa bilang `admin_config` account, awtomatikong susuriin ng Anchor na tumutugma ang discriminator ng account sa inaasahang uri ng account.
+Magdaragdag din kami ng `update_admin` instruction na nagpapatunay sa `admin_config` account bilang isang uri ng account na `AdminConfig` gamit ang `Account` wrapper ng Anchor. Para sa anumang account na ipinasa bilang `admin_config` account, awtomatikong susuriin ng Anchor na tumutugma ang discriminator ng account sa inaasahang uri ng account.
 
 ```rust
 use anchor_lang::prelude::*;
@@ -361,7 +361,7 @@ pub struct User {
 
 ### 5. Subukan ang secure na `update_admin` na pagtuturo
 
-Sa test file, magsisimula kami ng `AdminConfig` account at isang `User` account mula sa `type_checked` program. Pagkatapos ay gagamitin namin ang tagubiling `updateAdmin` nang dalawang beses na ipinapasa sa mga bagong likhang account.
+Sa test file, magsisimula kami ng `AdminConfig` account at isang `User` account mula sa `type_checked` program. Pagkatapos ay gagamitin natin ang `updateAdmin` instruction nang dalawang beses na ipinapasa sa mga bagong likhang account.
 
 ```rust
 describe("type-cosplay", () => {
@@ -417,7 +417,7 @@ describe("type-cosplay", () => {
 })
 ```
 
-Patakbuhin ang `anchor test`. Para sa transaksyon kung saan pumasa kami sa uri ng account na `User`, inaasahan namin ang pagtuturo at magbabalik ng Anchor Error para sa account na hindi uri ng `AdminConfig`.
+Patakbuhin ang `anchor test`. Para sa transaksyon kung saan pumasa kami sa uri ng account na `User`, inaasahan natin ang pagtuturo at magbabalik ng Anchor Error para sa account na hindi uri ng `AdminConfig`.
 
 ```bash
 'Program EU66XDppFCf2Bg7QQr59nyykj9ejWaoW93TSkk1ufXh3 invoke [1]',
