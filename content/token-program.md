@@ -11,14 +11,14 @@ objectives:
 # TL;DR
 
 - Ang **SPL-Tokens** ay kumakatawan sa lahat ng hindi katutubong token sa network ng Solana. Ang parehong fungible at non-fungible token (NFTs) sa Solana ay SPL-Tokens
-- Ang **Token Program** ay naglalaman ng mga tagubilin para sa paglikha at pakikipag-ugnayan sa SPL-Tokens
+- Ang **Token Program** ay naglalaman ng mga instruction para sa paglikha at pakikipag-ugnayan sa SPL-Tokens
 - **Token Mints** ay mga account na nagtataglay ng data tungkol sa isang partikular na Token, ngunit hindi nagtataglay ng Token
 - **Token Accounts** ay ginagamit upang maghawak ng mga Token ng isang partikular na Token Mint
 - Ang paggawa ng Mga Token Mint at Token Account ay nangangailangan ng paglalaan ng **renta** sa SOL. Ang renta para sa isang Token Account ay maaaring i-refund kapag ang account ay sarado, gayunpaman, ang Token Mint ay kasalukuyang hindi maaaring isara
 
 # Pangkalahatang-ideya
 
-Ang Token Program ay isa sa maraming programa na ginawang available ng Solana Program Library (SPL). Naglalaman ito ng mga tagubilin para sa paglikha at pakikipag-ugnayan sa SPL-Tokens. Ang mga token na ito ay kumakatawan sa lahat ng hindi katutubong (i.e. hindi SOL) na mga token sa network ng Solana.
+Ang Token Program ay isa sa maraming program na ginawang available ng Solana Program Library (SPL). Naglalaman ito ng mga instruction para sa paglikha at pakikipag-ugnayan sa SPL-Tokens. Ang mga token na ito ay kumakatawan sa lahat ng hindi katutubong (i.e. hindi SOL) na mga token sa network ng Solana.
 
 Ang araling ito ay tumutuon sa mga pangunahing kaalaman sa paglikha at pamamahala ng isang bagong SPL-Token gamit ang Token Program:
 1. Paglikha ng bagong Token Mint
@@ -27,7 +27,7 @@ Ang araling ito ay tumutuon sa mga pangunahing kaalaman sa paglikha at pamamahal
 4. Paglilipat ng mga token mula sa isang may hawak patungo sa isa pa
 5. Nagsusunog ng mga token
 
-Lalapitan namin ito mula sa client-side ng proseso ng pag-develop gamit ang `@solana/spl-token` Javascript library.
+Lalapitan natin ito mula sa client-side ng proseso ng pag-develop gamit ang `@solana/spl-token` Javascript library.
 
 ## Token Mint
 
@@ -37,7 +37,7 @@ Bilang halimbawa, tingnan natin ang [USD Coin (USDC) sa Solana Explorer](https:/
 
 ![Screenshot ng USDC Token Mint](../assets/token-program-usdc-mint.png)
 
-Upang lumikha ng bagong Token Mint, kailangan mong ipadala ang tamang mga tagubilin sa transaksyon sa Token Program. Upang gawin ito, gagamitin namin ang function na `createMint` mula sa `@solana/spl-token`.
+Upang lumikha ng bagong Token Mint, kailangan mong ipadala ang tamang mga instruction sa transaksyon sa Token Program. Upang gawin ito, gagamitin natin ang function na `createMint` mula sa `@solana/spl-token`.
 
 ```tsx
 const tokenMint = await createMint(
@@ -51,15 +51,15 @@ const tokenMint = await createMint(
 
 Ibinabalik ng function na `createMint` ang `publicKey` ng bagong token mint. Ang function na ito ay nangangailangan ng mga sumusunod na argumento:
 
-- `koneksyon` - ang JSON-RPC na koneksyon sa cluster
-- `payer` - ang pampublikong susi ng nagbabayad para sa transaksyon
+- `connection` - ang JSON-RPC na koneksyon sa cluster
+- `payer` - ang public key ng nagbabayad para sa transaksyon
 - `mintAuthority` - ang account na pinahintulutang gawin ang aktwal na pag-minting ng mga token mula sa token mint.
-- `freezeAuthority` - isang account na pinahintulutan na i-freeze ang mga token sa isang token account. Kung ang pagyeyelo ay hindi isang nais na katangian, ang parameter ay maaaring itakda sa null
+- `freezeAuthority` - isang account na pinahintulutan na i-freeze ang mga token sa isang token account. Kung ang pagyeyelo ay hindi isang nais na attribute, ang parameter ay maaaring itakda sa null
 - `decimals` - tumutukoy sa nais na katumpakan ng decimal ng token
 
-Kapag gumagawa ng bagong mint mula sa isang script na may access sa iyong sikretong key, maaari mo lang gamitin ang function na `createMint`. Gayunpaman, kung bubuo ka ng isang website upang payagan ang mga user na lumikha ng bagong token mint, kakailanganin mong gawin ito gamit ang sikretong key ng user nang hindi nila inilalantad ito sa browser. Sa kasong iyon, gugustuhin mong bumuo at magsumite ng transaksyon na may mga tamang tagubilin.
+Kapag gumagawa ng bagong mint mula sa isang script na may access sa iyong sikretong key, maaari mo lang gamitin ang function na `createMint`. Gayunpaman, kung bubuo ka ng isang website upang payagan ang mga user na lumikha ng bagong token mint, kakailanganin mong gawin ito gamit ang sikretong key ng user nang hindi nila inilalantad ito sa browser. Sa kasong iyon, gugustuhin mong bumuo at magsumite ng transaksyon na may mga tamang instruction.
 
-Sa ilalim ng hood, ang function na `createMint` ay gumagawa lang ng transaksyon na naglalaman ng dalawang tagubilin:
+Sa ilalim ng hood, ang function na `createMint` ay gumagawa lang ng transaksyon na naglalaman ng dalawang instruction:
 1. Gumawa ng bagong account
 2. Magsimula ng bagong mint
 
@@ -99,7 +99,7 @@ async function buildCreateMintTransaction(
 }
 ```
 
-Kapag manu-manong ginagawa ang mga tagubilin para gumawa ng bagong token mint, tiyaking idagdag mo ang mga tagubilin para sa paggawa ng account at pagsisimula ng mint sa *parehong transaksyon*. Kung gagawin mo ang bawat hakbang sa isang hiwalay na transaksyon, sa teoryang posible para sa ibang tao na kunin ang account na iyong ginawa at simulan ito para sa kanilang sariling mint.
+Kapag manu-manong ginagawa ang mga instruction para gumawa ng bagong token mint, tiyaking idagdag mo ang mga instruction para sa paggawa ng account at pagsisimula ng mint sa *parehong transaksyon*. Kung gagawin mo ang bawat hakbang sa isang hiwalay na transaksyon, sa teoryang posible para sa ibang tao na kunin ang account na iyong ginawa at simulan ito para sa kanilang sariling mint.
 
 ### Renta at Rent Exemption
 Tandaan na ang unang linya sa body ng function ng nakaraang snippet ng code ay naglalaman ng isang tawag sa `getMinimumBalanceForRentExemptMint`, ang resulta nito ay ipinapasa sa function na `createAccount`. Ito ay bahagi ng pagsisimula ng account na tinatawag na rent exemption.
@@ -110,13 +110,13 @@ Hanggang kamakailan lamang, ang lahat ng mga account sa Solana ay kinakailangang
 
 Kamakailan, ang unang opsyon ay tinanggal at naging kinakailangan na magdeposito ng sapat na SOL para sa pagbubukod sa upa kapag nagpasimula ng bagong account.
 
-Sa kasong ito, gumagawa kami ng bagong account para sa isang token mint kaya ginagamit namin ang `getMinimumBalanceForRentExemptMint` mula sa `@solana/spl-token` library. Gayunpaman, nalalapat ang konseptong ito sa lahat ng account at magagamit mo ang mas generic na paraan ng `getMinimumBalanceForRentExemption` sa `Connection` para sa iba pang account na maaaring kailanganin mong gawin.
+Sa kasong ito, gumagawa tayo ng bagong account para sa isang token mint kaya ginagamit natin ang `getMinimumBalanceForRentExemptMint` mula sa `@solana/spl-token` library. Gayunpaman, nalalapat ang konseptong ito sa lahat ng account at magagamit mo ang mas generic na paraan ng `getMinimumBalanceForRentExemption` sa `Connection` para sa iba pang account na maaaring kailanganin mong gawin.
 
 ## Token Account
 
 Bago ka makapag-mint ng mga token (mag-isyu ng bagong supply), kailangan mo ng Token Account para mahawakan ang mga bagong ibinigay na token.
 
-Ang isang Token Account ay nagtataglay ng mga token ng isang partikular na "mint" at may tinukoy na "may-ari" ng account. Ang may-ari lang ang may pahintulot na bawasan ang balanse ng Token Account (ilipat, i-burn, atbp.) habang ang sinuman ay maaaring magpadala ng mga token sa Token Account upang madagdagan ang balanse nito.
+Ang isang Token Account ay nagtataglay ng mga token ng isang partikular na "mint" at may tinukoy na "owner" ng account. Ang owner lang ang may pahintulot na bawasan ang balanse ng Token Account (ilipat, i-burn, atbp.) habang ang sinuman ay maaaring magpadala ng mga token sa Token Account upang madagdagan ang balanse nito.
 
 Maaari mong gamitin ang `createAccount` function ng `spl-token` library upang lumikha ng bagong Token Account:
 
@@ -132,15 +132,15 @@ const tokenAccount = await createAccount(
 
 Ibinabalik ng function na `createAccount` ang `publicKey` ng bagong token account. Ang function na ito ay nangangailangan ng mga sumusunod na argumento:
 
-- `koneksyon` - ang JSON-RPC na koneksyon sa cluster
+- `connection` - ang JSON-RPC na koneksyon sa cluster
 - `payer` - ang account ng nagbabayad para sa transaksyon
 - `mint` - ang token mint kung saan nauugnay ang bagong token account
-- `may-ari` - ang account ng may-ari ng bagong token account
-- `keypair` - isa itong opsyonal na parameter para sa pagtukoy ng bagong address ng token account. Kung walang ibinigay na keypair, ang function na `createAccount` ay magde-default sa isang derivation mula sa nauugnay na `mint` at `may-ari` na account.
+- `owner` - ang account ng may-ari ng bagong token account
+- `keypair` - isa itong opsyonal na parameter para sa pagtukoy ng bagong address ng token account. Kung walang ibinigay na keypair, ang function na `createAccount` ay magde-default sa isang derivation mula sa nauugnay na `mint` at `owner` na account.
 
-Pakitandaan na ang function na `createAccount` na ito ay iba sa function na `createAccount` na ipinakita sa itaas noong tumingin kami sa ilalim ng hood ng function na `createMint`. Noong nakaraan, ginamit namin ang function na `createAccount` sa `SystemProgram` upang ibalik ang pagtuturo para sa paggawa ng lahat ng account. Ang `createAccount` function dito ay isang helper function sa `spl-token` library na nagsusumite ng transaksyon na may dalawang tagubilin. Ang una ay gumagawa ng account at ang pangalawa ay nagpapasimula ng account bilang isang Token Account.
+Pakitandaan na ang function na `createAccount` na ito ay iba sa function na `createAccount` na ipinakita sa itaas noong tumingin tayo sa ilalim ng hood ng function na `createMint`. Noong nakaraan, ginamit natin ang function na `createAccount` sa `SystemProgram` upang ibalik ang instruction para sa paggawa ng lahat ng account. Ang `createAccount` function dito ay isang helper function sa `spl-token` library na nagsusumite ng transaksyon na may dalawang instruction. Ang una ay gumagawa ng account at ang pangalawa ay nagpapasimula ng account bilang isang Token Account.
 
-Tulad ng paggawa ng Token Mint, kung kailangan naming buuin ang transaksyon para sa `createAccount` nang manu-mano maaari naming i-duplicate kung ano ang ginagawa ng function sa ilalim ng hood:
+Tulad ng paggawa ng Token Mint, kung kailangan nating buuin ang transaksyon para sa `createAccount` nang manu-mano maaari nating i-duplicate kung ano ang ginagawa ng function sa ilalim ng hood:
 1. Gamitin ang `getMint` upang kunin ang data na nauugnay sa `mint`
 2. Gamitin ang `getAccountLenForMint` upang kalkulahin ang puwang na kailangan para sa token account
 3. Gamitin ang `getMinimumBalanceForRentExemption` para kalkulahin ang mga lamport na kailangan para sa exemption sa upa
@@ -183,7 +183,7 @@ async function buildCreateTokenAccountTransaction(
 
 ### Kaugnay na Token Account
 
-Ang Associated Token Account ay isang Token Account kung saan ang address ng Token Account ay hinango gamit ang pampublikong key ng may-ari at isang token mint. Ang Associated Token Accounts ay nagbibigay ng isang tiyak na paraan upang mahanap ang Token Account na pagmamay-ari ng isang partikular na `publicKey` para sa isang partikular na token mint. Kadalasan, gagawa ka ng Token Account, gugustuhin mo itong maging Associated Token Account.
+Ang Associated Token Account ay isang Token Account kung saan ang address ng Token Account ay hinango gamit ang public key ng may-ari at isang token mint. Ang Associated Token Accounts ay nagbibigay ng isang tiyak na paraan upang mahanap ang Token Account na pagmamay-ari ng isang partikular na `publicKey` para sa isang partikular na token mint. Kadalasan, gagawa ka ng Token Account, gugustuhin mo itong maging Associated Token Account.
 
 Katulad sa itaas, maaari kang lumikha ng nauugnay na token account gamit ang `createAssociatedTokenAccount` function ng `spl-token` library.
 
@@ -198,17 +198,17 @@ const associatedTokenAccount = await createAssociatedTokenAccount(
 
 Ibinabalik ng function na ito ang `publicKey` ng bagong nauugnay na token account at nangangailangan ng mga sumusunod na argumento:
 
-- `koneksyon` - ang JSON-RPC na koneksyon sa cluster
+- `connection` - ang JSON-RPC na koneksyon sa cluster
 - `payer` - ang account ng nagbabayad para sa transaksyon
 - `mint` - ang token mint kung saan nauugnay ang bagong token account
-- `may-ari` - ang account ng may-ari ng bagong token account
+- `owner` - ang account ng may-ari ng bagong token account
 
 Maaari mo ring gamitin ang `getOrCreateAssociatedTokenAccount` upang makuha ang Token Account na nauugnay sa isang ibinigay na address o gawin ito kung wala ito. Halimbawa, kung nagsusulat ka ng code sa mga airdrop na token sa isang partikular na user, malamang na gagamitin mo ang function na ito upang matiyak na ang token account na nauugnay sa ibinigay na user ay malilikha kung hindi pa ito umiiral.
 
 Sa ilalim ng hood, ang `createAssociatedTokenAccount` ay gumagawa ng dalawang bagay:
 
 1. Paggamit ng `getAssociatedTokenAddress` upang makuha ang nauugnay na token account address mula sa `mint` at `may-ari`
-2. Pagbuo ng transaksyon gamit ang mga tagubilin mula sa `createAssociatedTokenAccountInstruction`
+2. Pagbuo ng transaksyon gamit ang mga instruction mula sa `createAssociatedTokenAccountInstruction`
 
 ```tsx
 import * as web3 from '@solana/web3'
@@ -252,16 +252,16 @@ const transactionSignature = await mintTo(
 
 Ang `mintTo` function ay nagbabalik ng `TransactionSignature` na maaaring tingnan sa Solana Explorer. Ang `mintTo` function ay nangangailangan ng mga sumusunod na argumento:
 
-- `koneksyon` - ang JSON-RPC na koneksyon sa cluster
+- `connection` - ang JSON-RPC na koneksyon sa cluster
 - `payer` - ang account ng nagbabayad para sa transaksyon
 - `mint` - ang token mint kung saan nauugnay ang bagong token account
 - `destination` - ang token account kung saan ilalagay ang mga token
 - `authority` - ang account na pinahintulutan na gumawa ng mga token
 - `amount` - ang raw na dami ng mga token na i-mint sa labas ng mga decimal, hal. kung ang mga decimal na ari-arian ng Scrooge Coin mint ay itinakda sa 2 para makakuha ng 1 buong Scrooge Coin kailangan mong itakda ang property na ito sa 100
 
-Karaniwang i-update ang awtoridad ng mint sa isang token mint sa null pagkatapos ma-mint ang mga token. Magtatakda ito ng pinakamataas na supply at masisigurong walang mga token ang maaaring i-mint sa hinaharap. Sa kabaligtaran, ang awtoridad sa pagmimina ay maaaring ibigay sa isang programa upang ang mga token ay maaaring awtomatikong ma-minted sa mga regular na agwat o ayon sa mga kundisyon na naa-program.
+Karaniwang i-update ang awtoridad ng mint sa isang token mint sa null pagkatapos ma-mint ang mga token. Magtatakda ito ng pinakamataas na supply at masisigurong walang mga token ang maaaring i-mint sa hinaharap. Sa kabaligtaran, ang awtoridad sa pagmimina ay maaaring ibigay sa isang program upang ang mga token ay maaaring awtomatikong ma-minted sa mga regular na agwat o ayon sa mga kundisyon na naa-program.
 
-Sa ilalim ng hood, ang function na `mintTo` ay gumagawa lang ng isang transaksyon gamit ang mga tagubiling nakuha mula sa function na `createMintToInstruction`.
+Sa ilalim ng hood, ang function na `mintTo` ay gumagawa lang ng isang transaksyon gamit ang mga instruction nakuha mula sa function na `createMintToInstruction`.
 
 ```tsx
 import * as web3 from '@solana/web3'
@@ -286,7 +286,7 @@ async function buildMintToTransaction(
 }
 ```
 
-## Mga Token ng Paglipat
+## Mga Transfer Token
 
 Ang mga paglilipat ng SPL-Token ay nangangailangan ng parehong nagpadala at tagatanggap na magkaroon ng mga token account para sa mint ng mga token na inililipat. Ang mga token ay inililipat mula sa token account ng nagpadala patungo sa token account ng tatanggap.
 
@@ -307,15 +307,15 @@ const transactionSignature = await transfer(
 
 Ang function na `transfer` ay nagbabalik ng `TransactionSignature` na maaaring tingnan sa Solana Explorer. Ang function na `transfer` ay nangangailangan ng mga sumusunod na argumento:
 
-- `koneksyon` ang JSON-RPC na koneksyon sa cluster
+- `connection` ang JSON-RPC na koneksyon sa cluster
 - `payer` ang account ng nagbabayad para sa transaksyon
 - `source` ang token account na nagpapadala ng mga token
 - `destination` ang token account na tumatanggap ng mga token
-- `may-ari` ang account ng may-ari ng token account na `pinagmulan`
+- `owner` ang account ng may-ari ng token account na `pinagmulan`
 - `amount` ang halaga ng mga token na ililipat
 
 
-Sa ilalim ng hood, ang function na `transfer` ay gumagawa lamang ng isang transaksyon na may mga tagubiling nakuha mula sa function na `createTransferInstruction`:
+Sa ilalim ng hood, ang function na `transfer` ay gumagawa lamang ng isang transaksyon na may mga instruction nakuha mula sa function na `createTransferInstruction`:
 
 ```tsx
 import * as web3 from '@solana/web3'
@@ -359,14 +359,14 @@ const transactionSignature = await burn(
 
 Ang function na `burn` ay nagbabalik ng `TransactionSignature` na maaaring tingnan sa Solana Explorer. Ang function na `burn` ay nangangailangan ng mga sumusunod na argumento:
 
-- `koneksyon` ang JSON-RPC na koneksyon sa cluster
+- `connection` ang JSON-RPC na koneksyon sa cluster
 - `payer` ang account ng nagbabayad para sa transaksyon
 - `account` ang token account kung saan magsu-burn ng mga token
 - `mint` ang token mint na nauugnay sa token account
-- `may-ari` ang account ng may-ari ng token account
+- `owner` ang account ng may-ari ng token account
 - `amount` ang halaga ng mga token na susunugin
 
-Sa ilalim ng hood, ang function na `burn` ay lumilikha ng isang transaksyon na may mga tagubiling nakuha mula sa function na `createBurnInstruction`:
+Sa ilalim ng hood, ang function na `burn` ay lumilikha ng isang transaksyon na may mga instruction nakuha mula sa function na `createBurnInstruction`:
 
 ```tsx
 import * as web3 from '@solana/web3'
@@ -391,7 +391,7 @@ async function buildBurnTransaction(
 }
 ```
 
-## Aprubahan ang Delegado
+## Approve Delegate
 
 Ang pag-apruba sa isang delegado ay ang proseso ng pagpapahintulot sa isa pang account na maglipat o magsunog ng mga token mula sa isang token account. Kapag gumagamit ng isang delegado, ang awtoridad sa token account ay nananatili sa orihinal na may-ari. Ang maximum na halaga ng mga token na maaaring ilipat o masunog ng isang delegado ay tinukoy sa oras na aprubahan ng may-ari ng token account ang delegado. Tandaan na maaari lamang magkaroon ng isang delegadong account na nauugnay sa isang token account sa anumang partikular na oras.
 
@@ -410,14 +410,14 @@ const transactionSignature = await approve(
 
 Ang function na `aprubahan` ay nagbabalik ng isang `TransactionSignature` na maaaring tingnan sa Solana Explorer. Ang function na `aprubahan` ay nangangailangan ng mga sumusunod na argumento:
 
-- `koneksyon` ang JSON-RPC na koneksyon sa cluster
+- `connection` ang JSON-RPC na koneksyon sa cluster
 - `payer` ang account ng nagbabayad para sa transaksyon
 - `account` ang token account kung saan magde-delegate ng mga token
 - `delegate` ang account na pinahihintulutan ng may-ari na maglipat o mag-burn ng mga token
-- `may-ari` ang account ng may-ari ng token account
+- `owner` ang account ng may-ari ng token account
 - `amount` ang maximum na bilang ng mga token na maaaring ilipat o i-burn ng delegado
 
-Sa ilalim ng hood, ang function na `approve` ay gumagawa ng isang transaksyon na may mga tagubiling nakuha mula sa function na `createApproveInstruction`:
+Sa ilalim ng hood, ang function na `approve` ay gumagawa ng isang transaksyon na may mga instruction nakuha mula sa function na `createApproveInstruction`:
 
 ```tsx
 import * as web3 from '@solana/web3'
@@ -442,11 +442,11 @@ async function buildApproveTransaction(
 }
 ```
 
-## Bawiin ang Delegado
+## Revoke Delegate
 
-Ang isang dating naaprubahang delegado para sa isang token account ay maaaring bawiin sa ibang pagkakataon. Sa sandaling binawi ang isang delegado, hindi na makakapaglipat ang delegado ng mga token mula sa token account ng may-ari. Ang anumang natitirang halaga na hindi nailipat mula sa dating naaprubahang halaga ay hindi na mailipat ng delegado.
+Ang isang dating naaprubahang delegado para sa isang token account ay maaaring i-revoke sa ibang pagkakataon. Sa sandaling binawi ang isang delegado, hindi na makakapaglipat ang delegado ng mga token mula sa token account ng may-ari. Ang anumang natitirang halaga na hindi nailipat mula sa dating naaprubahang halaga ay hindi na mailipat ng delegado.
 
-Upang bawiin ang isang delegado gamit ang `spl-token` na library, gagamitin mo ang function na `revoke`.
+Upang i-revoke ang isang delegado gamit ang `spl-token` na library, gagamitin mo ang function na `revoke`.
 
 ```tsx
 const transactionSignature = await revoke(
@@ -459,12 +459,12 @@ const transactionSignature = await revoke(
 
 Ang `revoke` function ay nagbabalik ng `TransactionSignature` na maaaring tingnan sa Solana Explorer. Ang `revoke` function ay nangangailangan ng mga sumusunod na argumento:
 
-- `koneksyon` ang JSON-RPC na koneksyon sa cluster
+- `connection` ang JSON-RPC na koneksyon sa cluster
 - `payer` ang account ng nagbabayad para sa transaksyon
-- `account` ang token account upang bawiin ang delegadong awtoridad mula sa
-- `may-ari` ang account ng may-ari ng token account
+- `account` ang token account upang i-revoke ang delegadong awtoridad mula sa
+- `owner` ang account ng may-ari ng token account
 
-Sa ilalim ng hood, ang function na `revoke` ay lumilikha ng isang transaksyon na may mga tagubiling nakuha mula sa function na `createRevokeInstruction`:
+Sa ilalim ng hood, ang function na `revoke` ay lumilikha ng isang transaksyon na may mga instruction nakuha mula sa function na `createRevokeInstruction`:
 
 ```tsx
 import * as web3 from '@solana/web3'
@@ -487,11 +487,11 @@ async function buildRevokeTransaction(
 
 # Demo
 
-Gagawa kami ng script na nakikipag-ugnayan sa mga tagubilin sa Token Program. Gagawa kami ng Token Mint, gagawa ng Token Accounts, mint token, mag-aaprubahan ng delegado, maglilipat ng mga token, at mag-burn ng mga token.
+Gagawa tayo ng script na nakikipag-ugnayan sa mga instruction sa Token Program. Gagawa tayo ng Token Mint, gagawa ng Token Accounts, mint token, mag-aaprubahan ng delegado, maglilipat ng mga token, at mag-burn ng mga token.
 
 ### 1. Basic scaffolding
 
-Magsimula tayo sa ilang pangunahing scaffolding. Maaari mong i-set up ang iyong proyekto gayunpaman, sa palagay mo ay pinakaangkop para sa iyo, ngunit gagamit kami ng isang simpleng Typescript na proyekto na may dependency sa `@solana/web3.js` at `@solana/spl-token` na mga pakete.
+Magsimula tayo sa ilang pangunahing scaffolding. Maaari mong i-set up ang iyong proyekto gayunpaman, sa palagay mo ay pinakaangkop para sa iyo, ngunit gagamit tayo ng isang simpleng Typescript na proyekto na may dependency sa `@solana/web3.js` at `@solana/spl-token` na mga pakete.
 
 Maaari mong gamitin ang `npx create-solana-client [INSERT_NAME_HERE]` sa command line para i-clone ang template na ating sisimulan. O maaari mong manual na i-clone ang template [dito](https://github.com/Unboxed-Software/solana-client-template).
 
@@ -537,7 +537,7 @@ async function createNewMint(
 
 Kapag nakumpleto na ang function na iyon, tawagan ito mula sa katawan ng `main`, na nagtatakda ng `user` bilang `payer`, `mintAuthority`, at `freezeAuthority`.
 
-Pagkatapos gawin ang bagong mint, kunin natin ang data ng account gamit ang function na `getMint` at iimbak ito sa isang variable na tinatawag na `mintInfo`. Gagamitin namin ang data na ito sa ibang pagkakataon upang ayusin ang input `amount` para sa desimal na katumpakan ng mint.
+Pagkatapos gawin ang bagong mint, kunin natin ang data ng account gamit ang function na `getMint` at iimbak ito sa isang variable na tinatawag na `mintInfo`. Gagamitin natin ang data na ito sa ibang pagkakataon upang ayusin ang input `amount` para sa desimal na katumpakan ng mint.
 
 ```tsx
 async function main() {
@@ -558,13 +558,13 @@ async function main() {
 
 ### 3. Lumikha ng Token Account
 
-Ngayong nagawa na natin ang mint, gumawa tayo ng bagong Token Account, na tumutukoy sa `user` bilang `may-ari`.
+Ngayong nagawa na natin ang mint, gumawa tayo ng bagong Token Account, na tumutukoy sa `user` bilang `owner`.
 
-Ang function na `createAccount` ay lumilikha ng bagong Token Account na may opsyon na tukuyin ang address ng Token Account. Tandaan na kung walang ibinigay na address, ang `createAccount` ay magiging default sa paggamit ng nauugnay na token account na nakuha gamit ang `mint` at `may-ari`.
+Ang function na `createAccount` ay lumilikha ng bagong Token Account na may opsyon na tukuyin ang address ng Token Account. Tandaan na kung walang ibinigay na address, ang `createAccount` ay magiging default sa paggamit ng nauugnay na token account na nakuha gamit ang `mint` at `owner`.
 
-Bilang kahalili, ang function na `createAssociatedTokenAccount` ay gagawa din ng nauugnay na token account na may parehong address na nagmula sa `mint` at `may-ari` na pampublikong key.
+Bilang kahalili, ang function na `createAssociatedTokenAccount` ay gagawa din ng nauugnay na token account na may parehong address na nagmula sa `mint` at `owner` na public key.
 
-Para sa aming demo, gagamitin namin ang function na`getOrCreateAssociatedTokenAccount` upang gawin ang aming token account. Nakukuha ng function na ito ang address ng isang Token Account kung mayroon na ito. Kung hindi, lilikha ito ng bagong Associated Token Account sa naaangkop na address.
+Para sa ating demo, gagamitin natin ang function na`getOrCreateAssociatedTokenAccount` upang gawin ang ating token account. Nakukuha ng function na ito ang address ng isang Token Account kung mayroon na ito. Kung hindi, lilikha ito ng bagong Associated Token Account sa naaangkop na address.
 
 ```tsx
 async function createTokenAccount(
@@ -588,7 +588,7 @@ async function createTokenAccount(
 }
 ```
 
-Magdagdag ng tawag sa `createTokenAccount` sa `main`, na ipinapasa ang mint na ginawa namin sa nakaraang hakbang at itinatakda ang `user` bilang `nagbabayad` at `may-ari`.
+Magdagdag ng tawag sa `createTokenAccount` sa `main`, na ipinapasa ang mint na ginawa natin sa nakaraang hakbang at itinatakda ang `user` bilang `payer` at `owner`.
 
 ```tsx
 async function main() {
@@ -616,7 +616,7 @@ async function main() {
 
 ### 4. Mint Token
 
-Ngayong mayroon na tayong token mint at token account, hayaan ang mga token ng mint sa token account. Tandaan na ang `mintAuthority` lang ang makakapag-mint ng mga bagong token sa isang token account. Tandaan na itinakda namin ang `user` bilang `mintAuthority` para sa `mint` na aming ginawa.
+Ngayong mayroon na tayong token mint at token account, hayaan ang mga token ng mint sa token account. Tandaan na ang `mintAuthority` lang ang makakapag-mint ng mga bagong token sa isang token account. Tandaan na itinakda natin ang `user` bilang `mintAuthority` para sa `mint` na ating ginawa.
 
 Lumikha ng function na `mintTokens` na gumagamit ng `spl-token` function na `mintTo` upang mag-mint ng mga token:
 
@@ -646,7 +646,7 @@ async function mintTokens(
 
 Tawagan natin ang function sa `main` gamit ang `mint` at `tokenAccount` na ginawa dati.
 
-Tandaan na kailangan nating ayusin ang input `amount` para sa desimal na katumpakan ng mint. Ang mga token mula sa aming `mint` ay may desimal na katumpakan na 2. Kung tutukuyin lamang namin ang 100 bilang input `amount`, pagkatapos ay 1 token lang ang ilalagay sa aming token account.
+Tandaan na kailangan nating ayusin ang input `amount` para sa desimal na katumpakan ng mint. Ang mga token mula sa ating `mint` ay may desimal na katumpakan na 2. Kung tutukuyin lamang natin ang 100 bilang input `amount`, pagkatapos ay 1 token lang ang ilalagay sa ating token account.
 
 ```tsx
 async function main() {
@@ -681,7 +681,7 @@ async function main() {
 }
 ```
 
-### 5. Aprubahan ang Delegado
+### 5. Approve Delegate
 
 Ngayong mayroon na tayong token mint at token account, hayaan ang isang delegado na maglipat ng mga token sa ngalan natin.
 
@@ -711,7 +711,7 @@ async function approveDelegate(
 }
 ```
 
-Sa `pangunahin`, hayaang bumuo ng bagong `Keypair` upang kumatawan sa delegadong account. Pagkatapos, tawagan natin ang aming bagong function na `approveDelegate` at pahintulutan ang delegado na maglipat ng hanggang 50 token mula sa token account ng `user`. Tandaang isaayos ang `halaga` para sa desimal na katumpakan ng `mint`.
+Sa `main`, hayaang bumuo ng bagong `Keypair` upang mag representa sa delegadong account. Pagkatapos, tawagan natin ang ating bagong function na `approveDelegate` at pahintulutan ang delegado na maglipat ng hanggang 50 token mula sa token account ng `user`. Tandaang isaayos ang `amount` para sa desimal na katumpakan ng `mint`.
 
 ```tsx
 async function main() {
@@ -757,9 +757,9 @@ async function main() {
 }
 ```
 
-### 6. Mga Token sa Paglipat
+### 6. Mga Transfer Token
 
-Susunod, hayaang ilipat ang ilan sa mga token na kakagawa lang namin gamit ang `transfer` function ng `spl-token` library.
+Susunod, hayaang ilipat ang ilan sa mga token na kakagawa lang natin gamit ang `transfer` function ng `spl-token` library.
 
 ```tsx
 async function transferTokens(
@@ -785,11 +785,11 @@ async function transferTokens(
 }
 ```
 
-Bago namin matawagan ang bagong function na ito, kailangan naming malaman ang account kung saan namin ililipat ang mga token.
+Bago natin matawagan ang bagong function na ito, kailangan nating malaman ang account kung saan natin ililipat ang mga token.
 
 Sa `main`, hayaang makabuo ng bagong `Keypair` para maging receiver (ngunit tandaan na ito ay para lamang gayahin ang pagkakaroon ng taong magpadala ng mga token - sa isang tunay na application na kailangan mong malaman ang wallet address ng taong tumatanggap ng mga token).
 
-Pagkatapos, gumawa ng token account para sa tatanggap. Panghuli, tawagan natin ang aming bagong function na `transferTokens` para maglipat ng mga token mula sa token account ng `user` patungo sa token account ng `receiver`. Gagamitin namin ang `delegate` na inaprubahan namin sa nakaraang hakbang upang maisagawa ang paglipat sa ngalan namin.
+Pagkatapos, gumawa ng token account para sa tatanggap. Panghuli, tawagan natin ang ating bagong function na `transferTokens` para maglipat ng mga token mula sa token account ng `user` patungo sa token account ng `receiver`. Gagamitin natin ang `delegate` na inaprubahan natin sa nakaraang hakbang upang maisagawa ang paglipat sa ngalan natin.
 
 ```tsx
 async function main() {
@@ -851,9 +851,9 @@ async function main() {
 }
 ```
 
-### 7. Bawiin ang Delegado
+### 7. Revoke Delegate
 
-Ngayong tapos na kaming maglipat ng mga token, bawiin natin ang `delegate` gamit ang `revoke` function ng `spl-token` library.
+Ngayong tapos na tayong maglipat ng mga token, revoke natin ang `delegate` gamit ang `revoke` function ng `spl-token` library.
 
 ```tsx
 async function revokeDelegate(
@@ -875,7 +875,7 @@ async function revokeDelegate(
 }
 ```
 
-Ang pagbawi ay magtatakda ng delegado para sa token account na maging null at i-reset ang nakalaang halaga sa 0. Ang kailangan lang namin para sa function na ito ay ang token account at user. Tawagan natin ang aming bagong function na `revokeDelegate` upang bawiin ang delegate mula sa token account ng `user`.
+Ang pagrevoke ay magtatakda ng delegado para sa token account na maging null at i-reset ang nakalaang halaga sa 0. Ang kailangan lang natin para sa function na ito ay ang token account at user. Tawagan natin ang ating bagong function na `revokeDelegate` upang i-revoke ang delegate mula sa token account ng `user`.
 
 ```tsx
 async function main() {
@@ -974,7 +974,7 @@ async function burnTokens(
 }
 ```
 
-Ngayon tawagan ang bagong function na ito sa `pangunahing` upang masunog ang 25 sa mga token ng user. Tandaang isaayos ang `halaga` para sa desimal na katumpakan ng `mint`.
+Ngayon tawagan ang bagong function na ito sa `main` upang masunog ang 25 sa mga token ng user. Tandaang isaayos ang `amount` para sa desimal na katumpakan ng `mint`.
 
 ```tsx
 async function main() {
@@ -1060,15 +1060,15 @@ Kung kailangan mo ng kaunting oras sa proyektong ito para kumportable, tingnan a
 
 Ngayon ay iyong pagkakataon na bumuo ng isang bagay nang nakapag-iisa. Gumawa ng application na nagbibigay-daan sa mga user na gumawa ng bagong mint, gumawa ng token account, at mint token.
 
-Tandaan na hindi mo direktang magagamit ang mga function ng helper na napuntahan namin sa demo. Upang makipag-ugnayan sa Token Program gamit ang Phantom wallet adapter, kakailanganin mong buuin nang manu-mano ang bawat transaksyon at isumite ang transaksyon sa Phantom para sa pag-apruba.
+Tandaan na hindi mo direktang magagamit ang mga function ng helper na napuntahan natin sa demo. Upang makipag-ugnayan sa Token Program gamit ang Phantom wallet adapter, kakailanganin mong buuin nang manu-mano ang bawat transaksyon at isumite ang transaksyon sa Phantom para sa pag-apruba.
 
 ![Screenshot ng Token Program Challenge Frontend](../assets/token-program-frontend.png)
 
 1. Magagawa mo ito mula sa simula o maaari mong i-download ang starter code [dito](https://github.com/Unboxed-Software/solana-token-frontend/tree/starter).
 2. Gumawa ng bagong Token Mint sa bahagi ng `CreateMint`.
-     Kung kailangan mo ng refresher sa kung paano magpadala ng mga transaksyon sa isang wallet para sa pag-apruba, tingnan ang [aralin sa Wallets](./interact-with-wallets.md).
+     Kung kailangan mo ng refresher sa kung paano magpadala ng mga transaksyon sa isang wallet para sa pag-apruba, tingnan ang [Wallets lesson](./interact-with-wallets.md).
 
-     Kapag gumagawa ng bagong mint, kailangan ding lagdaan ng bagong nabuong `Keypair` ang transaksyon. Kapag kailangan ng mga karagdagang pumirma bilang karagdagan sa nakakonektang wallet, gamitin ang sumusunod na format:
+     Kapag gumagawa ng bagong mint, kailangan ding i-sign ang bagong nabuong `Keypair` ang transaksyon. Kapag kailangan ng mga karagdagang signers bilang karagdagan sa nakakonektang wallet, gamitin ang sumusunod na format:
 
     ```tsx
     sendTransaction(transaction, connection, {
