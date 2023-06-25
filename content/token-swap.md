@@ -10,8 +10,8 @@ objectives:
 # TL;DR
 
 - Ang **Token Swap Program** ay isang kontrata ng SPL na naka-deploy sa Devnet na magagamit para sa pagsubok at eksperimento ng mga developer at protocol. Para sa mga kaso ng paggamit sa produksyon, gamitin ang iyong sariling deployment o isa na regular na pinapanatili ng isang mapagkakatiwalaang serbisyo.
-- Ang programa ay tumatanggap ng anim na magkakaibang **mga tagubilin**, lahat ng ito ay ating tuklasin sa araling ito.
-- Nagagawa ng mga developer na lumikha at gumamit ng **mga liquidity pool** upang magpalit sa pagitan ng anumang SPL token na gusto nila.
+- Ang programa ay tumatanggap ng anim na magkakaibang **instructions**, lahat ng ito ay ating tuklasin sa araling ito.
+- Nagagawa ng mga developer na lumikha at gumamit ng **liquidity pools** upang magpalit sa pagitan ng anumang SPL token na gusto nila.
 - Gumagamit ang program ng mathematical formula na tinatawag na "**curve**" para kalkulahin ang presyo ng lahat ng trade. Nilalayon ng mga curves na gayahin ang normal na dynamics ng market: halimbawa, habang bumibili ang mga trader ng maraming isang uri ng token, tumataas ang halaga ng ibang uri ng token.
 
 # Pangkalahatang-ideya
@@ -28,21 +28,21 @@ Kapag handa na ang isang LP na bawiin ang kanilang idinepositong liquidity, ang 
 
 Ang layunin ng mga swap pool ay upang mapadali ang desentralisadong kalakalan sa pagitan ng mga user. Sa tradisyunal na pananalapi, ang mga user ay nagsasagawa ng mga trade na tulad nito sa pamamagitan ng isang sentralisadong palitan sa isang gitnang limitasyon [order book](https://www.investopedia.com/terms/o/order-book.asp). Sa pangkalahatan, nangangailangan ito ng pinagkakatiwalaang tagapamagitan ng third-party.
 
-Dahil sa desentralisadong katangian ng cryptocurrency, gayunpaman, mayroon na tayong bagong paraan upang mapadali ang mga pangangalakal. Maraming mga protocol na desentralisadong palitan ang binuo upang samantalahin ito. Ang [Project Serum](https://www.projectserum.com/) ay isang halimbawa ng naturang desentralisadong aklat ng order ng sentral na limitasyon na binuo sa Solana.
+Dahil sa desentralisadong nature ng cryptocurrency, gayunpaman, mayroon na tayong bagong paraan upang mapadali ang mga pangangalakal. Maraming mga protocol na desentralisadong palitan ang binuo upang samantalahin ito. Ang [Project Serum](https://www.projectserum.com/) ay isang halimbawa ng naturang desentralisadong aklat ng order ng sentral na limitasyon na binuo sa Solana.
 
-Dahil ang mga swap pool ay ganap na desentralisado, kahit sino ay maaaring magbigay ng mga tagubilin sa swap program upang lumikha ng bagong swap pool sa pagitan ng anumang SPL token na gusto nila. Isa itong napakalaking pagtaas na lampas sa tradisyonal na pananalapi. Ang mga swap pool at Automated Market Makers (AMMs) ay isa sa mga pinakakaakit-akit at kumplikadong paksa ng DeFi. Ang mga nakakatuwang detalye ng kung paano gumagana ang mga ito ay wala sa saklaw ng araling ito, ngunit mayroong isang toneladang materyal sa labas na magagamit mo kung interesado kang matuto nang higit pa. Halimbawa, ang Programa ng Solana Token Swap ay lubos na inspirasyon ng [Uniswap](https://uniswap.org/) at [Balancer](https://balancer.fi/), bawat isa ay nagbibigay ng mahusay na dokumentasyon na mababasa mo sa pamamagitan ng.
+Dahil ang mga swap pool ay ganap na desentralisado, kahit sino ay maaaring magbigay ng mga instruction sa swap program upang lumikha ng bagong swap pool sa pagitan ng anumang SPL token na gusto nila. Isa itong napakalaking pagtaas na lampas sa tradisyonal na pananalapi. Ang mga swap pool at Automated Market Makers (AMMs) ay isa sa mga pinakakaakit-akit at kumplikadong paksa ng DeFi. Ang mga nakakatuwang detalye ng kung paano gumagana ang mga ito ay wala sa saklaw ng araling ito, ngunit mayroong isang toneladang materyal sa labas na magagamit mo kung interesado kang matuto nang higit pa. Halimbawa, ang Programa ng Solana Token Swap ay lubos na inspirasyon ng [Uniswap](https://uniswap.org/) at [Balancer](https://balancer.fi/), bawat isa ay nagbibigay ng mahusay na dokumentasyon na mababasa mo sa pamamagitan ng.
 
 ## Token Swap Program at `@solana/spl-token-swap`
 
-Hindi tulad ng Token Program, walang Solana-maintained deployment ng Token Swap Program. Sa halip, nagbibigay si Solana ng [source code](https://github.com/solana-labs/solana-program-library/tree/master/token-swap/program) para sa Token Swap Program bilang isang reference na pagpapatupad na maaari mong i-fork at i-deploy ang iyong sarili. Maaari ka ring gumamit ng token swap program na pinapanatili ng isang third party na organisasyon na pinagkakatiwalaan mo. Sa buong araling ito, gagamitin namin ang deployment na pinananatili ng Serum sa address na `SwaPpA9LAaLfeLi3a68M4DjnLqgtticKg6CnyNwgAC8`.
+Hindi tulad ng Token Program, walang Solana-maintained deployment ng Token Swap Program. Sa halip, nagbibigay si Solana ng [source code](https://github.com/solana-labs/solana-program-library/tree/master/token-swap/program) para sa Token Swap Program bilang isang reference implementation na maaari mong i-fork at i-deploy ang iyong sarili. Maaari ka ring gumamit ng token swap program na pinapanatili ng isang third party na organisasyon na pinagkakatiwalaan mo. Sa buong araling ito, gagamitin natin ang deployment na pinananatili ng Serum sa address na `SwaPpA9LAaLfeLi3a68M4DjnLqgtticKg6CnyNwgAC8`.
 
-Pinapanatili din ni Solana ang library ng `@solana/spl-token-swap` na JS. Nagbibigay ang library na ito ng mga function ng helper para sa pakikipag-ugnayan sa isang token swap program. Ang bawat helper function ay tumatagal ng argumento na kumakatawan sa isang token swap program ID. Hangga't tinatanggap ng program na iyong ginagamit ang mga tagubilin sa Token Swap, maaari mong gamitin ang library na `@solana/spl-token-swap` kasama nito.
+Pinapanatili din ni Solana ang library ng `@solana/spl-token-swap` na JS. Nagbibigay ang library na ito ng mga helper function para sa pakikipag-ugnayan sa isang token swap program. Ang bawat helper function ay tumatagal ng argumento na kumakatawan sa isang token swap program ID. Hangga't tinatanggap ng program na iyong ginagamit ang mga instruction sa Token Swap, maaari mong gamitin ang library na `@solana/spl-token-swap` kasama nito.
 
 ## Paggawa ng Swap Pool
 
-Ang paggawa ng mga swap pool gamit ang SPL Token Swap Program ay talagang nagpapakita ng account, pagtuturo, at mga modelo ng awtorisasyon sa Solana. Ang araling ito ay pagsasama-samahin at bubuo sa ibabaw ng maraming natutunan natin sa ngayon sa kurso. Para sa mga operasyong partikular sa Token Swap Program, gagamitin namin ang library na `@solana/spl-token-swap`.
+Ang paggawa ng mga swap pool gamit ang SPL Token Swap Program ay talagang nagpapakita ng account, instruction, at mga modelo ng awtorisasyon sa Solana. Ang araling ito ay pagsasama-samahin at bubuo sa ibabaw ng maraming natutunan natin sa ngayon sa kurso. Para sa mga operasyong partikular sa Token Swap Program, gagamitin natin ang library na `@solana/spl-token-swap`.
 
-Habang pinag-uusapan natin ang paggawa ng swap pool, ipagpalagay natin na gumagawa tayo ng swap pool para sa dalawang token na pinangalanang Token A at Token B. Ang paggawa ng swap pool gamit ang `spl-token-swap` library ay kasing simple ng pagpapadala ng transaksyon na may tagubiling ginawa gamit ang function na `TokenSwap.createInitSwapInstruction`. Gayunpaman, mayroong ilang mga account na kailangan mong gawin o kunin nang maaga na kakailanganin kapag gumagawa ng tagubiling iyon:
+Habang pinag-uusapan natin ang paggawa ng swap pool, ipagpalagay natin na gumagawa tayo ng swap pool para sa dalawang token na pinangalanang Token A at Token B. Ang paggawa ng swap pool gamit ang `spl-token-swap` library ay kasing simple ng pagpapadala ng transaksyon na may instruction ginawa gamit ang function na `TokenSwap.createInitSwapInstruction`. Gayunpaman, mayroong ilang mga account na kailangan mong gawin o kunin nang maaga na kakailanganin kapag gumagawa ng instruction iyon:
 1. **Token swap state account** - nagtataglay ng impormasyon tungkol sa swap pool
 2. **Swap pool authority** - ang PDA na ginamit para pumirma ng mga transaksyon sa ngalan ng swap program
 3. **Mga token account para sa Token A at Token B** - mga token account na magtataglay ng mga token A at B para sa pool
@@ -54,7 +54,7 @@ Habang pinag-uusapan natin ang paggawa ng swap pool, ipagpalagay natin na gumaga
 
 Bago ka makagawa ng swap pool, kakailanganin mong gumawa ng token swap state account. Gagamitin ang account na ito para magkaroon ng impormasyon tungkol sa swap pool mismo.
 
-Upang lumikha ng token swap state account, gagamitin mo ang tagubiling `SystemProgram` na `createAccount`.
+Upang lumikha ng token swap state account, gagamitin mo ang instruction `SystemProgram` na `createAccount`.
 
 ```tsx
 import * as web3 from '@solana/web3'
@@ -82,7 +82,7 @@ Ilang item na dapat tandaan mula sa halimbawang ito:
 
 Ang awtoridad sa swap pool ay ang account na ginamit upang mag-sign para sa mga transaksyon sa ngalan ng swap program. Ang account na ito ay isang Program Derived Address (PDA) na nagmula sa Token Swap Program at ang token swap state account.
 
-Ang mga PDA ay maaari lamang gawin sa pamamagitan ng kanilang pagmamay-ari na programa, kaya hindi mo kailangang direktang gawin ang account na ito. Gayunpaman, kailangan mong malaman ang pampublikong susi nito. Maaari mo itong matuklasan gamit ang function ng `@solana/web3` library na `PublicKey.findProgramAddress`.
+Ang mga PDA ay maaari lamang gawin sa pamamagitan ng kanilang pagmamay-ari na programa, kaya hindi mo kailangang direktang gawin ang account na ito. Gayunpaman, kailangan mong malaman ang public key nito. Maaari mo itong matuklasan gamit ang function ng `@solana/web3` library na `PublicKey.findProgramAddress`.
 
 ```tsx
 const [swapAuthority, bump] = await Web3.PublicKey.findProgramAddress(
@@ -99,7 +99,7 @@ Ang Token A at Token B account ay nauugnay na mga token account na ginagamit par
 
 ```tsx
 let tokenAAccountAddress = await token.getAssociatedTokenAddress(
-    tokenAMint, // mint
+    tokenatint, // mint
     swapAuthority, // owner
     true // allow owner off curve
 )
@@ -108,7 +108,7 @@ const tokenAAccountInstruction = await token.createAssociatedTokenAccountInstruc
     wallet.publicKey, // payer
     tokenAAccountAddress, // ata
     swapAuthority, // owner
-    tokenAMint // mint
+    tokenatint // mint
 )
 
 transaction.add(tokenAAccountInstruction)
@@ -156,7 +156,7 @@ transaction.add(initializeTokenAccountPoolInstruction)
 
 ### Pool Token Fee Account
 
-Ang pool token fee account ay ang token account kung saan binabayaran ang mga bayarin para sa mga token swaps. Para sa Serum deployment ng Token Swap Program na ginagamit namin, ang account na ito ay dapat na pagmamay-ari ng isang partikular na account na tinukoy sa swap program: [HfoTxFR1Tm6kGmWgYWD6J7YHVy1UwqSULUGVLXkJqaKN](https://explorer.solana.com/address/HfoTxFR1Tm6kGmWgYWD6J7YHVy1UwqSULUGVLXkJqaKN?cluster=devnet ).
+Ang pool token fee account ay ang token account kung saan binabayaran ang mga bayarin para sa mga token swaps. Para sa Serum deployment ng Token Swap Program na ginagamit natin, ang account na ito ay dapat na pagmamay-ari ng isang partikular na account na tinukoy sa swap program: [HfoTxFR1Tm6kGmWgYWD6J7YHVy1UwqSULUGVLXkJqaKN](https://explorer.solana.com/address/HfoTxFR1Tm6kGmWgYWD6J7YHVy1UwqSULUGVLXkJqaKN?cluster=devnet ).
 
 ```tsx
 const feeOwner = new web3.PublicKey('HfoTxFR1Tm6kGmWgYWD6J7YHVy1UwqSULUGVLXkJqaKN')
@@ -187,14 +187,14 @@ Ang unang 7 argumento ay ang mga kinakailangang token account na tinalakay lang 
 
 Pagkatapos nito, darating ang constant na kumakatawan sa Token Program ID na sinusundan ng constant na kumakatawan sa Token Swap Program ID.
 
-Susunod, mayroong 4 na pares ng mga argumento ng numero na kumakatawan sa mga numerator at denominator para sa bayad sa kalakalan, bayad sa kalakalan ng may-ari, bayad sa pag-withdraw ng may-ari, at bayad sa host. Ang pagtuturo ay gumagamit ng numerator at denominator para sa bawat isa upang kalkulahin ang porsyento ng bayad. Ipaliwanag natin ang bawat isa sa mga bayarin:
+Susunod, mayroong 4 na pares ng mga argumento ng numero na kumakatawan sa mga numerator at denominator para sa bayad sa kalakalan, bayad sa kalakalan ng may-ari, bayad sa pag-withdraw ng may-ari, at bayad sa host. Ang instruction ay gumagamit ng numerator at denominator para sa bawat isa upang kalkulahin ang porsyento ng bayad. Ipaliwanag natin ang bawat isa sa mga bayarin:
 
 1. **Trade fee** - mga bayarin na pinapanatili ng mga swap pool token account sa panahon ng isang trade at pinapataas ang nare-redeem na halaga ng LP-token. Ang bayad na ito ay nagbibigay ng reward sa mga user para sa pagbibigay ng liquidity sa swap pool.
 2. **Bayaran sa pangangalakal ng may-ari** - mga bayarin na pinapanatili ng mga swap pool token account sa panahon ng isang kalakalan, na may katumbas na LP-token na ibinibigay sa may-ari ng programa
 3. **Bayaran sa pag-withdraw ng may-ari** - mga dagdag na LP-token na ipinapadala sa may-ari sa bawat pag-withdraw
 4. **Host fee** - isang proporsyon ng mga bayarin sa pangangalakal ng may-ari, na ipinadala sa isang karagdagang host token account na ibinigay sa panahon ng kalakalan. Ang bayad na ito ay nagbibigay ng insentibo sa mga panlabas na partido (tulad ng isang desentralisadong palitan) na magbigay ng mga frontend para sa swap pool at bigyan sila ng isang bahagi.
 
-Kapag gumagamit ng swap program na na-deploy at pinananatili ng isang third party, ang mga bayarin na ito ay maaaring maayos o hindi upang *dapat* ipasok mo ang mga tamang argumento. Kakailanganin mong suriin ang pagpapatupad ng backing program.
+Kapag gumagamit ng swap program na na-deploy at pinananatili ng isang third party, ang mga bayarin na ito ay maaaring maayos o hindi upang *dapat* ipasok mo ang mga tamang argumento. Kakailanganin mong suriin ang implementation ng backing program.
 
 Panghuli, mayroong uri ng kurba, na tatalakayin pa natin sa susunod na aralin.
 
@@ -223,22 +223,22 @@ const createSwapInstruction = TokenSwap.createInitSwapInstruction(
 transaction.add(createSwapInstruction)
 ```
 
-Kapag matagumpay na naisagawa ang isang transaksyon sa mga tagubiling ito, ang swap pool ay gagawin at handa nang gamitin.
+Kapag matagumpay na naisagawa ang isang transaksyon sa mga instruction na ito, ang swap pool ay gagawin at handa nang gamitin.
 
 ## Nakikipag-ugnayan sa Mga Swap Pool
 
-Kapag nasimulan na ang swap pool, ang Token Swap Program ay may ilang magkakaibang mga tagubilin para sa paggamit ng swap pool. Kabilang dito ang:
+Kapag nasimulan na ang swap pool, ang Token Swap Program ay may ilang magkakaibang mga instruction para sa paggamit ng swap pool. Kabilang dito ang:
 1. Pagsasagawa ng swap
 2. Pagdeposito ng pagkatubig
 3. Pag-withdraw ng pagkatubig
 
 ### Magsagawa ng swap
 
-Makakapagsimula kaagad ang mga user sa pangangalakal sa isang swap pool gamit ang tagubilin sa swap. Ang pagtuturo ng swap ay naglilipat ng mga pondo mula sa token account ng isang user papunta sa token account ng swap pool. Ang swap pool ay nagmi-mint ng LP-token sa LP-token account ng user.
+Makakapagsimula kaagad ang mga user sa pangangalakal sa isang swap pool gamit ang instruction sa swap. Ang swap instruction ay naglilipat ng mga pondo mula sa token account ng isang user papunta sa token account ng swap pool. Ang swap pool ay nagmi-mint ng LP-token sa LP-token account ng user.
 
-Dahil kinakailangan ng mga programang Solana na ideklara ang lahat ng account sa pagtuturo, kailangan ng mga user na ipunin ang lahat ng impormasyon ng account mula sa token swap state account: ang token A at B account, pool token mint, at fee account.
+Dahil kinakailangan ng mga programang Solana na ideklara ang lahat ng account sa instruction, kailangan ng mga user na ipunin ang lahat ng impormasyon ng account mula sa token swap state account: ang token A at B account, pool token mint, at fee account.
 
-Nagpapalit kami ng mga token gamit ang `TokenSwap.swapInstruction` helper function na nangangailangan ng mga sumusunod na argumento:
+Nagpapalit tayo ng mga token gamit ang `TokenSwap.swapInstruction` helper function na nangangailangan ng mga sumusunod na argumento:
 1. `tokenSwap` - ang token swap state account
 2. `authority` - ang swap pool authority
 3. `userTransferAuthority` - ang delegado sa token account ng user
@@ -252,9 +252,9 @@ Nagpapalit kami ng mga token gamit ang `TokenSwap.swapInstruction` helper functi
 11. `swapProgramId` - ang address ng Token Swap Program
 12. `tokenProgramId` - ang address ng Token Program
 13. `amountIn` - halaga ng mga token na gustong ilipat ng user sa swap pool
-14. `minimumAmountOut` - pinakamababang halaga ng mga token na ipinapadala sa token account ng user. Ang parameter na ito ay ginagamit upang isaalang-alang ang slippage. Ang slippage ay ang pagkakaiba sa pagitan ng halaga ng isang token kapag isinumite mo ang transaksyon kumpara sa kung kailan natupad ang order. Sa kasong ito, mas mababa ang numero, mas maraming slippage ang posibleng mangyari nang hindi nabigo ang transaksyon. Sa buong araling ito, gagamitin namin ang 0 para sa mga swap dahil ang pagkalkula ng slippage ay nasa labas ng saklaw ng araling ito. Sa isang production app, gayunpaman, mahalagang hayaan ang mga user na tukuyin ang dami ng slippage kung saan sila komportable.
+14. `minimumAmountOut` - pinakamababang halaga ng mga token na ipinapadala sa token account ng user. Ang parameter na ito ay ginagamit upang isaalang-alang ang slippage. Ang slippage ay ang pagkakaiba sa pagitan ng halaga ng isang token kapag isinumite mo ang transaksyon kumpara sa kung kailan natupad ang order. Sa kasong ito, mas mababa ang numero, mas maraming slippage ang posibleng mangyari nang hindi nabigo ang transaksyon. Sa buong araling ito, gagamitin natin ang 0 para sa mga swap dahil ang pagkalkula ng slippage ay nasa labas ng saklaw ng araling ito. Sa isang production app, gayunpaman, mahalagang hayaan ang mga user na tukuyin ang dami ng slippage kung saan sila komportable.
 
-Ang pagtuturo para sa pagpapalit ng token A para sa token B ay magiging ganito:
+Ang instruction para sa pagpapalit ng token A para sa token B ay magiging ganito:
 
 ```tsx
 const swapInstruction = TokenSwap.swapInstruction(
@@ -279,11 +279,11 @@ transaction.add(swapInstruction)
 
 ### Deposit liquidity
 
-Ang Token Swap Program ay may dalawang variation ng mga tagubilin sa deposito. Pinapayagan ng isa ang mga user na magdeposito lang ng mga token sa isang bahagi ng swap pool sa bawat pagkakataon. Ang isa ay nagbibigay-daan para sa mga user na magdeposito sa magkabilang panig ng swap pool nang sabay.
+Ang Token Swap Program ay may dalawang variation ng mga instruction sa deposito. Pinapayagan ng isa ang mga user na magdeposito lang ng mga token sa isang bahagi ng swap pool sa bawat pagkakataon. Ang isa ay nagbibigay-daan para sa mga user na magdeposito sa magkabilang panig ng swap pool nang sabay.
 
 Para makapagdeposito ng liquidity sa magkabilang panig ng swap pool, ang wallet ng user ay dapat may sapat na halaga ng bawat token. Kapag nagdedeposito ng parehong token, sa halip na ibigay ang halaga ng bawat token na idedeposito, tinutukoy ng user ang halaga ng LP-token na gusto nilang matanggap. Pagkatapos ay kinakalkula ng Token Swap Program ang halaga ng bawat token na matatanggap ng isang depositor dahil sa curve ng pool at kasalukuyang pagkatubig.
 
-Maaari naming ideposito ang parehong mga token nang sabay-sabay gamit ang function na helper na `TokenSwap.depositAllTokenTypesInstruction` na nangangailangan ng mga sumusunod na argumento:
+Maaari nating ideposito ang parehong mga token nang sabay-sabay gamit ang function na helper na `TokenSwap.depositAllTokenTypesInstruction` na nangangailangan ng mga sumusunod na argumento:
 1. `tokenSwap` - ang token swap state account
 2. `authority` - ang swap pool authority
 3. `userTransferAuthority` - ang awtoridad sa mga token account ng user
@@ -299,9 +299,9 @@ Maaari naming ideposito ang parehong mga token nang sabay-sabay gamit ang functi
 13. `maximumTokenA` - maximum na halaga ng token A na pinapayagang magdeposito
 14. `maximumTokenB` - maximum na halaga ng token A na pinapayagang magdeposito
 
-Ang mga argumentong `maximumTokenA` at `maximumTokenB` ay ginagamit upang maiwasan ang pagkadulas. Kung mas mataas ang numero, mas maraming slippage ang posibleng mangyari nang walang pagkabigo sa transaksyon. Para sa pagiging simple, gagamit kami ng napakalaking numero para sa mga argumentong ito.
+Ang mga argumentong `maximumTokenA` at `maximumTokenB` ay ginagamit upang maiwasan ang pagkadulas. Kung mas mataas ang numero, mas maraming slippage ang posibleng mangyari nang walang pagkabigo sa transaksyon. Para sa pagiging simple, gagamit tayo ng napakalaking numero para sa mga argumentong ito.
 
-Ang pagtuturo para sa pagdeposito ng parehong token A at token B ay magiging ganito:
+Ang instruction para sa pagdeposito ng parehong token A at token B ay magiging ganito:
 
 ```tsx
 const instruction = TokenSwap.depositAllTokenTypesInstruction(
@@ -324,7 +324,7 @@ const instruction = TokenSwap.depositAllTokenTypesInstruction(
 transaction.add(instruction)
 ```
 
-Maaari kaming magdeposito ng mga token sa isang bahagi lamang ng swap pool sa katulad na paraan gamit ang `TokenSwap.depositSingleTokenTypeExactAmountInInstruction`. Ang pangunahing pagkakaiba ay ang huling argumento sa pagtuturo ay `minimumPoolTokenAmount`. Kapag nagdedeposito sa isang bahagi lamang ng swap pool, eksaktong tinukoy ng user kung gaano karaming mga token ang idedeposito. Kaugnay nito, kinakalkula ng Token Swap Program ang halaga ng mga LP-token upang i-mint ang user para sa kanilang deposito. Ang isang tagubilin na nagdedeposito lamang ng Token A ay magiging ganito:
+Maaari tayong magdeposito ng mga token sa isang bahagi lamang ng swap pool sa katulad na paraan gamit ang `TokenSwap.depositSingleTokenTypeExactAmountInInstruction`. Ang pangunahing pagkakaiba ay ang huling argumento sa instruction ay `minimumPoolTokenAmount`. Kapag nagdedeposito sa isang bahagi lamang ng swap pool, eksaktong tinukoy ng user kung gaano karaming mga token ang idedeposito. Kaugnay nito, kinakalkula ng Token Swap Program ang halaga ng mga LP-token upang i-mint ang user para sa kanilang deposito. Ang isang instruction na nagdedeposito lamang ng Token A ay magiging ganito:
 
 ```tsx
 const instruction = TokenSwap.depositSingleTokenTypeExactAmountInInstruction(
@@ -350,7 +350,7 @@ Kapalit ng pagbibigay ng liquidity, ang mga depositor ay tumatanggap ng LP-token
 
 Ang Token Swap Program ay may dalawang variation ng withdraw instructions. Ang isa ay nagpapahintulot sa mga user na mag-withdraw lamang ng mga token mula sa isang bahagi ng swap pool sa isang pagkakataon. Ang isa ay nagbibigay-daan para sa pag-withdraw mula sa magkabilang panig ng swap pool sa parehong oras.
 
-Maaari naming i-withdraw ang parehong mga token nang sabay-sabay gamit ang `TokenSwap.withdrawAllTokenTypesInstruction` helper function na nangangailangan ng mga sumusunod na argumento:
+Maaari nating i-withdraw ang parehong mga token nang sabay-sabay gamit ang `TokenSwap.withdrawAllTokenTypesInstruction` helper function na nangangailangan ng mga sumusunod na argumento:
 1. `tokenSwap` - ang token swap state account
 2. `authority` - ang swap pool authority
 3. `userTransferAuthority` - ang awtoridad sa mga token account ng user
@@ -367,9 +367,9 @@ Maaari naming i-withdraw ang parehong mga token nang sabay-sabay gamit ang `Toke
 14. `minimumTokenA` - pinakamababang halaga ng token A na bawiin
 15. `minimumTokenB` - pinakamababang halaga ng token B na bawiin
 
-Ang mga argumentong `minimumTokenA` at `minimumTokenB` ay ginagamit upang maiwasan ang pagkadulas. Kung mas mababa ang numero, mas maraming slippage ang posibleng mangyari. Para sa pagiging simple, gagamitin namin ang 0 para sa mga argumentong ito.
+Ang mga argumentong `minimumTokenA` at `minimumTokenB` ay ginagamit upang maiwasan ang pagkadulas. Kung mas mababa ang numero, mas maraming slippage ang posibleng mangyari. Para sa pagiging simple, gagamitin natin ang 0 para sa mga argumentong ito.
 
-Ang pagtuturo para sa pagdeposito ng parehong token A at token B ay magiging ganito:
+Ang instruction para sa pagdeposito ng parehong token A at token B ay magiging ganito:
 The instruction for depositing both token A and token B will look like this:
 
 ```tsx
@@ -394,7 +394,7 @@ const instruction = TokenSwap.withdrawAllTokenTypesInstruction(
 transaction.add(instruction)
 ```
 
-Maaari kaming mag-withdraw ng mga token mula sa isang bahagi lamang ng swap pool sa katulad na paraan gamit ang `TokenSwap.withdrawSingleTokenTypeExactAmountOut`. Ang pangunahing pagkakaiba ay ang huling argumento sa pagtuturo ay `maximumPoolTokenAmount`. Kapag nag-withdraw lamang ng isang bahagi ng swap pool, tinutukoy ng user kung gaano karaming mga token ang aalisin. Kaugnay nito, kinakalkula ng Token Swap Program ang halaga ng mga LP-token na dapat sunugin ng user. Ang isang pagtuturo na nag-withdraw lamang ng Token B ay magiging ganito:
+Maaari tayong mag-withdraw ng mga token mula sa isang bahagi lamang ng swap pool sa katulad na paraan gamit ang `TokenSwap.withdrawSingleTokenTypeExactAmountOut`. Ang pangunahing pagkakaiba ay ang huling argumento sa instruction ay `maximumPoolTokenAmount`. Kapag nag-withdraw lamang ng isang bahagi ng swap pool, tinutukoy ng user kung gaano karaming mga token ang aalisin. Kaugnay nito, kinakalkula ng Token Swap Program ang halaga ng mga LP-token na dapat sunugin ng user. Ang isang instruction na nag-withdraw lamang ng Token B ay magiging ganito:
 
 ```tsx
 const instruction = TokenSwap.depositSingleTokenTypeExactAmountInInstruction(
@@ -432,7 +432,7 @@ Ngayon, kung nais ng isang mangangalakal na maglagay ng isang tiyak na halaga ng
 (A_total + A_in) * (B_total - B_out) = invariant
 ```
 
-Ang paglalagay ng 10 token A kasama ang aming invariant na kalahating milyon, kakailanganin naming lutasin ang "B_out" tulad nito:
+Ang paglalagay ng 10 token A kasama ang ating invariant na kalahating milyon, kakailanganin nating lutasin ang "B_out" tulad nito:
 
 ```tsx
 (100 + 10) * (5,000 - B_out) = 500,000
@@ -447,7 +447,7 @@ Kung ang mga kurba ay walang kahulugan, huwag mag-alala! Bagama't hindi masakit 
 
 # Demo
 
-Para sa demo na ito, isang token pool ng dalawang bagong token ang nagawa at live sa Devnet. Tatalakayin namin ang pagbuo ng isang frontend UI upang makipag-ugnayan sa swap pool na ito! Dahil ang pool ay ginawa na, hindi namin kailangang mag-alala tungkol sa pagsisimula ng pool at pagpopondo dito ng mga token. Sa halip, magtutuon kami sa pagbuo ng mga tagubilin para sa
+Para sa demo na ito, isang token pool ng dalawang bagong token ang nagawa at live sa Devnet. Tatalakayin natin ang pagbuo ng isang frontend UI upang makipag-ugnayan sa swap pool na ito! Dahil ang pool ay ginawa na, hindi natin kailangang mag-alala tungkol sa pagsisimula ng pool at pagpopondo dito ng mga token. Sa halip, magtutuon tayo sa pagbuo ng mga instruction para sa
 
 - pagdeposito ng pagkatubig sa pool
 - pag-withdraw ng iyong idineposito na pagkatubig
@@ -459,24 +459,24 @@ Para sa demo na ito, isang token pool ng dalawang bagong token ang nagawa at liv
 
 Bago tayo magsimula, magpatuloy at i-download ang [starter code](https://github.com/Unboxed-Software/solana-token-swap-frontend/tree/starter).
 
-Ang proyekto ay isang medyo simpleng Next.js na application na muling gumagamit ng marami sa kung ano ang dating binuo para sa demo sa [aralin sa Token Program](./token-program.md). Tulad ng nakikita mo mula sa larawan sa itaas, mayroong ilang iba't ibang mga input ng teksto at mga pindutan - lahat ng ito ay magsusumite ng mga transaksyon sa blockchain sa ngalan ng gumagamit. Ang aming pagtuon sa demo na ito ay ang paggawa ng mga tagubilin na isusumite ng huling tatlong button.
+Ang proyekto ay isang medyo simpleng Next.js na application na muling gumagamit ng marami sa kung ano ang dating binuo para sa demo sa [aralin sa Token Program](./token-program.md). Tulad ng nakikita mo mula sa larawan sa itaas, mayroong ilang iba't ibang mga input ng teksto at mga pindutan - lahat ng ito ay magsusumite ng mga transaksyon sa blockchain sa ngalan ng gumagamit. Ang ating pagtuon sa demo na ito ay ang paggawa ng mga instruction na isusumite ng huling tatlong button.
 
 Naipatupad na ang mga button ng airdrop at dapat gumana sa labas ng kahon. Gumagamit sila ng isang airdrop program na naka-deploy sa Devnet sa address na [CPEV4ibq2VUv7UnNpkzUGL82VRzotbv2dy8vGwRfh3H3](https://explorer.solana.com/address/CPEV4ibq2VUv7UnNpkzUGL82VRzotbv2dy8vGwRfh3H3 Maaari kang mag-mint ng maraming token hangga't gusto mo sa iyong wallet upang makipag-ugnayan sa pool.
 
 ### 2. Lumikha ng Instruksyon sa Pagdeposito
 
-Sa dalawang variation ng mga tagubilin sa deposito sa Token Swap Program, gagamitin namin ang variation na nagbibigay ng liquidity sa magkabilang panig ng swap pool nang sabay-sabay: `TokenSwap.depositAllTokenTypesInstruction`.
+Sa dalawang variation ng mga instruction sa deposito sa Token Swap Program, gagamitin natin ang variation na nagbibigay ng liquidity sa magkabilang panig ng swap pool nang sabay-sabay: `TokenSwap.depositAllTokenTypesInstruction`.
 
-Dapat idagdag ang pagtuturo ng deposito sa loob ng `/components/Deposit.tsx` file sa loob ng function na `handleTransactionSubmit`. Ang function na ito ay tinatawag kapag ang user ay nag-click sa Deposit button.
+Dapat idagdag ang instruction ng deposito sa loob ng `/components/Deposit.tsx` file sa loob ng function na `handleTransactionSubmit`. Ang function na ito ay tinatawag kapag ang user ay nag-click sa Deposit button.
 
 Magsisimula tayo sa pagkuha ng tatlong nauugnay na address ng token account:
 1. Ang nauugnay na token account na naaayon sa wallet address ng user at Krypt Coin
 2. Ang nauugnay na token account na naaayon sa wallet address ng user at Scrooge Coin
 3. Ang nauugnay na token account na naaayon sa wallet address ng user at ang swap pools LP token
 
-Mayroong ilang mga paraan upang gawin ito, ngunit gagamitin namin ang helper function na `getAssociatedTokenAddress` mula sa `spl-token` library.
+Mayroong ilang mga paraan upang gawin ito, ngunit gagamitin natin ang helper function na `getAssociatedTokenAddress` mula sa `spl-token` library.
 
-Kakailanganin din namin ang data na nauugnay sa pool token mint para isaayos ang input ng user para sa mga decimal ng pool token. Para ma-access ang data ng token mint, gagamitin namin ang helper function na `getMint` mula sa `spl-token` library.
+Kakailanganin din natin ang data na nauugnay sa pool token mint para isaayos ang input ng user para sa mga decimal ng pool token. Para ma-access ang data ng token mint, gagamitin natin ang helper function na `getMint` mula sa `spl-token` library.
 
 ```tsx
 const handleTransactionSubmit = async (deposit: DepositAllSchema) => {
@@ -494,9 +494,9 @@ const handleTransactionSubmit = async (deposit: DepositAllSchema) => {
 }
 ```
 
-Susunod, kailangan naming suriin kung ang `tokenAccountPool` na address na kakakuha lang namin ay nagawa na. Gagamitin namin ang function na `getAccountInfo` mula sa library ng `@solana/web3` para makuha ang impormasyon ng account na nauugnay sa `tokenAccountPool`. Ang function na ito ay magbabalik ng `AccountInfo` struct kung ang account ay umiiral o `null` kung hindi. Kung ibinalik ang `null`, kakailanganin naming gawin ang account.
+Susunod, kailangan nating suriin kung ang `tokenAccountPool` na address na kakakuha lang natin ay nagawa na. Gagamitin natin ang function na `getAccountInfo` mula sa library ng `@solana/web3` para makuha ang impormasyon ng account na nauugnay sa `tokenAccountPool`. Ang function na ito ay magbabalik ng `AccountInfo` struct kung ang account ay umiiral o `null` kung hindi. Kung ibinalik ang `null`, kakailanganin nating gawin ang account.
 
-Dahil ang function na `handleTransactionSubmit` ay magsusumite na ng transaksyon, idaragdag lang namin ang tagubilin para sa paggawa ng nauugnay na account sa parehong transaksyon sa halip na magsumite ng maraming transaksyon.
+Dahil ang function na `handleTransactionSubmit` ay magsusumite na ng transaksyon, idaragdag lang natin ang instruction para sa paggawa ng nauugnay na account sa parehong transaksyon sa halip na magsumite ng maraming transaksyon.
 
 ```tsx
 const handleTransactionSubmit = async () => {
@@ -528,7 +528,7 @@ const handleTransactionSubmit = async () => {
 }
 ```
 
-Sa wakas, maaari tayong lumikha ng pagtuturo ng deposito gamit ang function ng helper na `TokenSwap.depositAllTokenTypesInstruction` library ng `spl-token-swap`. Pagkatapos ay idinagdag namin ang pagtuturo at isumite ang transaksyon.
+Sa wakas, maaari tayong lumikha ng instruction ng deposito gamit ang helper function na `TokenSwap.depositAllTokenTypesInstruction` library ng `spl-token-swap`. Pagkatapos ay idinagdag natin ang instruction at isumite ang transaksyon.
 
 ```tsx
 const handleTransactionSubmit = async () => {
@@ -609,13 +609,13 @@ Sa puntong ito, dapat mong mai-airdrop ang iyong sarili ng ilang mga token at pa
 
 ### 3. Lumikha ng Instruksyon sa Pag-withdraw
 
-Ang pagtuturo sa pag-withdraw ay halos kapareho sa pagtuturo ng deposito, ngunit may ilang mga banayad na pagkakaiba. Tulad ng mga deposito, ang Token Swap Program ay tumatanggap ng dalawang variation ng pagtuturo sa pag-withdraw. Maaari mong i-withdraw ang liquidity mula sa isang bahagi ng swap pool, o maaari mong bawiin ang iyong na-deposito na liquidity mula sa magkabilang panig nang sabay-sabay.
+Ang withdrawal instruction ay halos kapareho sa deposit instruction, ngunit may ilang mga banayad na pagkakaiba. Tulad ng mga deposito, ang Token Swap Program ay tumatanggap ng dalawang variation ng withdrawal instruction. Maaari mong i-withdraw ang liquidity mula sa isang bahagi ng swap pool, o maaari mong bawiin ang iyong na-deposito na liquidity mula sa magkabilang panig nang sabay-sabay.
 
-Sa dalawang variation ng mga tagubilin sa pag-withdraw sa Token Swap Program, gagamitin namin ang variation na nag-aalis ng liquidity mula sa magkabilang panig ng swap pool nang sabay-sabay: `TokenSwap.withdrawAllTokenTypesInstruction`.
+Sa dalawang variation ng mga instruction sa pag-withdraw sa Token Swap Program, gagamitin natin ang variation na nag-aalis ng liquidity mula sa magkabilang panig ng swap pool nang sabay-sabay: `TokenSwap.withdrawAllTokenTypesInstruction`.
 
-Dapat idagdag ang tagubilin sa pag-withdraw sa loob ng file na `/components/Withdraw.tsx` sa loob ng function na `handleTransactionSubmit`. Tinatawag ang function na ito kapag na-click ng user ang button na Withdraw.
+Dapat idagdag ang instruction sa pag-withdraw sa loob ng file na `/components/Withdraw.tsx` sa loob ng function na `handleTransactionSubmit`. Tinatawag ang function na ito kapag na-click ng user ang button na Withdraw.
 
-Magsisimula kami sa pamamagitan ng pagkuha ng tatlong nauugnay na token account address, pagkuha ng pool token mint data, at pagsuri sa `tokenAccountPool` na address sa parehong paraan na ginawa namin para sa pagtuturo ng deposito.
+Magsisimula tayo sa pamamagitan ng pagkuha ng tatlong nauugnay na token account address, pagkuha ng pool token mint data, at pagsuri sa `tokenAccountPool` na address sa parehong paraan na ginawa natin para sa deposit instruction.
 
 ```tsx
 const handleTransactionSubmit = async () => {
@@ -647,7 +647,7 @@ const handleTransactionSubmit = async () => {
 }
 ```
 
-Susunod, gagawa kami ng tagubilin sa pag-withdraw gamit ang function ng `TokenSwap.withdrawAllTokenTypesInstruction` ng library ng `spl-token-swap`. Pagkatapos ay idinagdag namin ang pagtuturo at isumite ang transaksyon.
+Susunod, gagawa tayo ng instruction sa pag-withdraw gamit ang function ng `TokenSwap.withdrawAllTokenTypesInstruction` ng library ng `spl-token-swap`. Pagkatapos ay idinagdag natin ang instruction at isumite ang transaksyon.
 
 ```tsx
 const handleTransactionSubmit = async () => {
@@ -724,11 +724,11 @@ Pansinin na ang pagkakasunud-sunod ng mga account ay naiiba para sa transaksyon 
 
 ### 4. Gumawa ng Swap Instruction
 
-Ngayon ay oras na upang ipatupad ang aktwal na layunin ng programang ito - ang pagtuturo ng swap!
+Ngayon ay oras na upang ipatupad ang aktwal na layunin ng programang ito - ang instruction ng swap!
 
-Tandaan na ang aming UI ay may dropdown upang payagan ang mga user na pumili kung aling token ang gusto nilang palitan *mula sa*, kaya kailangan naming gumawa ng aming pagtuturo sa ibang paraan batay sa kung ano ang pipiliin ng user.
+Tandaan na ang ating UI ay may dropdown upang payagan ang mga user na pumili kung aling token ang gusto nilang palitan *mula sa*, kaya kailangan nating gumawa ng ating instruction sa ibang paraan batay sa kung ano ang pipiliin ng user.
 
-Gagawin namin ito sa loob ng function na `handleTransactionSubmit` ng `/components/Swap.tsx` file. Muli, kakailanganin nating kunin ang `Mga Kaugnay na Token Address` ng user para sa bawat token mint (Krypt Coin, Scrooge Coin, at Pool Token) at likhain ang `tokenAccountPool` kung wala pa ito. Bukod pa rito, kukunin namin ang data para sa parehong Krypt Coin at Scrooge Coin upang i-account ang desimal na katumpakan ng mga token.
+Gagawin natin ito sa loob ng function na `handleTransactionSubmit` ng `/components/Swap.tsx` file. Muli, kakailanganin nating kunin ang `Mga Kaugnay na Token Address` ng user para sa bawat token mint (Krypt Coin, Scrooge Coin, at Pool Token) at likhain ang `tokenAccountPool` kung wala pa ito. Bukod pa rito, kukunin natin ang data para sa parehong Krypt Coin at Scrooge Coin upang i-account ang desimal na katumpakan ng mga token.
 
 ```tsx
 const handleTransactionSubmit = async () => {
@@ -746,7 +746,7 @@ const handleTransactionSubmit = async () => {
 }
 ```
 
-Mula dito, matutukoy ng input ng user ang aming landas ng pagpapatupad. Ang pinili ng user ay naka-save sa `mint` property, kaya gagamitin namin ito para magsanga sa pagitan ng bawat posibleng pagtuturo.
+Mula dito, matutukoy ng input ng user ang ating path of execution. Ang pinili ng user ay naka-save sa `mint` property, kaya gagamitin natin ito para magsanga sa pagitan ng bawat posibleng instruction.
 
 ```tsx
 const handleTransactionSubmit = async () => {
@@ -845,12 +845,12 @@ const handleTransactionSubmit = async () => {
 }
 ```
 
-At iyon na! Kapag naipatupad mo na ang pagtuturo ng swap, dapat na ganap na gumana ang UI at maaari kang mag-airdrop ng iyong sarili ng mga token, magdeposito ng liquidity, mag-withdraw ng iyong liquidity, at magpalit mula sa token patungo sa token!
+At iyon na! Kapag naipatupad mo na ang instruction ng swap, dapat na ganap na gumana ang UI at maaari kang mag-airdrop ng iyong sarili ng mga token, magdeposito ng liquidity, mag-withdraw ng iyong liquidity, at magpalit mula sa token patungo sa token!
 
-Mangyaring maglaan ng oras sa code na ito at sa mga konsepto sa araling ito. Ang mga swap pool ay maaaring maging mas kumplikado kaysa sa ipinatupad namin ngayon kaya mahalagang maunawaan ang mga pangunahing kaalaman. Kung kailangan mo ng mas maraming oras sa demo, kunin ito! At kung kailangan mo, tingnan ang [code ng solusyon dito](https://github.com/Unboxed-Software/solana-token-swap-frontend).
+Mangyaring maglaan ng oras sa code na ito at sa mga konsepto sa araling ito. Ang mga swap pool ay maaaring maging mas kumplikado kaysa sa ipinatupad natin ngayon kaya mahalagang maunawaan ang mga pangunahing kaalaman. Kung kailangan mo ng mas maraming oras sa demo, kunin ito! At kung kailangan mo, tingnan ang [code ng solusyon dito](https://github.com/Unboxed-Software/solana-token-swap-frontend).
 
 # Hamon
 
-Ngayong magkasama kaming nagsagawa ng demo, subukan at gawin ito nang higit pa gamit ang sarili mong mga token!
+Ngayong magkasama tayong nagsagawa ng demo, subukan at gawin ito nang higit pa gamit ang sarili mong mga token!
 
-Sa [aralin ng Token Program](./token-program.md) gumawa ka ng ilang mga token. Ngayon gumawa ng swap pool para sa mga token na iyon at baguhin ang code mula sa demo ng araling ito upang magamit ang iyong mga token at bagong likhang swap pool. Walang code ng solusyon para dito dahil partikular ito sa iyong mga token, kaya dahan-dahan at gawin ito nang paisa-isa. Nakuha mo na ito!
+Sa [aralin ng Token Program](./token-program.md) gumawa ka ng ilang mga token. Ngayon gumawa ng swap pool para sa mga token na iyon at baguhin ang code mula sa demo ng araling ito ng magamit ang iyong mga token at bagong likhang swap pool. Walang code ng solusyon para dito dahil partikular ito sa iyong mga token, kaya dahan-dahan at gawin ito nang paisa-isa. Nakuha mo na ito!
